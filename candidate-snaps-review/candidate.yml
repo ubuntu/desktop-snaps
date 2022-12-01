@@ -1,0 +1,64 @@
+cheese: []
+cherrytree: []
+chromium:
+- 2229
+eog: []
+epiphany:
+- 130
+evince: []
+firefox: []
+five-or-more: []
+gedit: []
+glade: []
+glimpse-editor: []
+gnome-2048: []
+gnome-3-26-1604:
+- 111
+gnome-3-28-1804:
+- 173
+gnome-3-34-1804:
+- 84
+gnome-3-34-1804-sdk: []
+gnome-3-38-2004:
+- 128
+gnome-3-38-2004-sdk: []
+gnome-42-2204:
+- 46
+gnome-42-2204-sdk:
+- 54
+gnome-calculator:
+- 926
+gnome-calendar: []
+gnome-characters: []
+gnome-chess: []
+gnome-clocks:
+- 451
+gnome-contacts:
+- 187
+gnome-dictionary: []
+gnome-font-viewer: []
+gnome-hitori: []
+gnome-klotski: []
+gnome-logs: []
+gnome-mahjongg: []
+gnome-mines: []
+gnome-nibbles: []
+gnome-recipes: []
+gnome-robots: []
+gnome-sudoku: []
+gnome-system-monitor: []
+gnome-taquin: []
+gnome-tetravex: []
+gnome-text-editor:
+- 8
+gtk-common-themes: []
+iagno: []
+libreoffice: []
+lightsoff: []
+quadrapassel: []
+snap-store: []
+swell-foop: []
+tali: []
+thunderbird:
+- 278
+ubuntu-desktop-installer: []
