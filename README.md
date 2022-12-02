@@ -1,4 +1,4 @@
-## Toolbox
+# Toolbox
 
 This repository is a collection of automation tools needed for the snaps on Ubuntu desktop.
 
@@ -11,3 +11,19 @@ The tools should be able to automatically:
 Then when a project has a new upstream patch, all we need to review is the automatically opened PR and screenshot.
 Once the PR has been manually merged, the launchpad mirror will pick up the change and automatically build a snap for --candidate.
 Then the snap in --candidate needs to be manually tested before promoting it to --stable.
+
+
+## Tools in the Toolbox
+
+### candidate-snaps-review
+
+This tool is really a set of 3 useful tools:
+* _snapchanges.py_ is a utility to display changes in a snap between stable and candidate channels
+* _snaps.py_ defines the list of snaps the Ubuntu Desktop team is interested in
+* _candidate.yml_ is a cache of candidate revisions already processed
+* _close-fixed-issues.py_ closes issues that were opened against a candidate no longer available
+
+### updatesnap.py
+This tool eases the inspection of the gnome-sdk snap that builds many parts. Since each part points to an upstream repo, updatesnap.py will check for newer upstream releases than the gnome-sdk part contains. It outputs an array of the update data.
+
+This data should be included in any automatically created PR.
