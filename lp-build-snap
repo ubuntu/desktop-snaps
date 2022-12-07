@@ -1,0 +1,103 @@
+#! /usr/bin/python3
+
+import os
+import sys
+import argparse
+
+from launchpadlib.launchpad import Launchpad
+
+DEBUG=False
+
+# basic paths
+home = os.getenv("HOME")
+workdir = home+"/snap-builds"
+
+parser = argparse.ArgumentParser(description='Trigger a Snap build in Launchpad. If no series or arch argument is specific it will default to the serie defined by the snapcraft.yaml and build on the available architectures.')
+parser.add_argument("--lpname", dest="lpname", default=os.getenv("USER"), help="Launchpad user or team to build from (default: %s)"%os.getenv("USER"))
+parser.add_argument("--arch", dest="arch", default=None, help="Build architecture to target")
+parser.add_argument("--series", dest="series", help="Ubuntu release to build against, required for an arch specific build")
+parser.add_argument("--core-channel", dest="core", default=None, help="Channel to find core (default: None)")
+parser.add_argument("--snapcraft-channel", dest="snapcraft", default=None, help="Channel to find snapcraft (default: None)")
+parser.add_argument("snap_name", help="Name of the Snap package being built")
+args = parser.parse_args()
+
+
+# basic data
+people_name = args.lpname
+snap_name = args.snap_name
+buildarch = args.arch
+series = args.series
+if buildarch:
+    if not series:
+        print("Building on a specific arch requires to also specify the serie")
+        exit(1)
+core = args.core
+snapcraft = args.snapcraft
+
+# we need to store credentials once for cronned builds
+cachedir = workdir+"/cache"
+creds = workdir+"/credentials"
+
+if DEBUG:
+    print ("people_name: %s" % people_name)
+    print ("snap_name: %s" % snap_name)
+    if buildarch:
+        print ("buildarch: %s" % buildarch)
+        print ("series: %s" % series)
+    print ("core-channel: %s" % core)
+    print ("snapcraft-channel: %s" % snapcraft)
+    print ("cachedir: %s" % cachedir)
+    print ("creds: %s" % creds)
+
+
+# log in
+launchpad = Launchpad.login_with('Launchpad Snap Build Trigger',
+                                 'production', cachedir,
+                                 credentials_file=creds,
+                                 version='devel')
+
+# get launchpad team data and ppa
+snappydev = launchpad.people[people_name]
+#imageppa = snappydev.getPPAByName(name='image')
+ubuntu = launchpad.distributions["ubuntu"]
+
+
+# get snap
+ubuntucore = launchpad.snaps.getByName(name=snap_name,
+                                       owner=snappydev)
+
+# get distro info
+ubuntu = launchpad.distributions['ubuntu']
+if buildarch:
+    release = ubuntu.getSeries(name_or_version=series)
+    arch = release.getDistroArchSeries(archtag=buildarch)
+
+# trigger build
+if core or snapcraft:
+    if not core:
+        core = 'stable'
+    if not snapcraft:
+        snapcraft = 'stable'
+    if buildarch:
+        request = ubuntucore.requestBuild(archive=ubuntu.main_archive,
+                                          channels={'core': core, 'snapcraft': snapcraft},
+                                          distro_arch_series=arch,
+                                          pocket='Updates')
+    else:
+        request = ubuntucore.requestBuilds(archive=ubuntu.main_archive,
+                                          channels={'core': core, 'snapcraft': snapcraft},
+                                          pocket='Updates')
+else:
+    if buildarch:
+        request = ubuntucore.requestBuild(archive=ubuntu.main_archive,
+                                          distro_arch_series=arch,
+                                          pocket='Updates')
+    else:
+        request = ubuntucore.requestBuilds(archive=ubuntu.main_archive,
+                                          pocket='Updates')
+
+buildid = str(request).rsplit('/', 1)[-1]
+if buildarch:
+    print("Arch: {} is building under: {}".format(buildarch, request))
+else:
+    print("Snap is building under: {}".format(request))
