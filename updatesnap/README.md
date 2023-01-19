@@ -2,6 +2,14 @@
 
 A simple script that checks a snapcraft yaml file and shows possible new versions for each part
 
+## Installing
+
+As usual, just doing
+
+    sudo ./setup.py install
+
+will install it system-wide.
+
 ## Using it
 
 Just run *updatesnap.py [-s] [-r] [--github-user=...] [--github-token=...] /path/to/snapcraft.yaml*.
