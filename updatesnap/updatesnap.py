@@ -322,9 +322,10 @@ class Snapcraft(object):
             if l == '# endext\n':
                 replace_comments = False
                 continue
-            l = l[1:]
-            if (len(l) > 0) and (l[1] == ' '):
-                l = ' ' + l
+            if replace_comments:
+                l = l[1:]
+                if (len(l) > 0) and (l[1] == ' '):
+                    l = ' ' + l
             newfile += l
         self._config = yaml.safe_load(newfile)
 
