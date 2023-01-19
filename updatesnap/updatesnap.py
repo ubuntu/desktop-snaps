@@ -283,6 +283,7 @@ class Snapcraft(object):
     def load_external_data(self, data, secrets = None):
         """ process SNAPCRAFT.YAML data and SECRETS directly """
 
+        self._load_secrets(None)
         self._open_yaml_file_with_extensions(data, "updatesnap")
         if secrets:
             self._secrets = yaml.safe_load(secrets)
@@ -298,7 +299,13 @@ class Snapcraft(object):
             another comment with the text '# endext', or with a non-comment
             line. This allows to add extra fields in a YAML file without
             breaking compatibility with snapcraft, because, by replacing
-            the # with an space, the format is preserved. """
+            the # with an space, the format is preserved.
+
+            The 'ext_name' part allows to add in a file blocks for several
+            different programs without they interferring with others. This
+            way, program1 can enable only the blocks marked with '# ext:program1',
+            while program2 can enable only the blocks marked with '# ext:program2',
+            for example, thus allowing to just reuse this method."""
 
         newfile = ""
         replace_comments = False
@@ -328,10 +335,11 @@ class Snapcraft(object):
             with open(secrets_file, "r") as cfg:
                 self._secrets = yaml.safe_load(cfg)
         else:
-            secrets_file = os.path.join(os.path.split(os.path.abspath(filename))[0], "updatesnap.secrets")
-            if os.path.exists(secrets_file):
-                with open(secrets_file, "r") as cfg:
-                    self._secrets = yaml.safe_load(cfg)
+            if filename is not None:
+                secrets_file = os.path.join(os.path.split(os.path.abspath(filename))[0], "updatesnap.secrets")
+                if os.path.exists(secrets_file):
+                    with open(secrets_file, "r") as cfg:
+                        self._secrets = yaml.safe_load(cfg)
         self._github.set_secrets(self._secrets)
         self._gitlab.set_secrets(self._secrets)
 
@@ -596,7 +604,7 @@ def process_folder(folder):
         retdata = []
         for a in arguments.parts:
             retdata.append(snap.process_part(a))
-        return retdada
+        return retdata
     else:
         return snap.process_parts()
 
@@ -616,7 +624,7 @@ def process_data(data):
         return snap.process_parts()
 
 
-def print_resume(data):
+def print_summary(data):
     printed_line = False
     for entry in data:
         if entry is None:
@@ -670,4 +678,4 @@ else:
             print(f"Failed to get the file {arguments.folder}: {response.status_code}")
             sys.exit(-1)
         retval = process_data(response.content.decode('utf-8'))
-print_resume(retval)
+print_summary(retval)
