@@ -8,5 +8,5 @@ setup(
         'requests',
     ],
     packages = ['SnapModule'],
-    scripts = ['updatesnap.py']
+    scripts = ['updatesnap.py','updatesnapyaml.py']
 )
