@@ -66,7 +66,7 @@ def print_summary(data):
         printed_line = True
         print(f"{entry['name']} current version: {entry['version'][0]} ({entry['version'][1]}); available updates:")
         for update in entry["updates"]:
-            print(f"    {update['name']} (tagget at {update['date']})")
+            print(f"    {update['name']} (tagged at {update['date']})")
 
 
 parser = argparse.ArgumentParser(prog="Update Snap",
