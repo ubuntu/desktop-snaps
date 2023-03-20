@@ -25,8 +25,61 @@ class Colors(object):
     def clear_line(self):
         print("\033[2K", end="\r") # clear the line
 
+class ProcessVersion(object):
 
-class GitClass(object):
+    def _read_number(self, text):
+        n = 0
+        if (len(text) == 0) or (text[0] not in '0123456789'):
+            return None, text
+        while (len(text) > 0) and (text[0] in '0123456789'):
+            n *= 10
+            n += int(text[0])
+            text = text[1:]
+        return n, text
+
+
+    def _get_version(self, part, entry, entry_format, check):
+        if "format" not in entry_format:
+            if check:
+                self._print_message(part, f"{self._colors.critical}Missing tag version format for {part}{self._colors.reset}.")
+            return None # unknown format
+        major = 0
+        minor = 0
+        revision = 0
+        # space is "no element". Adding it in front of the first block simplifies the code
+        fmt = (" " + entry_format["format"]).split("%")
+        for part in fmt:
+            if part[0] != ' ':
+                number, entry = self._read_number(entry)
+                if number is None:
+                    return None # not found a number when expected
+                if part[0] == 'M':
+                    major = number
+                elif part[0] == 'm':
+                    minor = number
+                elif part[0] == 'R':
+                    revision = number
+            part = part[1:]
+            if len(part) == 0:
+                continue
+            if not entry.startswith(part):
+                return None
+            entry = entry[len(part):]
+        version = pkg_resources.parse_version(f"{major}.{minor}.{revision}")
+        if "lower-than" in entry_format:
+            if version >= pkg_resources.parse_version(str(entry_format["lower-than"])):
+                return None
+        if ("ignore-odd-minor" in entry_format) and (entry_format["ignore-odd-minor"]):
+            if (minor % 2) == 1:
+                return None
+        if ("no-9x-revisions" in entry_format) and (entry_format["no-9x-revisions"]):
+            if revision >= 90:
+                return None
+
+        return version
+
+
+class GitClass(ProcessVersion):
     def __init__(self, repo_type, silent = False):
         super().__init__()
         self._silent = silent
@@ -65,6 +118,8 @@ class GitClass(object):
                 time.sleep(1)
         return response
 
+    def _stop_download(self, data):
+        return False
 
     def _read_pages(self, uri):
         elements = []
@@ -78,6 +133,8 @@ class GitClass(object):
             data = response.json()
             for entry in data:
                 elements.append(entry)
+            if self._stop_download(data):
+                break
             uri = None
             if "Link" in headers:
                 l = headers["link"]
@@ -165,15 +222,29 @@ class Github(GitClass):
         return self._read_pages(branch_command)
 
 
-    def get_tags(self, repository, current_tag = None):
+    def _stop_download(self, data):
+        if self._current_tag is None:
+            return False
+        for entry in data:
+            if ('name' in entry) and (self._current_tag == entry['name']):
+                return True
+        return False
+
+
+    def get_tags(self, repository, current_tag = None, version_format = {}):
         uri = self._is_github(repository)
         if uri is None:
             return None
 
-        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path), 'tags')
+        self._current_tag = current_tag
+        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path), 'tags?sort=created&direction=desc')
         data = self._read_pages(tag_command)
         tags = []
+        self._current_tag = None
         for tag in data:
+            parsed_version = self._get_version("", tag['name'], version_format, False)
+            if parsed_version is None:
+                continue
             tag_info = self._read_page(tag['commit']['url'])
             if tag_info is None:
                 continue
@@ -183,6 +254,8 @@ class Github(GitClass):
                 date = tag_info['commit']['author']['date']
             tags.append({"name": tag['name'],
                          "date": datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")})
+            if (current_tag is not None) and (current_tag == tag['name']):
+                break
         self._colors.clear_line()
         return tags
 
@@ -221,12 +294,22 @@ class Gitlab(GitClass):
         return branches
 
 
-    def get_tags(self, repository):
+    def _stop_download(self, data):
+        if self._current_tag is None:
+            return False
+        for entry in data:
+            if ('name' in entry) and (self._current_tag == entry['name']):
+                return True
+        return False
+
+
+    def get_tags(self, repository, current_tag = None, version_format = {}):
         uri = self._is_gitlab(repository)
         if uri is None:
             return None
 
-        tag_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects', self._project_name(uri), 'repository/tags')
+        self._current_tag = current_tag
+        tag_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects', self._project_name(uri), 'repository/tags?order_by=updated&sort=desc')
         data = self._read_pages(tag_command)
         tags = []
         for tag in data:
@@ -236,7 +319,7 @@ class Gitlab(GitClass):
         return tags
 
 
-class Snapcraft(object):
+class Snapcraft(ProcessVersion):
     def __init__(self, silent):
         super().__init__()
         self._colors = Colors()
@@ -352,11 +435,11 @@ class Snapcraft(object):
             print(self._colors.reset)
 
 
-    def _get_tags(self, source):
-        tags = self._github.get_tags(source)
+    def _get_tags(self, source, current_tag = None, version_format = {}):
+        tags = self._github.get_tags(source, current_tag, version_format)
         if tags is not None:
             return tags
-        tags = self._gitlab.get_tags(source)
+        tags = self._gitlab.get_tags(source, current_tag, version_format)
         return tags
 
 
@@ -366,54 +449,6 @@ class Snapcraft(object):
             return branches
         branches = self._gitlab.get_branches(source)
         return branches
-
-
-    def _read_number(self, text):
-        n = 0
-        if (len(text) == 0) or (text[0] not in '0123456789'):
-            return None, text
-        while (len(text) > 0) and (text[0] in '0123456789'):
-            n *= 10
-            n += int(text[0])
-            text = text[1:]
-        return n, text
-
-
-    def _get_version(self, part, entry, entry_format, check):
-        if "format" not in entry_format:
-            if check:
-                self._print_message(part, f"{self._colors.critical}Missing tag version format for {part}{self._colors.reset}.")
-            return None # unknown format
-        major = 0
-        minor = 0
-        revision = 0
-        # space is "no element". Adding it in front of the first block simplifies the code
-        fmt = (" " + entry_format["format"]).split("%")
-        for part in fmt:
-            if part[0] != ' ':
-                number, entry = self._read_number(entry)
-                if number is None:
-                    return None # not found a number when expected
-                if part[0] == 'M':
-                    major = number
-                elif part[0] == 'm':
-                    minor = number
-                elif part[0] == 'R':
-                    revision = number
-            part = part[1:]
-            if len(part) == 0:
-                continue
-            if not entry.startswith(part):
-                return None
-            entry = entry[len(part):]
-        version = pkg_resources.parse_version(f"{major}.{minor}.{revision}")
-        if "lower-than" in entry_format:
-            if version >= pkg_resources.parse_version(str(entry_format["lower-than"])):
-                return None
-        if ("ignore-odd-minor" in entry_format) and (entry_format["ignore-odd-minor"]):
-            if (minor % 2) == 1:
-                return None
-        return version
 
 
     def process_parts(self):
@@ -441,6 +476,25 @@ class Snapcraft(object):
         data = self._config['parts'][part]
         if 'source' not in data:
             return None
+        if 'source-tag' in data:
+            current_tag = data['source-tag']
+        else:
+            current_tag = None
+        version_format = data['version-format'] if ('version-format' in data) else {}
+        if ('ignore' in version_format) and (version_format['ignore']):
+            return None
+        if ("format" not in version_format) and (current_tag is not None):
+            # if the version format is not specified,
+            # automagically detect it between any of these common formats:
+            # * %M.%m.%R
+            # * v%M.%m.%R
+            # * %M.%m
+            if re.match('^[0-9]+[.][0-9]+[.][0-9]+$', current_tag):
+                version_format["format"] = '%M.%m.%R'
+            elif re.match('^v[0-9]+[.][0-9]+[.][0-9]+$', current_tag):
+                version_format["format"] = 'v%M.%m.%R'
+            elif re.match('^[0-9]+[.][0-9]+$', current_tag):
+                version_format["format"] = '%M.%m'
         source = data['source']
 
         if ((not source.startswith('http://')) and
@@ -465,7 +519,7 @@ class Snapcraft(object):
                 return part_data
 
         self._print_message(part, None, source = source)
-        tags = self._get_tags(source)
+        tags = self._get_tags(source, current_tag, version_format)
 
         if ('source-tag' not in data) and ('source-branch' not in data):
             self._print_message(part, f"{self._colors.warning}Has neither a source-tag nor a source-branch{self._colors.reset}", source = source)
@@ -474,7 +528,6 @@ class Snapcraft(object):
         if 'source-tag' in data:
             part_data["use_tag"] = True
             self._print_message(part, f"Current tag: {data['source-tag']}", source = source)
-            version_format = data['version-format'] if ('version-format' in data) else None
             self._sort_tags(part, data['source-tag'], tags, version_format, part_data)
 
         if 'source-branch' in data:
@@ -503,20 +556,6 @@ class Snapcraft(object):
         if tags is None:
             self._print_message(part, f"{self._colors.critical}No tags found")
             return
-        if version_format is None:
-            version_format = {}
-        if "format" not in version_format:
-            # if the version format is not specified,
-            # automagically detect it between any of these common formats:
-            # * %M.%m.%R
-            # * v%M.%m.%R
-            # * %M.%m
-            if re.match('^[0-9]+[.][0-9]+[.][0-9]+$', current_tag):
-                version_format["format"] = '%M.%m.%R'
-            elif re.match('^v[0-9]+[.][0-9]+[.][0-9]+$', current_tag):
-                version_format["format"] = 'v%M.%m.%R'
-            elif re.match('^[0-9]+[.][0-9]+$', current_tag):
-                version_format["format"] = '%M.%m'
 
         if "format" not in version_format:
             part_data['missing_format'] = True
