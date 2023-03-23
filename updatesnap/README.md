@@ -2,6 +2,14 @@
 
 A simple script that checks a snapcraft yaml file and shows possible new versions for each part
 
+## Installing
+
+As usual, just doing
+
+    sudo ./setup.py install
+
+will install it system-wide.
+
 ## Using it
 
 Just run *updatesnap.py [-s] [-r] [--github-user=...] [--github-token=...] /path/to/snapcraft.yaml*.
@@ -129,10 +137,6 @@ The available extra tokens are:
   current version will be ignored.
 * same-minor: if specified as TRUE, version numbers with a different minor value than the
   current version will be ignored.
-* no-9x-revisions: if specified as TRUE, version numbers with a revision value equal or
-  greater than 90 will be ignored. Useful for projects that use these revision numbers
-  as "prelude" to a new minor version.
-* ignore: don't try to check this entry. Useful for "archived" projects.
 
 ## TODO
 
