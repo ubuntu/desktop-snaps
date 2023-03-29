@@ -4,14 +4,11 @@ A simple script that checks a snapcraft yaml file and shows possible new version
 
 ## Installing
 
-As usual, just doing
+Just run:
 
-    python3 -m pip install .
+    sudo install.sh
 
-will install it in your user. Of course, it is mandatory to have $HOME/.local/bin in the PATH to
-be able to run it.
-
-Before installing, be sure to fully delete the folders 'build' and 'udpatesnap.egg-info'.
+will install it at /usr/local/bin
 
 ## Using it
 
