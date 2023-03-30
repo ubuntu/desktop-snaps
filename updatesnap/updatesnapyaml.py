@@ -41,6 +41,10 @@ class ProjectManager(object):
             # give priority to 'main' over 'master'
             if branch['name'] == 'main':
                 working_branch = 'main'
+            # give priority to 'stable' over any other
+            if branch['name'] == 'stable':
+                working_branch = 'stable'
+                break
         return working_branch
 
 

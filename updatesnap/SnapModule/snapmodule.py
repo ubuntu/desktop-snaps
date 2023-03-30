@@ -87,6 +87,7 @@ class GitClass(ProcessVersion):
         self._user = None
         self._colors = Colors()
         self._repo_type = repo_type
+        self._current_tag = None
 
 
     def set_secrets(self, secrets):
