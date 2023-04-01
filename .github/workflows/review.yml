@@ -1,0 +1,47 @@
+name: Report new candidates
+
+on:
+  schedule:
+    # Daily for now
+    - cron: '9 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+         working-directory: candidate-snaps-review
+    steps:
+      - uses: actions/checkout@v3
+      - name: Review new candidates
+        id: review
+        run: ./candidate-snaps-review.py
+      - name: report
+        id: build-the-report
+        run:  |
+          ls -l reports
+          for f in reports/*.json; do \
+             [ -f "$f" ] || continue; \
+             echo "$f"; \
+             curl --request POST \
+            --url https://api.github.com/repos/${{ github.repository }}/issues \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'content-type: application/json' \
+            --data-binary @$f \
+            --fail; \
+          done
+          echo "Check for changes to push to the vcs"
+          if ! git diff --exit-code candidate.yml; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Update the vcs
+        if: steps.build-the-report.outputs.changes
+        run: |
+          git add candidate.yml
+          git config user.name "Update Bot"
+          git config user.email "actions@github.com"
+          git commit -m "Update the list of known candidate revisions"
+          git push
+      - name: close-fixed-issues
+        run: ./close-fixed-issues.py https://api.github.com/repos/${{ github.repository }}/issues ${{ secrets.GITHUB_TOKEN }}
