@@ -11,20 +11,25 @@ glade: []
 glimpse-editor: []
 gnome-2048: []
 gnome-3-26-1604: []
-gnome-3-28-1804: []
-gnome-3-34-1804: []
+gnome-3-28-1804:
+- 194
+gnome-3-34-1804:
+- 90
 gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
-gnome-42-2204: []
+gnome-42-2204:
+- 71
 gnome-42-2204-sdk: []
-gnome-boxes: []
+gnome-boxes:
+- 3
 gnome-calculator: []
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
 gnome-clocks: []
-gnome-contacts: []
+gnome-contacts:
+- 187
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
