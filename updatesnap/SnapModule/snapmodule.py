@@ -621,7 +621,7 @@ class Snapcraft(ProcessVersion):
                 current_element = element
                 break
         for element in elements:
-            if (current_element is None) or (element['date'] > current_element['date']):
+            if (current_element is None) or (('date' in element) and (element['date'] > current_element['date'])):
                 newer_elements.append(element)
         if len(newer_elements) == 0:
             self._print_message(part, f"{self._colors.ok}Branch updated{self._colors.reset}")
