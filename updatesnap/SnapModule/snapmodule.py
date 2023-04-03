@@ -87,6 +87,7 @@ class GitClass(ProcessVersion):
         self._user = None
         self._colors = Colors()
         self._repo_type = repo_type
+        self._current_tag = None
 
 
     def set_secrets(self, secrets):
@@ -258,6 +259,16 @@ class Github(GitClass):
                 break
         self._colors.clear_line()
         return tags
+
+
+    def get_file(self, repository, file_path):
+        uri = self._is_github(repository)
+        if uri is None:
+            return None
+
+        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path), 'contents', file_path)
+        data = self._read_page(tag_command)
+        return data
 
 
 class Gitlab(GitClass):

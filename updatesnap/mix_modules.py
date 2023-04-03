@@ -40,6 +40,8 @@ with open(base_file, "r") as ifile:
                 add_import(ip)
             contents += modules["SnapModule.snapmodule"]["content"]
             continue
+        if line.strip() == "from SnapModule.snapmodule import Github":
+            continue
         if line.startswith("import ") or (line.startswith("from ")):
             add_import(line.strip())
             continue
