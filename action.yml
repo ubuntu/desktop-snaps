@@ -21,11 +21,24 @@ runs:
         repository: 'ubuntu/desktop-snaps'
         ref: add-action
         path: desktop-snaps
-    - id: updatesnapyaml
+    - name: run updatesnapyaml
+      id: updatesnapyaml
       run: |
-        ./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token $GITHUB_TOKEN https://github.com/${{ github.repository }} > new-snapcraft.yaml
-        cat new-snapcraft.yaml
+        cp snapcraft.yaml snapcraft.yaml.bak
+        ./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token $GITHUB_TOKEN https://github.com/${{ github.repository }} > snapcraft.yaml
       env:
         GITHUB_USER: ubuntu
         GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
+    - name: create pull request
+      id: cpr
+      uses: peter-evans/create-pull-request@v4
+      with:
+        path: ${{ github.event.repository.name }}
+        branch: automated-tag-update
+        delete-branch: true
+    - name: Check outputs
+      if: ${{ steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
