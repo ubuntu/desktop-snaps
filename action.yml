@@ -37,8 +37,10 @@ runs:
         path: ${{ github.event.repository.name }}
         branch: automated-tag-update
         delete-branch: true
+      shell: bash
     - name: Check outputs
       if: ${{ steps.cpr.outputs.pull-request-number }}
       run: |
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
         echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+      shell: bash
