@@ -1,6 +1,9 @@
 name: 'Update snap tag'
 description: 'Update the snapcraft.yaml for a given snap with the latest upstream tag'
 inputs:
+  token:
+    description: 'A Github PAT'
+    required: true
   repo:
     description: 'The repo containing the snapcraft.yaml to be updated'
     required: true
@@ -13,5 +16,6 @@ runs:
   using: "composite"
   steps:
     - id: updatesnapyaml
-      run: echo "new-snapcraft-yaml=$(./updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token ${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }} > snapcraft.yaml)" >> $GITHUB_OUTPUT
+      run: |
+        echo "new-snapcraft-yaml=$(./updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token ${{ inputs.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }} > snapcraft.yaml)" >> $GITHUB_OUTPUT
       shell: bash
