@@ -15,8 +15,13 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v3
+    - name: checkout desktop-snaps repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'ubuntu/desktop-snaps'
+        ref: add-action
+        path: desktop-snaps
     - id: updatesnapyaml
       run: |
-        echo "new-snapcraft-yaml=$(./updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token ${{ inputs.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }} > snapcraft.yaml)" >> $GITHUB_OUTPUT
+        echo "new-snapcraft-yaml=$(./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token ${{ inputs.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }} > snapcraft.yaml)" >> $GITHUB_OUTPUT
       shell: bash
