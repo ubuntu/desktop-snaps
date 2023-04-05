@@ -24,4 +24,6 @@ runs:
     - id: updatesnapyaml
       run: |
         echo "new-snapcraft-yaml=$(./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token ${{ inputs.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }} > snapcraft.yaml)" >> $GITHUB_OUTPUT
+      env:
+        GITHUB_USER: ubuntu
       shell: bash
