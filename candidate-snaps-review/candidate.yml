@@ -4,7 +4,8 @@ chromium: []
 eog: []
 epiphany: []
 evince: []
-firefox: []
+firefox:
+- 2531
 five-or-more: []
 gedit: []
 glade: []
@@ -21,7 +22,8 @@ gnome-42-2204:
 gnome-42-2204-sdk: []
 gnome-boxes:
 - 3
-gnome-calculator: []
+gnome-calculator:
+- 928
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
