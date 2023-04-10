@@ -621,13 +621,14 @@ class Snapcraft(ProcessVersion):
         for tag in tags:
             if tag['name'] == current_tag:
                 continue
-            if tag['date'] < current_date:
-                continue
             if current_version is not None:
                 version = self._get_version(part, tag['name'], version_format, False)
                 if version is None:
                     continue
-                if version < current_version:
+                if version <= current_version:
+                    continue
+            else:
+                if t['date'] < current_date:
                     continue
             if ("same-major" in version_format) and (version_format["same-major"]):
                 if version.major != current_version.major:
