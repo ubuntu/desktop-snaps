@@ -34,13 +34,13 @@ imports = []
 contents = ""
 
 with open(base_file, "r") as ifile:
+    imported = []
     for line in ifile:
-        if line.strip() == "from SnapModule.snapmodule import Snapcraft":
+        if (line.strip().startswith("from SnapModule.snapmodule import ")) and ("SnapModule.snapmodule" not in imported):
+            imported.append("SnapModule.snapmodule")
             for ip in modules["SnapModule.snapmodule"]["imports"]:
                 add_import(ip)
             contents += modules["SnapModule.snapmodule"]["content"]
-            continue
-        if line.strip() == "from SnapModule.snapmodule import Github":
             continue
         if line.startswith("import ") or (line.startswith("from ")):
             add_import(line.strip())
