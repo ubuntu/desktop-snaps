@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+""" Analizes a YAML file and outputs  """
+
 import sys
 import argparse
 import base64
@@ -10,7 +12,10 @@ from SnapModule.snapmodule import ManageYAML
 UPDATE_BRANCH = 'update_versions'
 
 class ProjectManager:
+    """ This class is the one that searches in a remote project for
+        the corresponding snapcraft.yaml file """
     def __init__(self, user = None, token = None):
+        """ Constructor. """
         self._github = Github(True)
         if user:
             self._github.set_secret('user', user)
@@ -19,6 +24,8 @@ class ProjectManager:
 
 
     def get_working_branch(self, project_url):
+        """ Returns the main branch of the project """
+
         branches = self._github.get_branches(project_url)
         working_branch = 'master'
         for branch in branches:
@@ -36,6 +43,8 @@ class ProjectManager:
 
 
     def get_yaml_file(self, project_url):
+        """ Searches in a project for the 'snapcraft.yaml' file and
+            returns its contents """
         yaml_path = 'snapcraft.yaml'
         data = self._github.get_file(project_url, yaml_path)
         if not data:
@@ -46,6 +55,7 @@ class ProjectManager:
         return data
 
 def main():
+    """ Main code """
     parser = argparse.ArgumentParser(prog='Update Snap YAML',
                                     description='Find the lastest source'
                                     ' versions for snap files and generates a new snapcraft.yaml.')
