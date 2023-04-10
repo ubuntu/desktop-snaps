@@ -1,14 +1,15 @@
-import requests
-import yaml
 import urllib
 import re
 import time
 import os
 import datetime
+import requests
+import yaml
+
 
 import pkg_resources
 
-class Colors(object):
+class Colors:
     def __init__(self):
         self.red = "\033[31m"
         self.green = "\033[32m"
@@ -25,23 +26,41 @@ class Colors(object):
     def clear_line(self):
         print("\033[2K", end="\r") # clear the line
 
-class ProcessVersion(object):
+class ProcessVersion:
+
+    def __init__(self, silent = False):
+        super().__init__()
+        self._silent = silent
+        self._colors = Colors()
+        self._last_part = None
+
+    def _print_message(self, part, message, source = None):
+        if self._silent:
+            return
+        if part != self._last_part:
+            print(f"Part: {self._colors.note}{part}{self._colors.reset}"
+                  f"{f' ({source})' if source else ''}")
+            self._last_part = part
+        if message is not None:
+            print("  " + message, end="")
+            print(self._colors.reset)
 
     def _read_number(self, text):
-        n = 0
+        number = 0
         if (len(text) == 0) or (text[0] not in '0123456789'):
             return None, text
         while (len(text) > 0) and (text[0] in '0123456789'):
-            n *= 10
-            n += int(text[0])
+            number *= 10
+            number += int(text[0])
             text = text[1:]
-        return n, text
+        return number, text
 
 
-    def _get_version(self, part, entry, entry_format, check):
+    def _get_version(self, part_name, entry, entry_format, check):
         if "format" not in entry_format:
             if check:
-                self._print_message(part, f"{self._colors.critical}Missing tag version format for {part}{self._colors.reset}.")
+                self._print_message(part_name, f"{self._colors.critical}"
+                                    f"Missing tag version format for {part_name}{self._colors.reset}.")
             return None # unknown format
         major = 0
         minor = 0
@@ -81,11 +100,9 @@ class ProcessVersion(object):
 
 class GitClass(ProcessVersion):
     def __init__(self, repo_type, silent = False):
-        super().__init__()
-        self._silent = silent
+        super().__init__(silent)
         self._token = None
         self._user = None
-        self._colors = Colors()
         self._repo_type = repo_type
         self._current_tag = None
 
@@ -109,7 +126,8 @@ class GitClass(ProcessVersion):
         while True:
             try:
                 if (self._user is not None) and (self._token is not None):
-                    response = requests.get(uri, auth=requests.auth.HTTPBasicAuth(self._user, self._token))
+                    response = requests.get(uri, auth=requests.auth.HTTPBasicAuth(
+                                            self._user, self._token))
                 else:
                     response = requests.get(uri)
                 break
@@ -128,7 +146,8 @@ class GitClass(ProcessVersion):
             response = self._read_uri(uri)
             if response.status_code != 200:
                 if not self._silent:
-                    print(f"{self._colors.critical}Status code {response.status_code} when asking for {uri}{self._colors.reset}")
+                    print(f"{self._colors.critical}Status code {response.status_code} "
+                          f"when asking for {uri}{self._colors.reset}")
                 return []
             headers = response.headers
             data = response.json()
@@ -138,14 +157,14 @@ class GitClass(ProcessVersion):
                 break
             uri = None
             if "Link" in headers:
-                l = headers["link"]
-                entries = l.split(",")
-                for e in entries:
-                    if 'rel="next"' not in e:
+                link = headers["link"]
+                entries = link.split(",")
+                for entry in entries:
+                    if 'rel="next"' not in entry:
                         continue
-                    p1 = e.find("<")
-                    p2 = e.find(">")
-                    uri = e[p1+1:p2]
+                    p_left = entry.find("<")
+                    p_right = entry.find(">")
+                    uri = entry[p_left+1:p_right]
                     break
         self._colors.clear_line()
         return elements
@@ -154,7 +173,8 @@ class GitClass(ProcessVersion):
     def _read_page(self, uri):
         response = self._read_uri(uri)
         if response.status_code != 200:
-            print(f"{self._colors.critical}Status code {response.status_code} when asking for {uri}{self._colors.reset}")
+            print(f"{self._colors.critical}Status code {response.status_code} "
+                  f"when asking for {uri}{self._colors.reset}")
             return None
         headers = response.headers
         data = response.json()
@@ -168,11 +188,13 @@ class GitClass(ProcessVersion):
         uri = urllib.parse.urlparse(repository)
         elements = uri.path.split("/")
         if (uri.scheme != 'http') and (uri.scheme != 'https') and (uri.scheme != 'git'):
-            print(f"{self._colors.critical}Unrecognized protocol in repository {repository}{self._colors.reset}")
+            print(f"{self._colors.critical}Unrecognized protocol in repository "
+                  f"{repository}{self._colors.reset}")
             return None
         elements = uri.path.split("/")
         if len(elements) < min_elements:
-            print(f"{self._colors.critical}Invalid uri format for repository {repository}{self._colors.reset}")
+            print(f"{self._colors.critical}Invalid uri format for repository "
+                  f"{repository}{self._colors.reset}")
             return None
         return uri
 
@@ -238,7 +260,8 @@ class Github(GitClass):
             return None
 
         self._current_tag = current_tag
-        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path), 'tags?sort=created&direction=desc')
+        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path),
+                                    'tags?sort=created&direction=desc')
         data = self._read_pages(tag_command)
         tags = []
         self._current_tag = None
@@ -266,7 +289,8 @@ class Github(GitClass):
         if uri is None:
             return None
 
-        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path), 'contents', file_path)
+        tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path),
+                                    'contents', file_path)
         data = self._read_page(tag_command)
         return data
 
@@ -297,7 +321,8 @@ class Gitlab(GitClass):
         if uri is None:
             return None
 
-        branch_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects', self._project_name(uri), 'repository/branches')
+        branch_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects',
+                                       self._project_name(uri), 'repository/branches')
         data = self._read_pages(branch_command)
         branches = []
         for branch in data:
@@ -320,7 +345,9 @@ class Gitlab(GitClass):
             return None
 
         self._current_tag = current_tag
-        tag_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects', self._project_name(uri), 'repository/tags?order_by=updated&sort=desc')
+        tag_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects',
+                                    self._project_name(uri),
+                                    'repository/tags?order_by=updated&sort=desc')
         data = self._read_pages(tag_command)
         tags = []
         for tag in data:
@@ -332,12 +359,9 @@ class Gitlab(GitClass):
 
 class Snapcraft(ProcessVersion):
     def __init__(self, silent, github_pose = None, gitlab_pose = None):
-        super().__init__()
-        self._colors = Colors()
+        super().__init__(silent)
         self._secrets = {}
         self._config = None
-        self.silent = silent
-        self._last_part = None
         if github_pose:
             self._github = github_pose
         else:
@@ -362,16 +386,16 @@ class Snapcraft(ProcessVersion):
         if filename is None:
             filename = '.'
         if os.path.isdir(filename):
-            f1 = os.path.join(filename, "snapcraft.yaml")
-            if not os.path.exists(f1):
-                f1 = os.path.join(filename, "snap", "snapcraft.yaml")
-                if not os.path.exists(f1):
+            filename_tmp = os.path.join(filename, "snapcraft.yaml")
+            if not os.path.exists(filename_tmp):
+                filename_tmp = os.path.join(filename, "snap", "snapcraft.yaml")
+                if not os.path.exists(filename_tmp):
                     print(f"No snapcraft file found at folder {filename}")
-            filename = f1
+            filename = filename_tmp
         if os.path.exists(filename):
             print(f"Opening file {filename}")
-            with open(filename, "r") as f:
-                data = f.read()
+            with open(filename, "r") as file_data:
+                data = file_data.read()
             self._open_yaml_file_with_extensions(data, "updatesnap")
         self._load_secrets(filename)
 
@@ -405,26 +429,26 @@ class Snapcraft(ProcessVersion):
 
         newfile = ""
         replace_comments = False
-        for l in data.split("\n"):
-            l += '\n' # restore the newline at the end
-            if l[0] != '#':
-                newfile += l
+        for line in data.split("\n"):
+            line += '\n' # restore the newline at the end
+            if line[0] != '#':
+                newfile += line
                 replace_comments = False
                 continue
             # the line contains a valid comment
-            if l == f'# ext:{ext_name}\n':
+            if line == f'# ext:{ext_name}\n':
                 replace_comments = True
                 continue
-            if l == '# endext\n':
+            if line == '# endext\n':
                 replace_comments = False
                 continue
             if replace_comments:
-                l = l[1:]
-                if (len(l) > 0) and (l[1] == ' '):
-                    l = ' ' + l
+                line = line[1:]
+                if (len(line) > 0) and (line[1] == ' '):
+                    line = ' ' + line
                 else:
-                    l = '#' + l
-            newfile += l
+                    line = '#' + line
+            newfile += line
         if data[-1] != '\n' and newfile[-1] == '\n':
             newfile = newfile[:-1]
         self._config = yaml.safe_load(newfile)
@@ -437,7 +461,8 @@ class Snapcraft(ProcessVersion):
                 self._secrets = yaml.safe_load(cfg)
         else:
             if filename is not None:
-                secrets_file = os.path.join(os.path.split(os.path.abspath(filename))[0], "updatesnap.secrets")
+                secrets_file = os.path.join(os.path.split(os.path.abspath(filename))[0],
+                                                          "updatesnap.secrets")
                 if os.path.exists(secrets_file):
                     with open(secrets_file, "r") as cfg:
                         self._secrets = yaml.safe_load(cfg)
@@ -445,18 +470,9 @@ class Snapcraft(ProcessVersion):
         self._gitlab.set_secrets(self._secrets)
 
 
-    def _print_message(self, part, message, source = None):
-        if self.silent:
-            return
-        if part != self._last_part:
-            print(f"Part: {self._colors.note}{part}{self._colors.reset}{f' ({source})' if source else ''}")
-            self._last_part = part
-        if message is not None:
-            print("  " + message, end="")
-            print(self._colors.reset)
-
-
-    def _get_tags(self, source, current_tag = None, version_format = {}):
+    def _get_tags(self, source, current_tag = None, version_format = None):
+        if version_format is None:
+            version_format = {}
         tags = self._github.get_tags(source, current_tag, version_format)
         if tags is not None:
             return tags
@@ -522,20 +538,24 @@ class Snapcraft(ProcessVersion):
             (not source.startswith('https://')) and
             (not source.startswith('git://')) and
             ((not 'source-type' in data) or (data['source-type'] != 'git'))):
-                self._print_message(part, f"{self._colors.critical}Source is neither http:// nor git://{self._colors.reset}", source = source)
-                print()
-                return part_data
+            self._print_message(part, f"{self._colors.critical}Source is neither http:// "
+                                      f"nor git://{self._colors.reset}", source = source)
+            print()
+            return part_data
 
-        if (not source.endswith('.git')) and ((not 'source-type' in data) or (data['source-type'] != 'git')):
-            self._print_message(part, f"{self._colors.warning}Source is not a GIT repository{self._colors.reset}", source = source)
+        if (not source.endswith('.git')) and ((not 'source-type' in data)
+            or (data['source-type'] != 'git')):
+            self._print_message(part, f"{self._colors.warning}Source is not a GIT "
+                                      f"repository{self._colors.reset}", source = source)
             print()
             return part_data
 
         if 'savannah' in source:
             url = urllib.parse.urlparse(source)
             if 'savannah' in url.netloc:
-                self._print_message(part, f"{self._colors.warning}Savannah repositories not supported{self._colors.reset}", source = source)
-                if not self.silent:
+                self._print_message(part, f"{self._colors.warning}Savannah repositories "
+                                          f"not supported{self._colors.reset}", source = source)
+                if not self._silent:
                     print()
                 return part_data
 
@@ -543,7 +563,8 @@ class Snapcraft(ProcessVersion):
         tags = self._get_tags(source, current_tag, version_format)
 
         if ('source-tag' not in data) and ('source-branch' not in data):
-            self._print_message(part, f"{self._colors.warning}Has neither a source-tag nor a source-branch{self._colors.reset}", source = source)
+            self._print_message(part, f"{self._colors.warning}Has neither a source-tag "
+                                      f"nor a source-branch{self._colors.reset}", source = source)
             self._print_last_tags(part, tags)
 
         if 'source-tag' in data:
@@ -558,9 +579,10 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, f"Current version: {current_version}")
             branches = self._get_branches(source)
             self._sort_elements(part, current_version, branches, "branch")
-            self._print_message(part, f"{self._colors.note}Should be moved to an specific tag{self._colors.reset}")
+            self._print_message(part, f"{self._colors.note}Should be moved to an "
+                                      f"specific tag{self._colors.reset}")
             self._print_last_tags(part, tags)
-        if not self.silent:
+        if not self._silent:
             print()
         return part_data
 
@@ -568,7 +590,7 @@ class Snapcraft(ProcessVersion):
     def _print_last_tags(self, part, tags):
         tags.sort(reverse = True, key=lambda x: x.get('date'))
         tags = tags[:4]
-        self._print_message(part, f"Last tags:")
+        self._print_message(part, "Last tags:")
         for tag in tags:
             self._print_message(part, f"  {tag['name']} ({tag['date']})")
 
@@ -581,24 +603,27 @@ class Snapcraft(ProcessVersion):
         if "format" not in version_format:
             part_data['missing_format'] = True
         current_date = None
+        found_tag = None
         for tag in tags:
             if tag['name'] == current_tag:
                 current_date = tag['date']
+                found_tag = tag
                 break
         if current_date is None:
-            self._print_message(part, f"{self._colors.critical}Error:{self._colors.reset} can't find the current tag in the tag list.")
+            self._print_message(part, f"{self._colors.critical}Error:{self._colors.reset} "
+                                      f"can't find the current tag in the tag list.")
             return
         self._print_message(part, f"Current tag date: {current_date}")
-        part_data['version'] = (tag['name'], current_date)
+        part_data['version'] = (found_tag['name'], current_date)
         current_version = self._get_version(part, current_tag, version_format, True)
         newer_tags = []
-        for t in tags:
-            if t['name'] == current_tag:
+        for tag in tags:
+            if tag['name'] == current_tag:
                 continue
-            if t['date'] < current_date:
+            if tag['date'] < current_date:
                 continue
             if current_version is not None:
-                version = self._get_version(part, t['name'], version_format, False)
+                version = self._get_version(part, tag['name'], version_format, False)
                 if version is None:
                     continue
                 if version < current_version:
@@ -609,7 +634,7 @@ class Snapcraft(ProcessVersion):
             if ("same-minor" in version_format) and (version_format["same-minor"]):
                 if version.minor != current_version.minor:
                     continue
-            newer_tags.append(t)
+            newer_tags.append(tag)
 
         if len(newer_tags) == 0:
             self._print_message(part, f"{self._colors.ok}Tag updated{self._colors.reset}")
@@ -621,7 +646,7 @@ class Snapcraft(ProcessVersion):
                 part_data["updates"].append(tag)
 
 
-    def _sort_elements(self, part, current_version, elements, text, show_equal = False):
+    def _sort_elements(self, part, current_version, elements, text):
         newer_elements = []
         if elements is None:
             elements = []
@@ -631,7 +656,8 @@ class Snapcraft(ProcessVersion):
                 current_element = element
                 break
         for element in elements:
-            if (current_element is None) or (('date' in element) and (element['date'] > current_element['date'])):
+            if (current_element is None) or (('date' in element) and
+                (element['date'] > current_element['date'])):
                 newer_elements.append(element)
         if len(newer_elements) == 0:
             self._print_message(part, f"{self._colors.ok}Branch updated{self._colors.reset}")
@@ -642,7 +668,11 @@ class Snapcraft(ProcessVersion):
                 self._print_message(part, "  " + element)
 
 
-class ManageYAML(object):
+class ManageYAML:
+    """ This class takes a YAML file and splits it in an array with each
+        block, preserving the child structure to allow to re-create it without
+        loosing any line. This can't be done by reading it with the YAML module
+        because it deletes things like comments. """
     def __init__(self, yaml_data):
         self._original_data = yaml_data
         self._tree = self._split_yaml(yaml_data.split('\n'))[1]
