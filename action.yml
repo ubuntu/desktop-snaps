@@ -1,0 +1,46 @@
+name: 'Update snap tag'
+description: 'Update the snapcraft.yaml for a given snap with the latest upstream tag'
+inputs:
+  token:
+    description: 'A Github PAT'
+    required: true
+  repo:
+    description: 'The repo containing the snapcraft.yaml to be updated'
+    required: true
+    default: 'None'
+outputs:
+  new-snapcraft-yaml:
+    description: "Updated snapcraft.yaml"
+    value: ${{ steps.updatesnapyaml.outputs.new-snapcraft-yaml }}
+runs:
+  using: "composite"
+  steps:
+    - name: checkout desktop-snaps repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'ubuntu/desktop-snaps'
+        ref: add-action
+        path: desktop-snaps
+    - name: run updatesnapyaml
+      id: updatesnapyaml
+      run: |
+        ./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token $GITHUB_TOKEN https://github.com/${{ github.repository }} > snapcraft.yaml
+      env:
+        GITHUB_USER: ubuntu
+        GITHUB_TOKEN: ${{ inputs.token }}
+      shell: bash
+    - name: create pull request
+      id: cpr
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: automated-tag-update
+        delete-branch: true
+    - name: Check outputs
+      if: ${{ steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+      shell: bash
+    - name: Cleanup
+      run: |
+        rm -rf desktop-snaps
