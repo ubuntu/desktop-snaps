@@ -36,7 +36,7 @@ contents = ""
 with open(base_file, "r") as ifile:
     imported = []
     for line in ifile:
-        if line.strip().startswith == "from SnapModule.snapmodule import " and "SnapModule.snapmodule" not in imported:
+        if (line.strip().startswith("from SnapModule.snapmodule import ")) and ("SnapModule.snapmodule" not in imported):
             imported.append("SnapModule.snapmodule")
             for ip in modules["SnapModule.snapmodule"]["imports"]:
                 add_import(ip)
