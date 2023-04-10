@@ -44,3 +44,4 @@ runs:
     - name: Cleanup
       run: |
         rm -rf desktop-snaps
+      shell: bash
