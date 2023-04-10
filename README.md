@@ -27,3 +27,39 @@ This tool is really a set of 3 useful tools:
 This tool eases the inspection of the gnome-sdk snap that builds many parts. Since each part points to an upstream repo, updatesnap.py will check for newer upstream releases than the gnome-sdk part contains. It outputs an array of the update data.
 
 This data should be included in any automatically created PR.
+
+### updatesnapyaml.py
+This tool utilizes updatesnap.py to generate a new snapcraft.yaml with the tag updated, provided a new tag is available upstream.
+
+For example, to run it locally on another repo (gnome-calculator in this case) to generate the update, pass it the url of the repo with the snapcraft.yaml in quesiton to be updated:
+
+```
+./updatesnap/updatesnapyaml.py --github-user GITHUB_USER --github-token GITHUB_TOKEN https://github.com/ubuntu/gnome-calculator.git
+```
+
+### GitHub action
+This action should be utilized by other repos' workflows. The action checks out this repository to use updatesnapyaml.py and replaces the old snapcraft.yaml with the new one.
+
+For example, to use this directly in another repo's workflow:
+
+```
+name: Open a PR if a new update is available
+
+on:
+  schedule:
+    # Daily for now
+    - cron: '9 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-snapcraft-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+      - name: Run desktop-snaps action
+        uses: ubuntu/desktop-snaps@add-action
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repository }}
+```
