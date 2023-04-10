@@ -16,7 +16,7 @@ class Colors:
         self.yellow = "\033[33m"
         self.cyan = "\033[36m"
         self.reset = "\033[0m"
-        self.clear_line = "\033[2K"
+        self.clearline = "\033[2K"
 
         self.critical = self.red
         self.warning = self.yellow
@@ -25,7 +25,7 @@ class Colors:
 
 
     def clear_line(self):
-        print(self.clear_line, end="\r") # clear the line
+        print(self.clearline, end="\r") # clear the line
 
 class ProcessVersion:
 
