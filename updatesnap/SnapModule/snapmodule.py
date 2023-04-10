@@ -331,15 +331,21 @@ class Gitlab(GitClass):
 
 
 class Snapcraft(ProcessVersion):
-    def __init__(self, silent):
+    def __init__(self, silent, github_pose = None, gitlab_pose = None):
         super().__init__()
         self._colors = Colors()
         self._secrets = {}
         self._config = None
         self.silent = silent
         self._last_part = None
-        self._github = Github(silent)
-        self._gitlab = Gitlab(silent)
+        if github_pose:
+            self._github = github_pose
+        else:
+            self._github = Github(silent)
+        if gitlab_pose:
+            self._gitlab = gitlab_pose
+        else:
+            self._gitlab = Gitlab(silent)
 
 
     def set_secret(self, backend, key, value):
@@ -401,7 +407,7 @@ class Snapcraft(ProcessVersion):
         replace_comments = False
         for l in data.split("\n"):
             l += '\n' # restore the newline at the end
-            if (len(l) == 0) or (l[0] != '#'):
+            if l[0] != '#':
                 newfile += l
                 replace_comments = False
                 continue
@@ -416,7 +422,11 @@ class Snapcraft(ProcessVersion):
                 l = l[1:]
                 if (len(l) > 0) and (l[1] == ' '):
                     l = ' ' + l
+                else:
+                    l = '#' + l
             newfile += l
+        if data[-1] != '\n' and newfile[-1] == '\n':
+            newfile = newfile[:-1]
         self._config = yaml.safe_load(newfile)
 
 
@@ -630,3 +640,79 @@ class Snapcraft(ProcessVersion):
             newer_elements.sort(reverse = True, key=lambda x: x.get('date'))
             for element in newer_elements:
                 self._print_message(part, "  " + element)
+
+
+class ManageYAML(object):
+    def __init__(self, yaml_data):
+        self._original_data = yaml_data
+        self._tree = self._split_yaml(yaml_data.split('\n'))[1]
+
+
+    def _split_yaml(self, contents, level=0, clevel = 0, separator=' '):
+        data = []
+        while len(contents) != 0:
+            if len(contents[0].lstrip()) == 0 or contents[0][0] == '#':
+                data.append({ 'separator': '',
+                              'data': contents[0].lstrip(),
+                              'child': None,
+                              'level': clevel })
+                contents = contents[1:]
+                continue
+            if not contents[0].startswith(separator * level):
+                return contents, data
+            if level == 0:
+                if contents[0][0] == ' ' or contents[0][0] == '\t':
+                    separator = contents[0][0]
+            if contents[0][level] != separator:
+                data.append({ 'separator': separator * level,
+                              'data': contents[0].lstrip(),
+                              'child': None,
+                              'level': clevel })
+                contents = contents[1:]
+                continue
+            old_level = level
+            while contents[0][level] == separator:
+                level += 1
+            contents, inner_data = self._split_yaml(contents, level, clevel+1, separator)
+            level = old_level
+            data[-1]['child'] = inner_data
+        return [], data
+
+
+    def get_part_data(self, part_name):
+        for entry in self._tree:
+            if entry['data'] != 'parts:':
+                continue
+            for entry2 in entry['child']:
+                if entry2['data'] != f'{part_name}:':
+                    continue
+                return entry2['child']
+        return None
+
+
+    def get_part_element(self, part_name, element):
+        part_data = self.get_part_data(part_name)
+        if part_data:
+            for entry in part_data:
+                if entry['data'].startswith(element):
+                    return entry
+        return None
+
+
+    def _get_yaml_group(self, group):
+        data = ""
+        for entry in group:
+            data += entry['separator']
+            data += entry['data']
+            data += '\n'
+            if entry['child']:
+                data += self._get_yaml_group(entry['child'])
+        return data
+
+
+    def get_yaml(self):
+        data = self._get_yaml_group(self._tree)
+        data = data.rstrip()
+        if data[-1] != '\n':
+            data += '\n'
+        return data

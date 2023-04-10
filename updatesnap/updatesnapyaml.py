@@ -6,6 +6,7 @@ import argparse
 import base64
 from SnapModule.snapmodule import Snapcraft
 from SnapModule.snapmodule import Github
+from SnapModule.snapmodule import ManageYAML
 
 #project_url = sys.argv[1]
 update_branch = 'update_versions'
@@ -57,78 +58,6 @@ class ProjectManager(object):
             if not data:
                 return None
         return data
-
-
-class ManageYAML(object):
-    def __init__(self, yaml_data):
-        self._original_data = yaml_data
-        self._tree = self._split_yaml(yaml_data.split('\n'))[1]
-
-
-    def _split_yaml(self, contents, level=0, clevel = 0, separator=' '):
-        data = []
-        while len(contents) != 0:
-            if len(contents[0]) == 0:
-                data.append({ 'separator': '',
-                              'data': '',
-                              'child': None,
-                              'level': clevel })
-                contents = contents[1:]
-                continue
-            if not contents[0].startswith(separator * level):
-                return contents, data
-            if level == 0:
-                if contents[0][0] == ' ' or contents[0][0] == '\t':
-                    separator = contents[0][0]
-            if contents[0][level] != separator:
-                data.append({ 'separator': separator * level,
-                              'data': contents[0].lstrip(),
-                              'child': None,
-                              'level': clevel })
-                contents = contents[1:]
-                continue
-            old_level = level
-            while contents[0][level] == separator:
-                level += 1
-            contents, inner_data = self._split_yaml(contents, level, clevel+1, separator)
-            level = old_level
-            data[-1]['child'] = inner_data
-        return [], data
-
-
-    def get_part_data(self, part_name):
-        for entry in self._tree:
-            if entry['data'] != 'parts:':
-                continue
-            for entry2 in entry['child']:
-                if entry2['data'] != f'{part_name}:':
-                    continue
-                return entry2['child']
-        return None
-
-
-    def get_part_element(self, part_name, element):
-        part_data = self.get_part_data(part_name)
-        if part_data:
-            for entry in part_data:
-                if entry['data'].startswith(element):
-                    return entry
-        return None
-
-
-    def _get_yaml_group(self, group):
-        data = ""
-        for entry in group:
-            data += entry['separator']
-            data += entry['data']
-            data += '\n'
-            if entry['child']:
-                data += self._get_yaml_group(entry['child'])
-        return data
-
-
-    def get_yaml(self):
-        return self._get_yaml_group(self._tree)
 
 
 parser = argparse.ArgumentParser(prog='Update Snap YAML',
