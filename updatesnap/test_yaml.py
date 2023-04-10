@@ -2,6 +2,7 @@
 
 import unittest
 import os
+import sys
 import datetime
 from SnapModule.snapmodule import Snapcraft
 from SnapModule.snapmodule import ManageYAML
