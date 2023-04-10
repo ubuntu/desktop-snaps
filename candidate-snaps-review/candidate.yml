@@ -3,7 +3,8 @@ cherrytree: []
 chromium: []
 eog: []
 epiphany: []
-evince: []
+evince:
+- 1022
 firefox:
 - 2541
 five-or-more: []
@@ -26,12 +27,14 @@ gnome-calculator:
 - 928
 gnome-calendar: []
 gnome-characters: []
-gnome-chess: []
+gnome-chess:
+- 83
 gnome-clocks: []
 gnome-contacts:
 - 187
 gnome-dictionary: []
-gnome-font-viewer: []
+gnome-font-viewer:
+- 43
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs: []
