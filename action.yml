@@ -19,7 +19,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: 'ubuntu/desktop-snaps'
-        ref: add-action
+        ref: stable
         path: desktop-snaps
     - name: run updatesnapyaml
       id: updatesnapyaml
