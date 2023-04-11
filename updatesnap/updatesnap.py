@@ -53,7 +53,7 @@ def print_summary(data):
         if entry is None:
             continue
         if printed_line:
-            print()
+            print("", file=sys.stderr)
             printed_line = False
         if entry["missing_format"]:
             print(f"{entry['name']}: needs version format definition.")
@@ -92,7 +92,7 @@ def main():
     if argument_list.r: # recursive
         if (argument_list.folder.startswith("http://") or
             argument_list.folder.startswith("https://")):
-            print("-r parameter can't be used with http or https. Aborting.")
+            print("-r parameter can't be used with http or https. Aborting.", file=sys.stderr)
             sys.exit(-1)
         retval = []
         for folder in os.listdir(argument_list.folder):
@@ -107,7 +107,7 @@ def main():
         else:
             response = requests.get(argument_list.folder)
             if not response:
-                print(f"Failed to get the file {argument_list.folder}: {response.status_code}")
+                print(f"Failed to get the file {argument_list.folder}: {response.status_code}", file=sys.stderr)
                 sys.exit(-1)
             retval = process_data(response.content.decode('utf-8'), argument_list)
     print_summary(retval)
