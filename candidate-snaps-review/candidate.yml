@@ -1,12 +1,14 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2424
 eog: []
-epiphany: []
+epiphany:
+- 141
 evince:
-- 1022
+- 1024
 firefox:
-- 2541
+- 2559
 five-or-more: []
 gedit: []
 glade: []
@@ -19,7 +21,7 @@ gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
-- 77
+- 81
 gnome-42-2204-sdk: []
 gnome-boxes:
 - 3
@@ -56,5 +58,6 @@ quadrapassel: []
 snap-store: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 315
 ubuntu-desktop-installer: []
