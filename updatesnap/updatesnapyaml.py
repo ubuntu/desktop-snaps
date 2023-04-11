@@ -104,13 +104,10 @@ def main():
         version_data = manager_yaml.get_part_element(part['name'], 'source-tag:')
         if not version_data:
             continue
-        print(f"Updating '{part['name']}' from version '{part['version'][0]}'"
-            " to version '{part['updates'][0]['name']}'")
         version_data['data'] = f"source-tag: '{part['updates'][0]['name']}'"
         has_update = True
 
     if has_update:
-        print("\n\n")
         print(manager_yaml.get_yaml())
     else:
         print("No updates available")
