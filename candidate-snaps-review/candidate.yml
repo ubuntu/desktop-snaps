@@ -1,37 +1,39 @@
 cheese: []
 cherrytree: []
-chromium:
-- 2424
-eog: []
-epiphany:
-- 141
+chromium: []
+eog:
+- 708
+epiphany: []
 evince:
-- 1024
-firefox:
-- 2559
+- 1027
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
 glimpse-editor: []
 gnome-2048: []
 gnome-3-26-1604: []
-gnome-3-28-1804: []
+gnome-3-28-1804:
+- 198
 gnome-3-34-1804: []
 gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
-gnome-3-38-2004-sdk: []
+gnome-3-38-2004-sdk:
+- 171
 gnome-42-2204:
 - 81
-gnome-42-2204-sdk: []
+gnome-42-2204-sdk:
+- 107
 gnome-boxes:
 - 3
 gnome-calculator:
-- 928
+- 930
 gnome-calendar: []
 gnome-characters: []
 gnome-chess:
 - 83
-gnome-clocks: []
+gnome-clocks:
+- 453
 gnome-contacts:
 - 187
 gnome-dictionary: []
@@ -49,7 +51,8 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor: []
+gnome-text-editor:
+- 17
 gtk-common-themes: []
 iagno: []
 libreoffice: []
