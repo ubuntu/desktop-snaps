@@ -25,7 +25,7 @@ class Colors:
 
 
     def clear_line(self):
-        print(self.clearline, end="\r") # clear the line
+        print(self.clearline, end="\r", file=sys.stderr) # clear the line
 
 class ProcessVersion:
 
@@ -40,11 +40,11 @@ class ProcessVersion:
             return
         if part != self._last_part:
             print(f"Part: {self._colors.note}{part}{self._colors.reset}"
-                  f"{f' ({source})' if source else ''}")
+                  f"{f' ({source})' if source else ''}", file=sys.stderr)
             self._last_part = part
         if message is not None:
-            print("  " + message, end="")
-            print(self._colors.reset)
+            print("  " + message, end="", file=sys.stderr)
+            print(self._colors.reset, file=sys.stderr)
 
     def _read_number(self, text):
         number = 0
@@ -123,7 +123,7 @@ class GitClass(ProcessVersion):
 
     def _read_uri(self, uri):
         if not self._silent:
-            print(f"Asking URI {uri}     ", end="\r")
+            print(f"Asking URI {uri}     ", end="\r", file=sys.stderr)
         while True:
             try:
                 if (self._user is not None) and (self._token is not None):
@@ -134,7 +134,7 @@ class GitClass(ProcessVersion):
                 break
             except:
                 if not self._silent:
-                    print(f"Retrying URI {uri}     ", end="\r")
+                    print(f"Retrying URI {uri}     ", end="\r", file=sys.stderr)
                 time.sleep(1)
         return response
 
@@ -148,7 +148,7 @@ class GitClass(ProcessVersion):
             if response.status_code != 200:
                 if not self._silent:
                     print(f"{self._colors.critical}Status code {response.status_code} "
-                          f"when asking for {uri}{self._colors.reset}")
+                          f"when asking for {uri}{self._colors.reset}", file=sys.stderr)
                 return []
             headers = response.headers
             data = response.json()
@@ -175,7 +175,7 @@ class GitClass(ProcessVersion):
         response = self._read_uri(uri)
         if response.status_code != 200:
             print(f"{self._colors.critical}Status code {response.status_code} "
-                  f"when asking for {uri}{self._colors.reset}")
+                  f"when asking for {uri}{self._colors.reset}", file=sys.stderr)
             return None
         headers = response.headers
         data = response.json()
@@ -190,12 +190,12 @@ class GitClass(ProcessVersion):
         elements = uri.path.split("/")
         if (uri.scheme != 'http') and (uri.scheme != 'https') and (uri.scheme != 'git'):
             print(f"{self._colors.critical}Unrecognized protocol in repository "
-                  f"{repository}{self._colors.reset}")
+                  f"{repository}{self._colors.reset}", file=sys.stderr)
             return None
         elements = uri.path.split("/")
         if len(elements) < min_elements:
             print(f"{self._colors.critical}Invalid uri format for repository "
-                  f"{repository}{self._colors.reset}")
+                  f"{repository}{self._colors.reset}", file=sys.stderr)
             return None
         return uri
 
@@ -379,7 +379,7 @@ class Snapcraft(ProcessVersion):
         elif backend == 'gitlab':
             self._gitlab.set_secret(key, value)
         else:
-            print(f"Unknown backend: {backend}")
+            print(f"Unknown backend: {backend}", file=sys.stderr)
 
 
     def load_local_file(self, filename = None):
@@ -391,10 +391,10 @@ class Snapcraft(ProcessVersion):
             if not os.path.exists(filename_tmp):
                 filename_tmp = os.path.join(filename, "snap", "snapcraft.yaml")
                 if not os.path.exists(filename_tmp):
-                    print(f"No snapcraft file found at folder {filename}")
+                    print(f"No snapcraft file found at folder {filename}", file=sys.stderr)
             filename = filename_tmp
         if os.path.exists(filename):
-            print(f"Opening file {filename}")
+            print(f"Opening file {filename}", file=sys.stderr)
             with open(filename, "r") as file_data:
                 data = file_data.read()
             self._open_yaml_file_with_extensions(data, "updatesnap")
@@ -541,14 +541,14 @@ class Snapcraft(ProcessVersion):
             ((not 'source-type' in data) or (data['source-type'] != 'git'))):
             self._print_message(part, f"{self._colors.critical}Source is neither http:// "
                                       f"nor git://{self._colors.reset}", source = source)
-            print()
+            print("", file=sys.stderr)
             return part_data
 
         if (not source.endswith('.git')) and ((not 'source-type' in data)
             or (data['source-type'] != 'git')):
             self._print_message(part, f"{self._colors.warning}Source is not a GIT "
                                       f"repository{self._colors.reset}", source = source)
-            print()
+            print("", file=sys.stderr)
             return part_data
 
         if 'savannah' in source:
@@ -557,7 +557,7 @@ class Snapcraft(ProcessVersion):
                 self._print_message(part, f"{self._colors.warning}Savannah repositories "
                                           f"not supported{self._colors.reset}", source = source)
                 if not self._silent:
-                    print()
+                    print("", file=sys.stderr)
                 return part_data
 
         self._print_message(part, None, source = source)
@@ -584,7 +584,7 @@ class Snapcraft(ProcessVersion):
                                       f"specific tag{self._colors.reset}")
             self._print_last_tags(part, tags)
         if not self._silent:
-            print()
+            print("", file=sys.stderr)
         return part_data
 
 

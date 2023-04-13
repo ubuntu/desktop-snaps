@@ -67,7 +67,7 @@ def main():
     arguments = parser.parse_args(sys.argv[1:])
 
     if arguments.project == '.':
-        print('A project URI is mandatory')
+        print('A project URI is mandatory', file=sys.stderr)
         sys.exit(-1)
 
     manager = ProjectManager(arguments.github_user, arguments.github_token)
@@ -77,7 +77,7 @@ def main():
     #branch = manager.get_working_branch(arguments.project)
     data = manager.get_yaml_file(arguments.project)
     if not data:
-        print('Failed to get the snapcraft.yaml file.')
+        print('Failed to get the snapcraft.yaml file.', file=sys.stderr)
         sys.exit(-1)
     contents = base64.b64decode(data['content']).decode('utf-8')
 
@@ -92,7 +92,7 @@ def main():
     parts = snap.process_parts()
 
     if len(parts) == 0:
-        print("The snapcraft.yaml file has no parts.")
+        print("The snapcraft.yaml file has no parts.", file=sys.stderr)
         sys.exit(0) # no parts
 
     has_update = False
@@ -105,15 +105,16 @@ def main():
         if not version_data:
             continue
         print(f"Updating '{part['name']}' from version '{part['version'][0]}'"
-            " to version '{part['updates'][0]['name']}'")
+            " to version '{part['updates'][0]['name']}'", file=sys.stderr)
         version_data['data'] = f"source-tag: '{part['updates'][0]['name']}'"
         has_update = True
 
     if has_update:
-        print("\n\n")
         print(manager_yaml.get_yaml())
+        sys.exit(0)
     else:
-        print("No updates available")
+        print("No updates available", file=sys.stderr)
+        sys.exit(-1)
 
 if __name__ == "__main__":
     main()
