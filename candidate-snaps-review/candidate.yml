@@ -19,20 +19,17 @@ gnome-3-28-1804:
 gnome-3-34-1804: []
 gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
-gnome-3-38-2004-sdk:
-- 171
+gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 94
-gnome-42-2204-sdk:
-- 111
+gnome-42-2204-sdk: []
 gnome-boxes:
 - 3
 gnome-calculator:
 - 932
 gnome-calendar: []
 gnome-characters: []
-gnome-chess:
-- 85
+gnome-chess: []
 gnome-clocks:
 - 453
 gnome-contacts:
