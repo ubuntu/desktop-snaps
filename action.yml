@@ -41,7 +41,3 @@ runs:
         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
         echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
       shell: bash
-    - name: Cleanup
-      run: |
-        rm -rf desktop-snaps
-      shell: bash
