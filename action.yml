@@ -29,6 +29,9 @@ runs:
         GITHUB_USER: ubuntu
         GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
+    - name: Cleanup
+      run: |
+        rm -rf desktop-snaps
     - name: create pull request
       id: cpr
       uses: peter-evans/create-pull-request@v4
