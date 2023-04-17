@@ -32,6 +32,7 @@ runs:
     - name: Cleanup
       run: |
         rm -rf desktop-snaps
+      shell: bash
     - name: create pull request
       id: cpr
       uses: peter-evans/create-pull-request@v4
