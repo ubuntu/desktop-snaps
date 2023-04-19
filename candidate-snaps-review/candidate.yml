@@ -28,7 +28,7 @@ gnome-calculator:
 - 934
 gnome-calendar: []
 gnome-characters:
-- 783
+- 785
 gnome-chess: []
 gnome-clocks:
 - 453
@@ -53,7 +53,8 @@ gnome-text-editor:
 - 17
 gtk-common-themes: []
 iagno: []
-libreoffice: []
+libreoffice:
+- 272
 lightsoff: []
 quadrapassel: []
 snap-store: []
