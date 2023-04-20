@@ -6,25 +6,6 @@ import datetime
 from SnapModule.snapmodule import Snapcraft
 from SnapModule.snapmodule import ManageYAML
 
-class GitPose:
-    def __init__(self):
-        self._tags = {}
-        self._branches = {}
-
-    def set_secrets(self, data):
-        pass
-
-    def set_tags(self, tags):
-        self._tags = tags
-
-    def set_branches(self, branches):
-        self._branches = branches
-
-    def get_tags(self, source, current_tag = None, version_format = None):
-        if source in self._tags:
-            return self._tags[source]
-        return []
-
 
 class TestYAMLfiles(unittest.TestCase):
 
@@ -56,8 +37,67 @@ class TestYAMLfiles(unittest.TestCase):
                 return False
         return True
 
+    def test_gnome_calculator_1(self):
+        # tests if it detects the right list of available updates
+        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
+                                              GitPose.get_gnome_calculator_tags())
+        data = snap.process_parts()
+        assert self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0"])
+        assert not self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0", "42.2"])
 
-    def _get_gnome_calculator_tags(self):
+
+    def test_gnome_calculator_2(self):
+        # tests if the updated snapcraft.yaml file is correct
+        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
+                                              GitPose.get_gnome_calculator_tags())
+        data = snap.process_parts()
+        manager_yaml = ManageYAML(datafile)
+        has_update = False
+        for part in data:
+            if not part:
+                continue
+            if not part['updates']:
+                continue
+            version_data = manager_yaml.get_part_element(part['name'], 'source-tag:')
+            if not version_data:
+                continue
+            version_data['data'] = f"source-tag: '{part['updates'][0]['name']}'"
+            has_update = True
+        version_data = manager_yaml.get_part_element("gnome-calculator", 'source-tag:')
+        assert has_update
+        assert version_data['data'] == "source-tag: '44.0'"
+        assert manager_yaml.get_yaml() == GitPose.get_updated_yaml()
+
+
+    def test_gnome_calculator_3(self):
+        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
+                                              GitPose.get_gnome_calculator_tags())
+        data = snap.process_parts()
+        manager_yaml = ManageYAML(datafile)
+        assert manager_yaml.get_yaml() == datafile
+
+
+class GitPose:
+    def __init__(self):
+        self._tags = {}
+        self._branches = {}
+
+    def set_secrets(self, data):
+        pass
+
+    def set_tags(self, tags):
+        self._tags = tags
+
+    def set_branches(self, branches):
+        self._branches = branches
+
+    def get_tags(self, source, current_tag = None, version_format = None):
+        if source in self._tags:
+            return self._tags[source]
+        return []
+
+    @staticmethod
+    def get_gnome_calculator_tags():
         return {"https://gitlab.gnome.org/GNOME/gnome-calculator.git":
             [
               {'name': '44.0', 'date': datetime.datetime(2023, 3, 17, 22, 17, 18,
@@ -103,34 +143,10 @@ class TestYAMLfiles(unittest.TestCase):
             ]
           }
 
-    def test_gnome_calculator_1(self):
-        # tests if it detects the right list of available updates
-        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
-                                              self._get_gnome_calculator_tags())
-        data = snap.process_parts()
-        assert self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0"])
-        assert not self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0", "42.2"])
 
-    def test_gnome_calculator_2(self):
-        # tests if the updated snapcraft.yaml file is correct
-        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
-                                              self._get_gnome_calculator_tags())
-        data = snap.process_parts()
-        manager_yaml = ManageYAML(datafile)
-        has_update = False
-        for part in data:
-            if not part:
-                continue
-            if not part['updates']:
-                continue
-            version_data = manager_yaml.get_part_element(part['name'], 'source-tag:')
-            if not version_data:
-                continue
-            version_data['data'] = f"source-tag: '{part['updates'][0]['name']}'"
-            has_update = True
-        version_data = manager_yaml.get_part_element("gnome-calculator", 'source-tag:')
-        assert version_data['data'] == "source-tag: '44.0'"
-        assert manager_yaml.get_yaml() == """name: gnome-calculator
+    @staticmethod
+    def get_updated_yaml():
+        return """name: gnome-calculator
 adopt-info: gnome-calculator
 summary: GNOME Calculator
 description: |
@@ -220,14 +236,5 @@ parts:
         cd "/snap/$snap/current" && find . -type f,l -name *.so.* -exec rm -f "$CRAFT_PRIME/{}" \\;
       done
 """
-
-
-    def test_gnome_calculator_3(self):
-        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
-                                              self._get_gnome_calculator_tags())
-        data = snap.process_parts()
-        manager_yaml = ManageYAML(datafile)
-        assert manager_yaml.get_yaml() == datafile
-
 
 unittest.main()
