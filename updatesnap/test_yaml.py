@@ -5,12 +5,28 @@
 import unittest
 import os
 import datetime
+import sys
+import yaml
 from SnapModule.snapmodule import Snapcraft
 from SnapModule.snapmodule import ManageYAML
 from SnapModule.snapmodule import ProcessVersion
+from SnapModule.snapmodule import Github
 
 class TestYAMLfiles(unittest.TestCase):
     """ Unitary tests for snapmodule """
+
+    def _load_secrets(self, obj):
+        secrets = None
+        if len(sys.argv) >= 3:
+            secrets = {"github": {"user":sys.argv[1], "token":sys.argv[2]}}
+        else:
+            secrets_file = os.path.expanduser('~/.config/updatesnap/updatesnap.secrets')
+            if os.path.exists(secrets_file):
+                with open(secrets_file, "r", encoding="utf8") as cfg:
+                    secrets = yaml.safe_load(cfg)
+        if secrets is not None:
+            obj.set_secrets(secrets)
+
 
     def _load_test_file(self, filepath, tags):
         with open(os.path.join("tests", filepath), "r", encoding='utf-8') as datafile:
@@ -43,7 +59,7 @@ class TestYAMLfiles(unittest.TestCase):
     def test_gnome_calculator_1(self):
         """ tests if it detects the right list of available updates """
         snap, _ = self._load_test_file("gnome-calculator-test1.yaml",
-                                              get_gnome_calculator_tags())
+                                       get_gnome_calculator_tags())
         data = snap.process_parts()
         assert self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0"])
         assert not self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0", "42.2"])
@@ -73,7 +89,7 @@ class TestYAMLfiles(unittest.TestCase):
 
 
     def test_gnome_calculator_3(self):
-        """ updates a YAML file and checks if the resulting YAML is correct """
+        """ Ensure that the updated file identical to the expected one """
         snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
                                               get_gnome_calculator_tags())
         data = snap.process_parts()
@@ -100,6 +116,37 @@ class TestYAMLfiles(unittest.TestCase):
         assert version is None
         version = obj._get_version("testpart", "3.42.1", entry_format, False)
         assert str(version) == "3.42.1"
+
+
+    def test_github_file_download(self):
+        """ Check that a file download from github works as expected """
+        gitobj = Github(silent = True)
+        self._load_secrets(gitobj)
+        data = gitobj.get_file("https://github.com/ubuntu/gnome-calculator", "snapcraft.yaml")
+        assert data is not None
+        assert isinstance(data, bytes)
+        content = data.decode('utf-8')
+        assert isinstance(content, str)
+        assert content.find('name: gnome-calculator') != -1
+
+
+    def test_github_tags_download(self):
+        """ Check that tag download from github works as expected """
+        gitobj = Github(silent = False)
+        self._load_secrets(gitobj)
+        data = gitobj.get_tags("https://github.com/GNOME/gnome-calculator",
+                               "40.0", {"format":"%M.%m"})
+        assert isinstance(data, list)
+        # ensure that the known tags are in the list
+        tags = get_gnome_calculator_tags()["https://gitlab.gnome.org/GNOME/gnome-calculator.git"]
+        for tag in data:
+            found = False
+            for tag2 in tags:
+                if tag2["name"] == tag["name"]:
+                    found = True
+                    break
+            assert found
+
 
 
 class GitPose:
