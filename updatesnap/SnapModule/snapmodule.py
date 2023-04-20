@@ -1,34 +1,49 @@
+""" Processes a YAML file to get the list of available updates for
+    each part, or return a new YAML with each part's version tag
+    updated to the last version available in each source repository """
+
 import urllib
 import re
 import time
 import os
 import datetime
+import sys
+from typing import Optional
 import requests
 import yaml
-import sys
 
 import pkg_resources
 
 class Colors:
+    #pylint: disable=too-few-public-methods
+    """ Container class to define the colors for the messages """
     def __init__(self):
-        self.red = "\033[31m"
-        self.green = "\033[32m"
-        self.yellow = "\033[33m"
-        self.cyan = "\033[36m"
+        red = "\033[31m"
+        green = "\033[32m"
+        yellow = "\033[33m"
+        cyan = "\033[36m"
+
         self.reset = "\033[0m"
         self.clearline = "\033[2K"
 
-        self.critical = self.red
-        self.warning = self.yellow
-        self.ok = self.green
-        self.note = self.cyan
-
+        self.critical = red
+        self.warning = yellow
+        self.all_ok = green
+        self.note = cyan
 
     def clear_line(self):
-        print(self.clearline, end="\r", file=sys.stderr) # clear the line
+        """ Restore the colors to the default ones
+
+        This must be called after showing a piece of text with any of
+        the previous colors, to go back to the default color."""
+        print(self.clearline, end="\r", file=sys.stderr)
 
 class ProcessVersion:
+    #pylint: disable=too-few-public-methods
+    """ Base code to process a version number from a tag
 
+    Implements the base code to parse a version number based on the
+    version_format tag in a snapcraft.yaml file."""
     def __init__(self, silent = False):
         super().__init__()
         self._silent = silent
@@ -46,7 +61,8 @@ class ProcessVersion:
             print("  " + message, end="", file=sys.stderr)
             print(self._colors.reset, file=sys.stderr)
 
-    def _read_number(self, text):
+    @staticmethod
+    def _read_number(text):
         number = 0
         if (len(text) == 0) or (text[0] not in '0123456789'):
             return None, text
@@ -61,7 +77,7 @@ class ProcessVersion:
         if "format" not in entry_format:
             if check:
                 self._print_message(part_name, f"{self._colors.critical}"
-                                    f"Missing tag version format for {part_name}{self._colors.reset}.")
+                    f"Missing tag version format for {part_name}{self._colors.reset}.")
             return None # unknown format
         major = 0
         minor = 0
@@ -86,21 +102,25 @@ class ProcessVersion:
                 return None
             entry = entry[len(part):]
         version = pkg_resources.parse_version(f"{major}.{minor}.{revision}")
-        if "lower-than" in entry_format:
-            if version >= pkg_resources.parse_version(str(entry_format["lower-than"])):
-                return None
-        if ("ignore-odd-minor" in entry_format) and (entry_format["ignore-odd-minor"]):
-            if (minor % 2) == 1:
-                return None
-        if ("no-9x-revisions" in entry_format) and (entry_format["no-9x-revisions"]):
-            if revision >= 90:
-                return None
+        if (("lower-than" in entry_format) and
+            (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
+            return None
+        if (("ignore-odd-minor" in entry_format) and (entry_format["ignore-odd-minor"]) and
+            ((minor % 2) == 1)):
+            return None
+        if (("no-9x-revisions" in entry_format) and (entry_format["no-9x-revisions"]) and
+            (revision >= 90)):
+            return None
 
         return version
 
 
 class GitClass(ProcessVersion):
-    def __init__(self, repo_type, silent = False):
+    """ Base class to get access to a GIT repository
+
+    Implements the base functionality to access a remote GIT repository,
+    either Github or Gitlab type, and use a REST API to obtain data. """
+    def __init__(self, repo_type: str, silent = False):
         super().__init__(silent)
         self._token = None
         self._user = None
@@ -109,19 +129,24 @@ class GitClass(ProcessVersion):
 
 
     def set_secrets(self, secrets):
+        """ Configure the secrets for this repository
+
+        The secrets are things like username and access tokens."""
         if (self._repo_type == 'github') and 'github' in secrets:
             self._user = secrets['github']['user']
             self._token = secrets['github']['token']
 
 
-    def set_secret(self, secret, value):
+    def set_secret(self, secret: str, value):
+        """ Configure an specific secret """
         if secret == 'user':
             self._user = value
         elif secret == 'token':
             self._token = value
 
 
-    def _read_uri(self, uri):
+    def _read_uri(self, uri: str):
+        # pylint: disable=bare-except
         if not self._silent:
             print(f"Asking URI {uri}     ", end="\r", file=sys.stderr)
         while True:
@@ -139,9 +164,10 @@ class GitClass(ProcessVersion):
         return response
 
     def _stop_download(self, data):
+        # pylint: disable=unused-argument, no-self-use
         return False
 
-    def _read_pages(self, uri):
+    def _read_pages(self, uri: str) -> list:
         elements = []
         while uri is not None:
             response = self._read_uri(uri)
@@ -171,13 +197,12 @@ class GitClass(ProcessVersion):
         return elements
 
 
-    def _read_page(self, uri):
+    def _read_page(self, uri: str) -> Optional[dict]:
         response = self._read_uri(uri)
         if response.status_code != 200:
             print(f"{self._colors.critical}Status code {response.status_code} "
                   f"when asking for {uri}{self._colors.reset}", file=sys.stderr)
             return None
-        headers = response.headers
         data = response.json()
         return data
 
@@ -188,7 +213,7 @@ class GitClass(ProcessVersion):
             repository = repository[:-4]
         uri = urllib.parse.urlparse(repository)
         elements = uri.path.split("/")
-        if (uri.scheme != 'http') and (uri.scheme != 'https') and (uri.scheme != 'git'):
+        if uri.scheme not in ['http', 'https', 'git']:
             print(f"{self._colors.critical}Unrecognized protocol in repository "
                   f"{repository}{self._colors.reset}", file=sys.stderr)
             return None
@@ -199,8 +224,8 @@ class GitClass(ProcessVersion):
             return None
         return uri
 
-
-    def _rb(self, text):
+    @staticmethod
+    def _rb(text):
         """ Remove trailing and heading '/' characters, to simplify building URIs """
         while (len(text) > 0) and (text[0] == '/'):
             text = text[1:]
@@ -209,7 +234,9 @@ class GitClass(ProcessVersion):
         return text
 
 
-    def join_url(self, *args):
+    @staticmethod
+    def join_url(*args):
+        """ Join several elements into a single URL """
         if len(args) == 0:
             return ""
         output = args[0]
@@ -223,6 +250,7 @@ class GitClass(ProcessVersion):
 
 
 class Github(GitClass):
+    """ Implements access to Github GIT repositories """
     def __init__(self, silent = False):
         super().__init__("github", silent)
         self._api_url = 'https://api.github.com/repos/'
@@ -232,12 +260,13 @@ class Github(GitClass):
         uri = self._get_uri(repository, 3)
         if uri is None:
             return None
-        if (uri.netloc != "github.com") and (uri.netloc != "www.github.com"):
+        if uri.netloc not in ["github.com", "www.github.com"]:
             return None
         return uri
 
 
-    def get_branches(self, repository):
+    def get_branches(self, repository) -> Optional[list]:
+        """ Returns a list of branches for this repository """
         uri = self._is_github(repository)
         if uri is None:
             return None
@@ -255,7 +284,10 @@ class Github(GitClass):
         return False
 
 
-    def get_tags(self, repository, current_tag = None, version_format = {}):
+    def get_tags(self, repository, current_tag = None, version_format = None) -> Optional[list]:
+        """ Returns a list of tags for this repository """
+        if version_format is None:
+            version_format = {}
         uri = self._is_github(repository)
         if uri is None:
             return None
@@ -285,7 +317,8 @@ class Github(GitClass):
         return tags
 
 
-    def get_file(self, repository, file_path):
+    def get_file(self, repository, file_path: str) -> Optional[dict]:
+        """ Returns a json with the contents of a file of the repository """
         uri = self._is_github(repository)
         if uri is None:
             return None
@@ -297,6 +330,7 @@ class Github(GitClass):
 
 
 class Gitlab(GitClass):
+    """ Implements access to Gitlab GIT repositories """
     def __init__(self, silent = False):
         super().__init__("gitlab", silent)
 
@@ -310,14 +344,16 @@ class Gitlab(GitClass):
         return uri
 
 
-    def _project_name(self, uri):
+    @staticmethod
+    def _project_name(uri):
         name = uri.path
         while name[0] == '/':
             name = name[1:]
         return name.replace('/', '%2F')
 
 
-    def get_branches(self, repository):
+    def get_branches(self, repository) -> Optional[list]:
+        """ Returns a list of branches for this repository """
         uri = self._is_gitlab(repository)
         if uri is None:
             return None
@@ -340,7 +376,9 @@ class Gitlab(GitClass):
         return False
 
 
-    def get_tags(self, repository, current_tag = None, version_format = {}):
+    def get_tags(self, repository, current_tag = None, version_format = None) -> Optional[list]:
+        # pylint: disable=unused-argument
+        """ Returns a list of tags for this repository """
         uri = self._is_gitlab(repository)
         if uri is None:
             return None
@@ -359,6 +397,7 @@ class Gitlab(GitClass):
 
 
 class Snapcraft(ProcessVersion):
+    """ Implements all the YAML processing for snapcraft configuration files """
     def __init__(self, silent, github_pose = None, gitlab_pose = None):
         super().__init__(silent)
         self._secrets = {}
@@ -374,6 +413,7 @@ class Snapcraft(ProcessVersion):
 
 
     def set_secret(self, backend, key, value):
+        """ Sets an specific secret value for a backend """
         if backend == 'github':
             self._github.set_secret(key, value)
         elif backend == 'gitlab':
@@ -395,7 +435,7 @@ class Snapcraft(ProcessVersion):
             filename = filename_tmp
         if os.path.exists(filename):
             print(f"Opening file {filename}", file=sys.stderr)
-            with open(filename, "r") as file_data:
+            with open(filename, "r", encoding="utf8") as file_data:
                 data = file_data.read()
             self._open_yaml_file_with_extensions(data, "updatesnap")
         self._load_secrets(filename)
@@ -458,22 +498,20 @@ class Snapcraft(ProcessVersion):
     def _load_secrets(self, filename):
         secrets_file = os.path.expanduser('~/.config/updatesnap/updatesnap.secrets')
         if os.path.exists(secrets_file):
-            with open(secrets_file, "r") as cfg:
+            with open(secrets_file, "r", encoding="utf8") as cfg:
                 self._secrets = yaml.safe_load(cfg)
         else:
             if filename is not None:
                 secrets_file = os.path.join(os.path.split(os.path.abspath(filename))[0],
                                                           "updatesnap.secrets")
                 if os.path.exists(secrets_file):
-                    with open(secrets_file, "r") as cfg:
+                    with open(secrets_file, "r", encoding="utf8") as cfg:
                         self._secrets = yaml.safe_load(cfg)
         self._github.set_secrets(self._secrets)
         self._gitlab.set_secrets(self._secrets)
 
 
     def _get_tags(self, source, current_tag = None, version_format = None):
-        if version_format is None:
-            version_format = {}
         tags = self._github.get_tags(source, current_tag, version_format)
         if tags is not None:
             return tags
@@ -489,7 +527,11 @@ class Snapcraft(ProcessVersion):
         return branches
 
 
-    def process_parts(self):
+    def process_parts(self) -> list:
+        """ Processes all the parts of the current YAML file
+
+        It goes through each part in the current YAML file and
+        updates the version to the latest one. """
         if self._config is None:
             return []
         parts = []
@@ -498,29 +540,48 @@ class Snapcraft(ProcessVersion):
         return parts
 
 
-    def process_part(self, part):
+    def process_part(self, part: str) -> Optional[dict]:
+        """ Processes an specific part of the current YAML file
+
+        It takes the YAML data of the specified part, downloads all
+        the tags from the github/gitlab of the source, compares them
+        with the current version, finds the most recent in the repository,
+        and returns the part data modified with the new version.
+
+        If it returns None, there is no new version for that part
+        """
+
         part_data = {
             "name": part,
             "version": None,
             "use_branch": False,
             "use_tag": False,
             "missing_format": False,
-            "updates": []
+            "updates": [],
+            "version_format": {}
         }
+
         if self._config is None:
             return None
+
         if part not in self._config['parts']:
             return None
+
         data = self._config['parts'][part]
+
         if 'source' not in data:
             return None
+
         if 'source-tag' in data:
             current_tag = data['source-tag']
         else:
             current_tag = None
+
         version_format = data['version-format'] if ('version-format' in data) else {}
+
         if ('ignore' in version_format) and (version_format['ignore']):
             return None
+
         if ("format" not in version_format) and (current_tag is not None):
             # if the version format is not specified,
             # automagically detect it between any of these common formats:
@@ -533,6 +594,9 @@ class Snapcraft(ProcessVersion):
                 version_format["format"] = 'v%M.%m.%R'
             elif re.match('^[0-9]+[.][0-9]+$', current_tag):
                 version_format["format"] = '%M.%m'
+        part_data["version_format"] = version_format
+        if "format" not in version_format:
+            part_data['missing_format'] = True
         source = data['source']
 
         if ((not source.startswith('http://')) and
@@ -571,7 +635,10 @@ class Snapcraft(ProcessVersion):
         if 'source-tag' in data:
             part_data["use_tag"] = True
             self._print_message(part, f"Current tag: {data['source-tag']}", source = source)
-            self._sort_tags(part, data['source-tag'], tags, version_format, part_data)
+            if tags is None:
+                self._print_message(part, f"{self._colors.critical}No tags found")
+            else:
+                self._sort_tags(part, data['source-tag'], tags, part_data)
 
         if 'source-branch' in data:
             part_data["use_branch"] = True
@@ -596,13 +663,8 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, f"  {tag['name']} ({tag['date']})")
 
 
-    def _sort_tags(self, part, current_tag, tags, version_format, part_data):
-        if tags is None:
-            self._print_message(part, f"{self._colors.critical}No tags found")
-            return
+    def _sort_tags(self, part, current_tag, tags, part_data):
 
-        if "format" not in version_format:
-            part_data['missing_format'] = True
         current_date = None
         found_tag = None
         for tag in tags:
@@ -610,42 +672,51 @@ class Snapcraft(ProcessVersion):
                 current_date = tag['date']
                 found_tag = tag
                 break
+
         if current_date is None:
             self._print_message(part, f"{self._colors.critical}Error:{self._colors.reset} "
                                       f"can't find the current tag in the tag list.")
             return
+
+        version_format = part_data["version_format"]
         self._print_message(part, f"Current tag date: {current_date}")
         part_data['version'] = (found_tag['name'], current_date)
         current_version = self._get_version(part, current_tag, version_format, True)
+
         newer_tags = []
         for tag in tags:
             if tag['name'] == current_tag:
                 continue
+
             if current_version is not None:
                 version = self._get_version(part, tag['name'], version_format, False)
-                if version is None:
+                if (version is None) or (version <= current_version):
                     continue
-                if version <= current_version:
-                    continue
-            else:
-                if t['date'] < current_date:
-                    continue
-            if ("same-major" in version_format) and (version_format["same-major"]):
-                if version.major != current_version.major:
-                    continue
-            if ("same-minor" in version_format) and (version_format["same-minor"]):
-                if version.minor != current_version.minor:
-                    continue
+
+            if (current_version is None) and (tag['date'] < current_date):
+                continue
+
+            if (("same-major" in version_format) and
+                (version_format["same-major"]) and
+                (version.major != current_version.major)):
+                continue
+
+            if (("same-minor" in version_format) and
+                (version_format["same-minor"]) and
+                (version.minor != current_version.minor)):
+                continue
+
             newer_tags.append(tag)
 
         if len(newer_tags) == 0:
-            self._print_message(part, f"{self._colors.ok}Tag updated{self._colors.reset}")
-        else:
-            self._print_message(part, f"{self._colors.warning}Newer tags:{self._colors.reset}")
-            newer_tags.sort(reverse = True, key=lambda x: x.get('date'))
-            for tag in newer_tags:
-                self._print_message(part, f"  {tag['name']} ({tag['date']})")
-                part_data["updates"].append(tag)
+            self._print_message(part, f"{self._colors.all_ok}Tag updated{self._colors.reset}")
+            return
+
+        self._print_message(part, f"{self._colors.warning}Newer tags:{self._colors.reset}")
+        newer_tags.sort(reverse = True, key=lambda x: x.get('date'))
+        for tag in newer_tags:
+            self._print_message(part, f"  {tag['name']} ({tag['date']})")
+            part_data["updates"].append(tag)
 
 
     def _sort_elements(self, part, current_version, elements, text):
@@ -662,7 +733,7 @@ class Snapcraft(ProcessVersion):
                 (element['date'] > current_element['date'])):
                 newer_elements.append(element)
         if len(newer_elements) == 0:
-            self._print_message(part, f"{self._colors.ok}Branch updated{self._colors.reset}")
+            self._print_message(part, f"{self._colors.all_ok}Branch updated{self._colors.reset}")
         else:
             self._print_message(part, text)
             newer_elements.sort(reverse = True, key=lambda x: x.get('date'))
@@ -675,12 +746,19 @@ class ManageYAML:
         block, preserving the child structure to allow to re-create it without
         loosing any line. This can't be done by reading it with the YAML module
         because it deletes things like comments. """
-    def __init__(self, yaml_data):
+
+    def __init__(self, yaml_data: str):
         self._original_data = yaml_data
         self._tree = self._split_yaml(yaml_data.split('\n'))[1]
 
 
-    def _split_yaml(self, contents, level=0, clevel = 0, separator=' '):
+    def _split_yaml(self, contents: str, level: int=0, clevel: int= 0,
+                    separator: str=' ') -> tuple[list, str]:
+        """ Transform a YAML text file into a tree
+
+        Splits a YAML file in lines in a format that preserves the structure,
+        the order and the comments. """
+
         data = []
         while len(contents) != 0:
             if len(contents[0].lstrip()) == 0 or contents[0][0] == '#':
@@ -711,7 +789,12 @@ class ManageYAML:
         return [], data
 
 
-    def get_part_data(self, part_name):
+    def get_part_data(self, part_name: str) -> Optional[dict]:
+        """ Returns all the entries of an specific part of the current
+            YAML file. For example, the 'glib' part from a YAML file
+            with several parts. It returns None if that part doesn't
+            exist """
+
         for entry in self._tree:
             if entry['data'] != 'parts:':
                 continue
@@ -722,7 +805,11 @@ class ManageYAML:
         return None
 
 
-    def get_part_element(self, part_name, element):
+    def get_part_element(self, part_name: int, element: str) -> Optional[dict]:
+        """ Returns an specific entry for an specific part in the YAML file.
+            For example, it can returns the 'source-tag' entry of the part
+            'glib' from a YAML file with several parts. """
+
         part_data = self.get_part_data(part_name)
         if part_data:
             for entry in part_data:
@@ -742,7 +829,8 @@ class ManageYAML:
         return data
 
 
-    def get_yaml(self):
+    def get_yaml(self) -> str:
+        """ Returns the YAML file updated with the new versions """
         data = self._get_yaml_group(self._tree)
         data = data.rstrip()
         if data[-1] != '\n':

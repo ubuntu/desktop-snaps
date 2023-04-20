@@ -107,7 +107,8 @@ def main():
         else:
             response = requests.get(argument_list.folder)
             if not response:
-                print(f"Failed to get the file {argument_list.folder}: {response.status_code}", file=sys.stderr)
+                print(f"Failed to get the file {argument_list.folder}: {response.status_code}",
+                      file=sys.stderr)
                 sys.exit(-1)
             retval = process_data(response.content.decode('utf-8'), argument_list)
     print_summary(retval)
