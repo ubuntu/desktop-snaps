@@ -74,6 +74,7 @@ class ProcessVersion:
 
 
     def _get_version(self, part_name, entry, entry_format, check):
+        # pylint: disable=too-many-return-statements
         if "format" not in entry_format:
             if check:
                 self._print_message(part_name, f"{self._colors.critical}"
@@ -89,12 +90,13 @@ class ProcessVersion:
                 number, entry = self._read_number(entry)
                 if number is None:
                     return None # not found a number when expected
-                if part[0] == 'M':
-                    major = number
-                elif part[0] == 'm':
-                    minor = number
-                elif part[0] == 'R':
-                    revision = number
+                match part[0]:
+                    case 'M':
+                        major = number
+                    case 'm':
+                        minor = number
+                    case 'R':
+                        revision = number
             part = part[1:]
             if len(part) == 0:
                 continue
@@ -102,6 +104,7 @@ class ProcessVersion:
                 return None
             entry = entry[len(part):]
         version = pkg_resources.parse_version(f"{major}.{minor}.{revision}")
+
         if (("lower-than" in entry_format) and
             (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
             return None
@@ -541,6 +544,7 @@ class Snapcraft(ProcessVersion):
 
 
     def process_part(self, part: str) -> Optional[dict]:
+        # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
         """ Processes an specific part of the current YAML file
 
         It takes the YAML data of the specified part, downloads all
