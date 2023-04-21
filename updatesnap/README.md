@@ -137,6 +137,9 @@ The available extra tokens are:
   current version will be ignored.
 * same-minor: if specified as TRUE, version numbers with a different minor value than the
   current version will be ignored.
+* no-9x-minors: if specified as TRUE, version numbers with a minor value equal or
+  greater than 90 will be ignored. Useful for projects that use these minor numbers
+  as "prelude" to a new major version.
 * no-9x-revisions: if specified as TRUE, version numbers with a revision value equal or
   greater than 90 will be ignored. Useful for projects that use these revision numbers
   as "prelude" to a new minor version.
