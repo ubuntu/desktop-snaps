@@ -22,7 +22,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 94
 gnome-42-2204-sdk:
-- 115
+- 122
 gnome-boxes:
 - 3
 gnome-calculator:
@@ -54,12 +54,12 @@ gnome-text-editor:
 - 17
 gtk-common-themes: []
 iagno: []
-libreoffice:
-- 272
+libreoffice: []
 lightsoff: []
 quadrapassel: []
 snap-store: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 319
 ubuntu-desktop-installer: []
