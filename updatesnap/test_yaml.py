@@ -18,7 +18,8 @@ class TestYAMLfiles(unittest.TestCase):
     def _load_secrets(self, obj):
         secrets = None
         if "GITHUB_USER" in os.environ and "GITHUB_TOKEN" in os.environ:
-            secrets = {"github": {"user":os.environ["GITHUB_USER"], "token":os.environ["GITHUB_TOKEN"]}}
+            secrets = {"github": {"user":os.environ["GITHUB_USER"],
+                       "token":os.environ["GITHUB_TOKEN"]}}
         elif len(sys.argv) >= 3:
             secrets = {"github": {"user":sys.argv[1], "token":sys.argv[2]}}
         else:
@@ -109,6 +110,8 @@ class TestYAMLfiles(unittest.TestCase):
         assert manager_yaml.get_yaml() == datafile
 
     def test_no_9x_revisions(self):
+        # pylint: disable=protected-access
+        """ Test the no-9x-revision option """
         obj = ProcessVersion(silent=True)
         entry_format = {"format":"%M.%m.%R", "no-9x-revisions": True}
         version = obj._get_version("testpart", "3.8.92", entry_format, False)
@@ -117,6 +120,8 @@ class TestYAMLfiles(unittest.TestCase):
         assert str(version) == "3.8.32"
 
     def test_no_9x_minors(self):
+        # pylint: disable=protected-access
+        """ Test the no-9x-minors option """
         obj = ProcessVersion(silent=True)
         entry_format = {"format":"%M.%m.%R", "no-9x-minors": True}
         version = obj._get_version("testpart", "3.97.1", entry_format, False)
