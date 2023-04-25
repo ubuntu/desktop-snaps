@@ -72,6 +72,10 @@ class ProcessVersion:
             text = text[1:]
         return number, text
 
+    def _checkopt(self, option, dictionary):
+        """ Returns True if an option is in the dictionary and it's True.
+            If it's False or it isn't in the dictionary, it returns False. """
+        return (option in dictionary) and (dictionary[option] == True)
 
     def _get_version(self, part_name, entry, entry_format, check):
         # pylint: disable=too-many-return-statements
@@ -108,11 +112,9 @@ class ProcessVersion:
         if (("lower-than" in entry_format) and
             (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
             return None
-        if (("ignore-odd-minor" in entry_format) and (entry_format["ignore-odd-minor"]) and
-            ((minor % 2) == 1)):
+        if self._checkopt("ignore-odd-minor", entry_format) and ((minor % 2) == 1):
             return None
-        if (("no-9x-revisions" in entry_format) and (entry_format["no-9x-revisions"]) and
-            (revision >= 90)):
+        if self._checkopt("no-9x-revisions", entry_format) and (revision >= 90):
             return None
 
         return version
