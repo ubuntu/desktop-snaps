@@ -105,7 +105,7 @@ def main():
         (not argument_list.folder.startswith("https://"))):
             retval = process_folder(argument_list.folder, argument_list)
         else:
-            response = requests.get(argument_list.folder)
+            response = requests.get(argument_list.folder, timeout=30)
             if not response:
                 print(f"Failed to get the file {argument_list.folder}: {response.status_code}",
                       file=sys.stderr)

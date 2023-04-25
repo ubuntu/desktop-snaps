@@ -160,9 +160,9 @@ class GitClass(ProcessVersion):
             try:
                 if (self._user is not None) and (self._token is not None):
                     response = requests.get(uri, auth=requests.auth.HTTPBasicAuth(
-                                            self._user, self._token))
+                                            self._user, self._token), timeout=30)
                 else:
-                    response = requests.get(uri)
+                    response = requests.get(uri, timeout=30)
                 break
             except:
                 if not self._silent:
@@ -171,7 +171,7 @@ class GitClass(ProcessVersion):
         return response
 
     def _stop_download(self, data):
-        # pylint: disable=unused-argument, no-self-use
+        # pylint: disable=unused-argument
         return False
 
     def _read_pages(self, uri: str) -> list:
