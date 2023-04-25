@@ -4,10 +4,12 @@ chromium:
 - 2450
 eog:
 - 708
-epiphany: []
+epiphany:
+- 145
 evince:
 - 1027
-firefox: []
+firefox:
+- 2605
 five-or-more: []
 gedit: []
 glade: []
@@ -15,9 +17,11 @@ glimpse-editor: []
 gnome-2048: []
 gnome-3-26-1604: []
 gnome-3-28-1804: []
-gnome-3-34-1804: []
+gnome-3-34-1804:
+- 93
 gnome-3-34-1804-sdk: []
-gnome-3-38-2004: []
+gnome-3-38-2004:
+- 140
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 94
@@ -32,7 +36,7 @@ gnome-characters:
 - 785
 gnome-chess: []
 gnome-clocks:
-- 453
+- 455
 gnome-contacts:
 - 187
 gnome-dictionary: []
@@ -51,10 +55,11 @@ gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor:
-- 17
+- 18
 gtk-common-themes: []
 iagno: []
-libreoffice: []
+libreoffice:
+- 274
 lightsoff: []
 quadrapassel: []
 snap-store: []
