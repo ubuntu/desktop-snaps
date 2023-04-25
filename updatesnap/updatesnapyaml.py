@@ -4,7 +4,6 @@
 
 import sys
 import argparse
-import base64
 from SnapModule.snapmodule import Snapcraft
 from SnapModule.snapmodule import Github
 from SnapModule.snapmodule import ManageYAML
@@ -50,8 +49,6 @@ class ProjectManager:
         if not data:
             yaml_path = 'snap/snapcraft.yaml'
             data = self._github.get_file(project_url, yaml_path)
-            if not data:
-                return None
         return data
 
 def main():
@@ -79,7 +76,7 @@ def main():
     if not data:
         print('Failed to get the snapcraft.yaml file.', file=sys.stderr)
         sys.exit(-1)
-    contents = base64.b64decode(data['content']).decode('utf-8')
+    contents = data.decode('utf-8')
 
     manager_yaml = ManageYAML(contents)
 

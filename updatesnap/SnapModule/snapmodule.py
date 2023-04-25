@@ -3,6 +3,7 @@
     updated to the last version available in each source repository """
 
 import urllib
+import base64
 import re
 import time
 import os
@@ -198,7 +199,8 @@ class GitClass(ProcessVersion):
                     p_right = entry.find(">")
                     uri = entry[p_left+1:p_right]
                     break
-        self._colors.clear_line()
+        if not self._silent:
+            self._colors.clear_line()
         return elements
 
 
@@ -261,7 +263,7 @@ class Github(GitClass):
         self._api_url = 'https://api.github.com/repos/'
 
 
-    def _is_github(self, repository):
+    def _is_github(self, repository: str):
         uri = self._get_uri(repository, 3)
         if uri is None:
             return None
@@ -270,7 +272,7 @@ class Github(GitClass):
         return uri
 
 
-    def get_branches(self, repository) -> Optional[list]:
+    def get_branches(self, repository: str) -> Optional[list]:
         """ Returns a list of branches for this repository """
         uri = self._is_github(repository)
         if uri is None:
@@ -289,7 +291,7 @@ class Github(GitClass):
         return False
 
 
-    def get_tags(self, repository, current_tag = None, version_format = None) -> Optional[list]:
+    def get_tags(self, repository: str, current_tag = None, version_format = None) -> Optional[list]:
         """ Returns a list of tags for this repository """
         if version_format is None:
             version_format = {}
@@ -318,11 +320,12 @@ class Github(GitClass):
                          "date": datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")})
             if (current_tag is not None) and (current_tag == tag['name']):
                 break
-        self._colors.clear_line()
+        if not self._silent:
+            self._colors.clear_line()
         return tags
 
 
-    def get_file(self, repository, file_path: str) -> Optional[dict]:
+    def get_file(self, repository: str, file_path: str) -> Optional[bytes]:
         """ Returns a json with the contents of a file of the repository """
         uri = self._is_github(repository)
         if uri is None:
@@ -331,7 +334,9 @@ class Github(GitClass):
         tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path),
                                     'contents', file_path)
         data = self._read_page(tag_command)
-        return data
+        if (data is None) or ("content" not in data):
+            return None
+        return base64.b64decode(data['content'])
 
 
 class Gitlab(GitClass):
