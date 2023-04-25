@@ -117,7 +117,8 @@ class ProcessVersion:
             return None
         if self._checkopt("no-9x-revisions", entry_format) and (revision >= 90):
             return None
-
+        if self._checkopt("no-9x-minors", entry_format) and (minor >= 90):
+            return None
         return version
 
 

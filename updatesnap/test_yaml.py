@@ -106,6 +106,22 @@ class TestYAMLfiles(unittest.TestCase):
         manager_yaml = ManageYAML(datafile)
         assert manager_yaml.get_yaml() == datafile
 
+    def test_no_9x_revisions(self):
+        obj = ProcessVersion(silent=True)
+        entry_format = {"format":"%M.%m.%R", "no-9x-revisions": True}
+        version = obj._get_version("testpart", "3.8.92", entry_format, False)
+        assert version is None
+        version = obj._get_version("testpart", "3.8.32", entry_format, False)
+        assert str(version) == "3.8.32"
+
+    def test_no_9x_minors(self):
+        obj = ProcessVersion(silent=True)
+        entry_format = {"format":"%M.%m.%R", "no-9x-minors": True}
+        version = obj._get_version("testpart", "3.97.1", entry_format, False)
+        assert version is None
+        version = obj._get_version("testpart", "3.45.1", entry_format, False)
+        assert str(version) == "3.45.1"
+
 
     def test_ignore_odd_minor(self):
         # pylint: disable=protected-access
