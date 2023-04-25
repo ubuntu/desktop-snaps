@@ -111,7 +111,6 @@ def main():
         sys.exit(0)
     else:
         print("No updates available", file=sys.stderr)
-        sys.exit(0)
 
 if __name__ == "__main__":
     main()
