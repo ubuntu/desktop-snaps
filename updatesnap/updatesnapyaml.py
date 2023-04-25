@@ -107,7 +107,7 @@ def main():
         has_update = True
 
     if has_update:
-        with open('output_file', 'w', encoding="utf8") as output_file:
+        with open('output_file', 'w') as output_file:
             output_file.write(manager_yaml.get_yaml())
     else:
         print("No updates available", file=sys.stderr)
