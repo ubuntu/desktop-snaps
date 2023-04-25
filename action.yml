@@ -24,7 +24,8 @@ runs:
     - name: run updatesnapyaml
       id: updatesnapyaml
       run: |
-        ./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token $GITHUB_TOKEN https://github.com/${{ github.repository }} > snapcraft.yaml
+        ./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token $GITHUB_TOKEN https://github.com/${{ github.repository }}
+        mv output_file snapcraft.yaml
       env:
         GITHUB_USER: ubuntu
         GITHUB_TOKEN: ${{ inputs.token }}
