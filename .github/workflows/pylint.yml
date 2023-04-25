@@ -29,3 +29,4 @@ jobs:
         pylint updatesnap/updatesnap.py
         pylint updatesnap/updatesnapyaml.py
         pylint updatesnap/SnapModule/snapmodule.py
+        pylint updatesnap/test_yaml.py
