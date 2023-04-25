@@ -76,7 +76,7 @@ class ProcessVersion:
     def _checkopt(self, option, dictionary):
         """ Returns True if an option is in the dictionary and it's True.
             If it's False or it isn't in the dictionary, it returns False. """
-        return (option in dictionary) and (dictionary[option] == True)
+        return (option in dictionary) and dictionary[option]
 
     def _get_version(self, part_name, entry, entry_format, check):
         # pylint: disable=too-many-return-statements
@@ -292,7 +292,8 @@ class Github(GitClass):
         return False
 
 
-    def get_tags(self, repository: str, current_tag = None, version_format = None) -> Optional[list]:
+    def get_tags(self, repository: str, current_tag = None,
+                 version_format = None) -> Optional[list]:
         """ Returns a list of tags for this repository """
         if version_format is None:
             version_format = {}

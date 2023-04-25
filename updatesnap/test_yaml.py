@@ -17,7 +17,9 @@ class TestYAMLfiles(unittest.TestCase):
 
     def _load_secrets(self, obj):
         secrets = None
-        if len(sys.argv) >= 3:
+        if "GITHUB_USER" in os.environ and "GITHUB_TOKEN" in os.environ:
+            secrets = {"github": {"user":os.environ["GITHUB_USER"], "token":os.environ["GITHUB_TOKEN"]}}
+        elif len(sys.argv) >= 3:
             secrets = {"github": {"user":sys.argv[1], "token":sys.argv[2]}}
         else:
             secrets_file = os.path.expanduser('~/.config/updatesnap/updatesnap.secrets')
@@ -148,7 +150,7 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_github_tags_download(self):
         """ Check that tag download from github works as expected """
-        gitobj = Github(silent = False)
+        gitobj = Github(silent = True)
         self._load_secrets(gitobj)
         data = gitobj.get_tags("https://github.com/GNOME/gnome-calculator",
                                "40.0", {"format":"%M.%m"})
