@@ -11,6 +11,7 @@ from SnapModule.snapmodule import Snapcraft
 from SnapModule.snapmodule import ManageYAML
 from SnapModule.snapmodule import ProcessVersion
 from SnapModule.snapmodule import Github
+from SnapModule.snapmodule import Gitlab
 
 class TestYAMLfiles(unittest.TestCase):
     """ Unitary tests for snapmodule """
@@ -179,6 +180,23 @@ class TestYAMLfiles(unittest.TestCase):
                                               None,
                                               get_gnome_boxes_branches())
         snap.process_parts()
+
+    def test_gitlab_tags_download(self):
+        """ Check that tag download from gitlab works as expected """
+        gitobj = Gitlab(silent = True)
+        self._load_secrets(gitobj)
+        data = gitobj.get_tags("https://gitlab.gnome.org/GNOME/gnome-calculator",
+                               "40.0", {"format":"%M.%m"})
+        assert isinstance(data, list)
+        # ensure that the known tags are in the list
+        tags = get_gnome_calculator_tags()["https://gitlab.gnome.org/GNOME/gnome-calculator.git"]
+        for tag in data:
+            found = False
+            for tag2 in tags:
+                if tag2["name"] == tag["name"]:
+                    found = True
+                    break
+            assert found
 
 
 class GitPose:
