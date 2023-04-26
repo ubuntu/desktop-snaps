@@ -51,8 +51,8 @@ class ProcessVersion:
         self._colors = Colors()
         self._last_part = None
 
-    def _print_message(self, part, message, source = None):
-        if self._silent:
+    def _print_message(self, part, message, source = None, override_silent = False):
+        if self._silent and not override_silent:
             return
         if part != self._last_part:
             print(f"Part: {self._colors.note}{part}{self._colors.reset}"
@@ -375,7 +375,15 @@ class Gitlab(GitClass):
         data = self._read_pages(branch_command)
         branches = []
         for branch in data:
-            branches.append({"name": branch['name']})
+            element = {"name": branch['name']}
+            if "commited_date" in branch["commit"]:
+                element["date"] = branch["commit"]["commited_date"]
+            elif "created_at" in branch["commit"]:
+                element["date"] = branch["commit"]["created_at"]
+            else:
+                element["date"] = 0
+            branches.append(element)
+
         return branches
 
 
@@ -638,14 +646,18 @@ class Snapcraft(ProcessVersion):
                 return part_data
 
         self._print_message(part, None, source = source)
-        tags = self._get_tags(source, current_tag, version_format)
 
         if ('source-tag' not in data) and ('source-branch' not in data):
+            tags = self._get_tags(source, current_tag, version_format)
+            branches = self._get_branches(source)
             self._print_message(part, f"{self._colors.warning}Has neither a source-tag "
-                                      f"nor a source-branch{self._colors.reset}", source = source)
-            self._print_last_tags(part, tags)
+                                      f"nor a source-branch{self._colors.reset}",
+                                      source = source, override_silent = True)
+            if tags is not None:
+                self._print_last_tags(part, tags)
 
         if 'source-tag' in data:
+            tags = self._get_tags(source, current_tag, version_format)
             part_data["use_tag"] = True
             self._print_message(part, f"Current tag: {data['source-tag']}", source = source)
             if tags is None:
@@ -660,9 +672,9 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, f"Current version: {current_version}")
             branches = self._get_branches(source)
             self._sort_elements(part, current_version, branches, "branch")
-            self._print_message(part, f"{self._colors.note}Should be moved to an "
-                                      f"specific tag{self._colors.reset}")
-            self._print_last_tags(part, tags)
+            self._print_message(part, f"{self._colors.note}Uses branches. Should be moved to an "
+                                      f"specific tag{self._colors.reset}", override_silent = True)
+            self._print_last_branches(part, branches)
         if not self._silent:
             print("", file=sys.stderr)
         return part_data
@@ -674,6 +686,14 @@ class Snapcraft(ProcessVersion):
         self._print_message(part, "Last tags:")
         for tag in tags:
             self._print_message(part, f"  {tag['name']} ({tag['date']})")
+
+
+    def _print_last_branches(self, part, branches):
+        branches.sort(reverse = True, key=lambda x: x.get('date'))
+        branches = branches[:4]
+        self._print_message(part, "Last branches:")
+        for branch in branches:
+            self._print_message(part, f"  {branch['name']} ({branch['date']})")
 
 
     def _sort_tags(self, part, current_tag, tags, part_data):
@@ -688,7 +708,8 @@ class Snapcraft(ProcessVersion):
 
         if current_date is None:
             self._print_message(part, f"{self._colors.critical}Error:{self._colors.reset} "
-                                      f"can't find the current tag in the tag list.")
+                                      f"can't find the current tag in the tag list.",
+                                      override_silent = True)
             return
 
         version_format = part_data["version_format"]
@@ -742,7 +763,7 @@ class Snapcraft(ProcessVersion):
                 current_element = element
                 break
         for element in elements:
-            if (current_element is None) or (('date' in element) and
+            if ('date' in element) and ((current_element is None) or
                 (element['date'] > current_element['date'])):
                 newer_elements.append(element)
         if len(newer_elements) == 0:
@@ -751,7 +772,7 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, text)
             newer_elements.sort(reverse = True, key=lambda x: x.get('date'))
             for element in newer_elements:
-                self._print_message(part, "  " + element)
+                self._print_message(part, "  " + str(element))
 
 
 class ManageYAML:

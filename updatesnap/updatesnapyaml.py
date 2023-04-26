@@ -102,7 +102,7 @@ def main():
         if not version_data:
             continue
         print(f"Updating '{part['name']}' from version '{part['version'][0]}'"
-            " to version '{part['updates'][0]['name']}'", file=sys.stderr)
+              f" to version '{part['updates'][0]['name']}'", file=sys.stderr)
         version_data['data'] = f"source-tag: '{part['updates'][0]['name']}'"
         has_update = True
 

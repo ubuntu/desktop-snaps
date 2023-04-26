@@ -31,7 +31,7 @@ class TestYAMLfiles(unittest.TestCase):
             obj.set_secrets(secrets)
 
 
-    def _load_test_file(self, filepath, tags):
+    def _load_test_file(self, filepath, tags, branches = None):
         with open(os.path.join("tests", filepath), "r", encoding='utf-8') as datafile:
             data = datafile.read()
         while data[:-2] == "\n\n":
@@ -39,8 +39,10 @@ class TestYAMLfiles(unittest.TestCase):
 
         github_pose = GitPose()
         github_pose.set_tags(tags)
+        github_pose.set_branches(branches)
         gitlab_pose = GitPose()
         gitlab_pose.set_tags(tags)
+        gitlab_pose.set_branches(branches)
         snap = Snapcraft(True, github_pose, gitlab_pose)
         snap.load_external_data(data)
         return snap, data
@@ -171,6 +173,13 @@ class TestYAMLfiles(unittest.TestCase):
             assert found
 
 
+    def test_branches(self):
+        """ Check that using branches in a part instead of tags does work """
+        snap, _ = self._load_test_file("gnome-boxes-test1.yaml",
+                                              None,
+                                              get_gnome_boxes_branches())
+        snap.process_parts()
+
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test
@@ -188,16 +197,289 @@ class GitPose:
         self._tags = tags
 
     def set_branches(self, branches):
-        """ Sets the bramches that will be returned by this object when asked """
+        """ Sets the branches that will be returned by this object when asked """
         self._branches = branches
 
     def get_tags(self, source, current_tag = None, version_format = None):
         # pylint: disable=unused-argument
         """ Implements the get_tags() method of GitClass """
+        if self._tags is None:
+            return []
         if source in self._tags:
             return self._tags[source]
         return []
 
+    def get_branches(self, source):
+        """ Implements the get_branches() method of GitClass """
+        if self._branches is None:
+            return []
+        if source in self._branches:
+            return self._branches[source]
+        return []
+
+def get_gnome_boxes_branches():
+    """ Returns a plausible list of branches for several tests """
+    return {
+        "https://gitlab.com/libvirt/libvirt.git":
+        [
+            {'name': 'master', 'date': 0},
+            {'name': 'v0.10.2-maint', 'date': 0},
+            {'name': 'v0.8.3-maint', 'date': 0},
+            {'name': 'v0.9.11-maint', 'date': 0},
+            {'name': 'v0.9.12-maint', 'date': 0},
+            {'name': 'v0.9.6-maint', 'date': 0},
+            {'name': 'v1.0.0-maint', 'date': 0},
+            {'name': 'v1.0.1-maint', 'date': 0},
+            {'name': 'v1.0.2-maint', 'date': 0},
+            {'name': 'v1.0.3-maint', 'date': 0},
+            {'name': 'v1.0.4-maint', 'date': 0},
+            {'name': 'v1.0.5-maint', 'date': 0},
+            {'name': 'v1.0.6-maint', 'date': 0},
+            {'name': 'v1.1.0-maint', 'date': 0},
+            {'name': 'v1.1.1-maint', 'date': 0},
+            {'name': 'v1.1.2-maint', 'date': 0},
+            {'name': 'v1.1.3-maint', 'date': 0},
+            {'name': 'v1.1.4-maint', 'date': 0},
+            {'name': 'v1.2.0-maint', 'date': 0},
+            {'name': 'v1.2.1-maint', 'date': 0},
+            {'name': 'v1.2.10-maint', 'date': 0},
+            {'name': 'v1.2.11-maint', 'date': 0},
+            {'name': 'v1.2.12-maint', 'date': 0},
+            {'name': 'v1.2.13-maint', 'date': 0},
+            {'name': 'v1.2.14-maint', 'date': 0},
+            {'name': 'v1.2.15-maint', 'date': 0},
+            {'name': 'v1.2.16-maint', 'date': 0},
+            {'name': 'v1.2.17-maint', 'date': 0},
+            {'name': 'v1.2.18-maint', 'date': 0},
+            {'name': 'v1.2.19-maint', 'date': 0},
+            {'name': 'v1.2.2-maint', 'date': 0},
+            {'name': 'v1.2.20-maint', 'date': 0},
+            {'name': 'v1.2.21-maint', 'date': 0},
+            {'name': 'v1.2.3-maint', 'date': 0},
+            {'name': 'v1.2.4-maint', 'date': 0},
+            {'name': 'v1.2.5-maint', 'date': 0},
+            {'name': 'v1.2.6-maint', 'date': 0},
+            {'name': 'v1.2.7-maint', 'date': 0},
+            {'name': 'v1.2.8-maint', 'date': 0},
+            {'name': 'v1.2.9-maint', 'date': 0},
+            {'name': 'v1.3.0-maint', 'date': 0},
+            {'name': 'v1.3.1-maint', 'date': 0},
+            {'name': 'v1.3.2-maint', 'date': 0},
+            {'name': 'v1.3.3-maint', 'date': 0},
+            {'name': 'v1.3.4-maint', 'date': 0},
+            {'name': 'v1.3.5-maint', 'date': 0},
+            {'name': 'v2.0-maint', 'date': 0},
+            {'name': 'v2.1-maint', 'date': 0},
+            {'name': 'v2.2-maint', 'date': 0},
+            {'name': 'v3.0-maint', 'date': 0},
+            {'name': 'v3.2-maint', 'date': 0},
+            {'name': 'v3.7-maint', 'date': 0},
+            {'name': 'v4.1-maint', 'date': 0},
+            {'name': 'v4.10-maint', 'date': 0},
+            {'name': 'v4.2-maint', 'date': 0},
+            {'name': 'v4.3-maint', 'date': 0},
+            {'name': 'v4.4-maint', 'date': 0},
+            {'name': 'v4.5-maint', 'date': 0},
+            {'name': 'v4.6-maint', 'date': 0},
+            {'name': 'v4.7-maint', 'date': 0},
+            {'name': 'v4.8-maint', 'date': 0},
+            {'name': 'v4.9-maint', 'date': 0},
+            {'name': 'v5.0-maint', 'date': 0},
+            {'name': 'v5.1-maint', 'date': 0},
+            {'name': 'v5.1.0-maint', 'date': 0},
+            {'name': 'v5.2-maint', 'date': 0},
+            {'name': 'v5.3-maint', 'date': 0}],
+        "https://gitlab.gnome.org/GNOME/tracker.git":
+        [{'name': '34-build-failure-with-werror-format-security', 'date': 0},
+            {'name': 'abderrahim/build-fix', 'date': 0},
+            {'name': 'api-cleanup', 'date': 0},
+            {'name': 'configurable-bus-type', 'date': 0},
+            {'name': 'crawler-max-depth', 'date': 0},
+            {'name': 'data-provider-monitor-interface', 'date': 0},
+            {'name': 'decorator-memory-reduction', 'date': 0},
+            {'name': 'domain-ontologies', 'date': 0},
+            {'name': 'external-libstemmer', 'date': 0},
+            {'name': 'fix-version', 'date': 0},
+            {'name': 'follow-symlinks', 'date': 0},
+            {'name': 'fts-property-names-cleanup', 'date': 0},
+            {'name': 'fts4', 'date': 0},
+            {'name': 'functional-test-fixes-bug-696172', 'date': 0},
+            {'name': 'gdbus-porting', 'date': 0},
+            {'name': 'hashtable-ordering-2.1', 'date': 0},
+            {'name': 'jolla-upstreaming', 'date': 0},
+            {'name': 'master', 'date': 0},
+            {'name': 'maxcardinality-change-support', 'date': 0},
+            {'name': 'maxcardinality-change-support-rebased', 'date': 0},
+            {'name': 'media-art-detect', 'date': 0},
+            {'name': 'meson-final', 'date': 0},
+            {'name': 'miner-twitter', 'date': 0},
+            {'name': 'oscp', 'date': 0},
+            {'name': 'pdf-extractor-no-forks', 'date': 0},
+            {'name': 'ricotz/vala', 'date': 0},
+            {'name': 'rss-update', 'date': 0},
+            {'name': 'sam/README', 'date': 0},
+            {'name': 'sam/README-updates', 'date': 0},
+            {'name': 'sam/app-domains', 'date': 0},
+            {'name': 'sam/ci', 'date': 0},
+            {'name': 'sam/ci-docs', 'date': 0},
+            {'name': 'sam/ci-sanitize', 'date': 0},
+            {'name': 'sam/circular-dep-fix', 'date': 0},
+            {'name': 'sam/comment', 'date': 0},
+            {'name': 'sam/common-file-utils', 'date': 0},
+            {'name': 'sam/coverity-fix', 'date': 0},
+            {'name': 'sam/diagrams', 'date': 0},
+            {'name': 'sam/functional-tests-pep8', 'date': 0},
+            {'name': 'sam/index-file-sync', 'date': 0},
+            {'name': 'sam/index-mount-points', 'date': 0},
+            {'name': 'sam/index-mount-points-2', 'date': 0},
+            {'name': 'sam/info-fix', 'date': 0},
+            {'name': 'sam/introspection-fix', 'date': 0},
+            {'name': 'sam/meson-0.60', 'date': 0},
+            {'name': 'sam/miner-fs-ignore-non-files', 'date': 0},
+            {'name': 'sam/namespace-c++', 'date': 0},
+            {'name': 'sam/remove-libuuid', 'date': 0},
+            {'name': 'sam/run-uninstalled-fixes', 'date': 0},
+            {'name': 'sam/share-sandboxes', 'date': 0},
+            {'name': 'sam/show-debug', 'date': 0},
+            {'name': 'sam/slow-tests', 'date': 0},
+            {'name': 'sam/test-utils', 'date': 0},
+            {'name': 'sam/tracker-2.3-developer-experience', 'date': 0},
+            {'name': 'sam/tracker-3.0-functional-tests', 'date': 0},
+            {'name': 'sam/tracker-resource-avoid-invalid-sparql', 'date': 0},
+            {'name': 'sam/uncrustify', 'date': 0},
+            {'name': 'sam/web-overview', 'date': 0},
+            {'name': 'sam/website-docs', 'date': 0},
+            {'name': 'sam/website-link', 'date': 0},
+            {'name': 'sam/wiki-to-website', 'date': 0},
+            {'name': 'sparql-ontology-tree', 'date': 0},
+            {'name': 'subtree-crawling', 'date': 0},
+            {'name': 'tintou/doc-update', 'date': 0},
+            {'name': 'tracker-0.10', 'date': 0},
+            {'name': 'tracker-0.12', 'date': 0},
+            {'name': 'tracker-0.14', 'date': 0},
+            {'name': 'tracker-0.16', 'date': 0},
+            {'name': 'tracker-0.6', 'date': 0},
+            {'name': 'tracker-0.8', 'date': 0},
+            {'name': 'tracker-1.0', 'date': 0},
+            {'name': 'tracker-1.10', 'date': 0},
+            {'name': 'tracker-1.12', 'date': 0},
+            {'name': 'tracker-1.2', 'date': 0},
+            {'name': 'tracker-1.4', 'date': 0},
+            {'name': 'tracker-1.6', 'date': 0},
+            {'name': 'tracker-1.8', 'date': 0},
+            {'name': 'tracker-2.1', 'date': 0},
+            {'name': 'tracker-2.2', 'date': 0},
+            {'name': 'tracker-2.3', 'date': 0},
+            {'name': 'tracker-3.0', 'date': 0},
+            {'name': 'tracker-3.1', 'date': 0},
+            {'name': 'tracker-3.2', 'date': 0},
+            {'name': 'tracker-3.3', 'date': 0},
+            {'name': 'tracker-3.4', 'date': 0},
+            {'name': 'tracker-cmd', 'date': 0},
+            {'name': 'trackerutils-arch-independent', 'date': 0},
+            {'name': 'updated-gtester', 'date': 0},
+            {'name': 'wip/carlosg/automatic-store-shutdown', 'date': 0},
+            {'name': 'wip/carlosg/avahi', 'date': 0},
+            {'name': 'wip/carlosg/ci-playground2', 'date': 0},
+            {'name': 'wip/carlosg/direct-rewrite', 'date': 0},
+            {'name': 'wip/carlosg/domain-ontologies', 'date': 0},
+            {'name': 'wip/carlosg/double-precision', 'date': 0},
+            {'name': 'wip/carlosg/downgrade-meson-version', 'date': 0},
+            {'name': 'wip/carlosg/drop-autotools', 'date': 0},
+            {'name': 'wip/carlosg/fix-bijiben-flatpak', 'date': 0},
+            {'name': 'wip/carlosg/fix-tracker-search', 'date': 0},
+            {'name': 'wip/carlosg/gi-docgen', 'date': 0},
+            {'name': 'wip/carlosg/insert-delete-triggers', 'date': 0},
+            {'name': 'wip/carlosg/issue-40', 'date': 0},
+            {'name': 'wip/carlosg/issue-56', 'date': 0},
+            {'name': 'wip/carlosg/legalese-cardinality', 'date': 0},
+            {'name': 'wip/carlosg/libtracker-miner-cleanups', 'date': 0},
+            {'name': 'wip/carlosg/meson-fixes', 'date': 0},
+            {'name': 'wip/carlosg/meson-system-dirs', 'date': 0},
+            {'name': 'wip/carlosg/ontlogy-tests-no-skip', 'date': 0},
+            {'name': 'wip/carlosg/property-paths', 'date': 0},
+            {'name': 'wip/carlosg/remote-module-extension', 'date': 0},
+            {'name': 'wip/carlosg/resource-deletes', 'date': 0},
+            {'name': 'wip/carlosg/resource-leak-fix', 'date': 0},
+            {'name': 'wip/carlosg/sparql-parser-ng', 'date': 0},
+            {'name': 'wip/carlosg/sparql-shell', 'date': 0},
+            {'name': 'wip/carlosg/trigger-filter-parent-on-monitor-events', 'date': 0},
+            {'name': 'wip/carlosg/unrestricted-predicates', 'date': 0},
+            {'name': 'wip/collect-bug-info', 'date': 0},
+            {'name': 'wip/ernestask/43', 'date': 0},
+            {'name': 'wip/fts5', 'date': 0},
+            {'name': 'wip/garnacho/sparql1.1', 'date': 0},
+            {'name': 'wip/index-mount-points', 'date': 0},
+            {'name': 'wip/jfelder/audio-writeback', 'date': 0},
+            {'name': 'wip/jtojnar/2.1-dist-fix', 'date': 0},
+            {'name': 'wip/lantw/dont-hard-code-usr-bin-python2', 'date': 0},
+            {'name': 'wip/mschraal/meson-log-domain', 'date': 0},
+            {'name': 'wip/mschraal/python3-port', 'date': 0},
+            {'name': 'wip/passive-extraction', 'date': 0},
+            {'name': 'wip/removable-device-completed', 'date': 0},
+            {'name': 'wip/ricotz/type-args', 'date': 0},
+            {'name': 'wip/rishi/non-native', 'date': 0},
+            {'name': 'wip/rishi/tracker-sparql-connection-peer-to-peer', 'date': 0},
+            {'name': 'wip/sam/carlosg/direct-rewrite', 'date': 0},
+            {'name': 'wip/sam/private-store', 'date': 0},
+            {'name': 'wip/sam/test-sqlite', 'date': 0},
+            {'name': 'wip/split/core', 'date': 0},
+            {'name': 'wip/split/miner-fs', 'date': 0},
+            {'name': 'wip/split/rss', 'date': 0},
+            {'name': 'wip/sthursfield/debian10-hacks', 'date': 0},
+            {'name': 'wip/tintou/fix-doc', 'date': 0}
+        ],
+        "https://gitlab.gnome.org/GNOME/gnome-boxes.git":
+        [{'name': 'account-for-interference-on-reboot-count', 'date': 0},
+            {'name': 'alatiera/sourceview', 'date': 0},
+            {'name': 'bundle-mks', 'date': 0},
+            {'name': 'check-kvm-user', 'date': 0},
+            {'name': 'create-qcow2-with-compat1.1', 'date': 0},
+            {'name': 'flatpak-net-bridge', 'date': 0},
+            {'name': 'flatpak-use-vala-lang-server-sdk', 'date': 0},
+            {'name': 'gnome-3-10', 'date': 0},
+            {'name': 'gnome-3-12', 'date': 0},
+            {'name': 'gnome-3-14', 'date': 0},
+            {'name': 'gnome-3-16', 'date': 0},
+            {'name': 'gnome-3-18', 'date': 0},
+            {'name': 'gnome-3-20', 'date': 0},
+            {'name': 'gnome-3-22', 'date': 0},
+            {'name': 'gnome-3-24', 'date': 0},
+            {'name': 'gnome-3-26', 'date': 0},
+            {'name': 'gnome-3-28', 'date': 0},
+            {'name': 'gnome-3-30', 'date': 0},
+            {'name': 'gnome-3-32', 'date': 0},
+            {'name': 'gnome-3-34', 'date': 0},
+            {'name': 'gnome-3-36', 'date': 0},
+            {'name': 'gnome-3-38', 'date': 0},
+            {'name': 'gnome-3-4', 'date': 0},
+            {'name': 'gnome-3-6', 'date': 0},
+            {'name': 'gnome-3-8', 'date': 0},
+            {'name': 'gnome-40', 'date': 0},
+            {'name': 'gnome-40-fix-run-in-bg', 'date': 0},
+            {'name': 'gnome-41', 'date': 0},
+            {'name': 'gnome-41-fix-clones-regression', 'date': 0},
+            {'name': 'gnome-42', 'date': 0},
+            {'name': 'gnome-43', 'date': 0},
+            {'name': 'gnome-44', 'date': 0},
+            {'name': 'libvirt-socket-path-long-2022', 'date': 0},
+            {'name': 'main', 'date': 0},
+            {'name': 'osdb-prefer-x86_64_resources-by-default', 'date': 0},
+            {'name': 'restore-support-to-download', 'date': 0},
+            {'name': 'update-po-files', 'date': 0},
+            {'name': 'wip/arm', 'date': 0},
+            {'name': 'wip/codespell-ci', 'date': 0},
+            {'name': 'wip/disable-secure-boot', 'date': 0},
+            {'name': 'wip/dont-continue-installations-on-restart', 'date': 0},
+            {'name': 'wip/empty-state-update-graphic', 'date': 0},
+            {'name': 'wip/feborges/flatpak-net-bridge', 'date': 0},
+            {'name': 'wip/feborges/no-filesystem-access', 'date': 0},
+            {'name': 'wip/new-properties-dialog', 'date': 0},
+            {'name': 'wip/sam/tracker3', 'date': 0},
+            {'name': 'wip/support-windows-11', 'date': 0},
+            {'name': 'workaround-audio-regression', 'date': 0}
+        ]
+    }
 
 def get_gnome_calculator_tags():
     """ Returns a plausible list of tags for several tests """
