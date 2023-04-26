@@ -1,6 +1,9 @@
-name: Pylint
+name: UpdateSnapTests
 
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - 'updatesnap/**'
 
 jobs:
   build:
