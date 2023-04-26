@@ -1,0 +1,375 @@
+name: gnome-boxes
+adopt-info: gnome-boxes
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+base: core20
+
+layout:
+  /usr/share/gnome-boxes:
+    bind: $SNAP/usr/share/gnome-boxes
+  /usr/share/osinfo:
+    bind: $SNAP/usr/share/osinfo
+  /usr/share/misc/usb.ids:
+    symlink: $SNAP/usr/share/misc/usb.ids
+  /usr/share/misc/pci.ids:
+    symlink: $SNAP/usr/share/misc/pci.ids
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvirt:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libvirt
+  /usr/share/libvirt:
+    bind: $SNAP/usr/share/libvirt
+  /usr/lib/libvirt:
+    bind: $SNAP/usr/lib/libvirt
+  /usr/share/seabios:
+    bind: $SNAP/usr/share/seabios
+  /usr/lib/ipxe:
+    bind: $SNAP/usr/lib/ipxe
+  /usr/bin/qemu-system-x86_64:
+    bind-file: $SNAP/usr/bin/qemu-system-x86_64
+  /usr/sbin/dnsmasq:
+    bind-file: $SNAP/usr/sbin/dnsmasq
+  /usr/share/qemu:
+    bind: $SNAP/usr/share/qemu
+  /etc/libvirt:
+    bind: $SNAP/etc/libvirt
+  /usr/libexec/libvirt_iohelper:
+    bind-file: $SNAP/usr/libexec/libvirt_iohelper
+
+slots:
+  # for GtkApplication registration
+  gnome-boxes:
+    interface: dbus
+    bus: session
+    name: org.gnome.Boxes
+
+apps:
+  gnome-boxes:
+    command: usr/bin/gnome-boxes
+    command-chain: [ bin/launcher ]
+    extensions: [gnome-3-38]
+    plugs:
+      - audio-record
+      - audio-playback
+      - camera
+      - hardware-observe
+      - home
+      - kvm
+      - login-session-observe
+      - mount-observe
+      - network
+      - network-bind
+      - network-status
+      - process-control
+      - raw-usb
+      - system-observe
+      - time-control
+      - udisks2
+      - upower-observe
+    desktop: usr/share/applications/org.gnome.Boxes.desktop
+    common-id: org.gnome.Boxes.desktop
+    environment:
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-boxes
+      GI_TYPELIB_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-boxes/girepository-1.0:$GI_TYPELIB_PATH
+      GTK_USE_PORTAL: '0'
+
+parts:
+  libvirt:
+    source: https://gitlab.com/libvirt/libvirt.git
+    source-depth: 1
+    source-branch: v6.0.0
+    plugin: autotools
+    build-packages:
+      - libxml2-dev
+      - libncurses5-dev
+      - libreadline-dev
+      - zlib1g-dev
+      - libgcrypt20-dev
+      - libgnutls28-dev
+      - libsasl2-dev
+      - libxen-dev
+      - libparted-dev
+      - libdevmapper-dev
+      - uuid-dev
+      - libudev-dev
+      - libpciaccess-dev
+      - libcurl4-gnutls-dev
+      - libpolkit-gobject-1-dev
+      - libcap-ng-dev
+      - libnl-3-dev
+      - libnl-route-3-dev
+      - libyajl-dev
+      - libpcap0.8-dev
+      - libnuma-dev
+      - libsanlock-dev
+      - libaudit-dev
+      - libselinux1-dev
+      - libapparmor-dev
+      - libdbus-1-dev
+      - systemtap-sdt-dev
+      - libzfslinux-dev
+      - librbd-dev
+      - librados-dev
+      - libglusterfs-dev
+      - libwireshark-dev
+      - libwiretap-dev
+      - libfuse-dev
+      - qemu-utils
+      - python3-docutils
+      - qemu-system-common
+      - xsltproc
+    stage-packages:
+      - libacl1
+      - libapparmor1
+      - libaudit1
+      - libblkid1
+      - libcap-ng0
+      - libcurl3-gnutls
+      - libdbus-1-3
+      - libdevmapper1.02.1
+      - libfuse2
+      - libgcc-s1
+      - libgfapi0
+      - libgfrpc0
+      - libgfxdr0
+      - libglib2.0-0
+      - libglusterfs0
+      - libgnutls30
+      - libnl-3-200
+      - libnuma1
+      - libparted2
+      - libpcap0.8
+      - librados2
+      - librbd1
+      - libsanlock-client1
+      - libsasl2-2
+      - libselinux1
+      - libtirpc3
+      - libudev1
+      - libxencall1
+      - libxenmisc4.11
+      - libxendevicemodel1
+      - libxenevtchn1
+      - libxenforeignmemory1
+      - libxengnttab1
+      - libxenstore3.0
+      - libxentoolcore1
+      - libxentoollog1
+      - libxml2
+      - libyajl2
+    build-environment:
+      - CFLAGS: "-Wno-error"
+    override-build: |
+      git apply $SNAPCRAFT_PROJECT_DIR/patches/libvirt-qemu.patch
+      mkdir build && cd build
+      ../autogen.sh --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-qemu
+      make
+      DESTDIR=$SNAPCRAFT_PART_INSTALL make install
+    prime:
+      - -usr/include
+      - -usr/lib/pkgconfig
+
+  libvirt-glib:
+    source: https://github.com/libvirt/libvirt-glib.git
+    after: [ libvirt ]
+    source-depth: 1
+    plugin: meson
+    meson-parameters:
+      - --prefix=/usr
+      - --buildtype=release
+    build-packages:
+      - libvirt-dev
+    prime:
+      - usr/lib/*/*.so.*
+
+  libhandy:
+    source: https://gitlab.gnome.org/GNOME/libhandy.git
+    source-tag: '1.5.91'
+    source-depth: 1
+    plugin: meson
+    meson-parameters:
+      - --prefix=/usr
+      - --buildtype=release
+      - -Dgtk_doc=false
+      - -Dtests=false
+      - -Dexamples=false
+      - -Dglade_catalog=disabled
+    prime:
+      - usr/lib/*/*.so.*
+
+  tracker:
+    source: https://gitlab.gnome.org/GNOME/tracker.git
+    source-branch: 'tracker-3.3'
+    source-depth: 1
+    plugin: meson
+    meson-version: 0.61.3
+    meson-parameters:
+      - --prefix=/usr
+      - --buildtype=release
+      - -Ddocs=false
+      - -Dman=false
+      - -Dbash_completion=false
+      - -Dsystemd_user_services=false
+      - -Dtest_utils=false
+      - -Dintrospection=disabled
+    build-packages:
+      - asciidoc
+      - libspice-client-gtk-3.0-dev
+    override-pull: |
+      set -eux
+      snapcraftctl pull
+      # disabling man and docs seems to be ignored by meson
+      sed -i "s#subdir('docs')##g" meson.build
+    prime:
+      - usr/lib/*/*.so.*
+
+  gnome-boxes:
+    after: [ libvirt-glib, libhandy, tracker ]
+    source: https://gitlab.gnome.org/GNOME/gnome-boxes.git
+    #source-tag: '42.rc'
+    source-branch: 'gnome-42'
+    parse-info: [usr/share/metainfo/org.gnome.Boxes.appdata.xml]
+    plugin: meson
+    meson-parameters:
+      - --prefix=/usr
+      - -Ddistributor_name=Ubuntu
+    meson-version: 0.60.1
+    organize:
+      snap/gnome-boxes/current/usr: usr
+    build-packages:
+      - libarchive-dev
+      - libgtk-vnc-2.0-dev
+      - libosinfo-1.0-dev
+      - libusb-1.0-0-dev
+      - cmake
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version $(git describe --tags --abbrev=10)
+      sed -i.bak -e "s|symlink_media: true|symlink_media: false|g" $SNAPCRAFT_PART_SRC/help/meson.build
+      # Ensure we save VMs in $SNAP_USER_COMMON
+      git apply $SNAPCRAFT_PROJECT_DIR/patches/gnome-boxes-snap-user-common.patch
+      # Update recommended downloads
+      git apply $SNAPCRAFT_PROJECT_DIR/patches/gnome-boxes-recommended-downloads.patch
+    build-environment:
+      - C_INCLUDE_PATH: $C_INCLUDE_PATH:$SNAPCRAFT_STAGE/usr/include/libvirt-gconfig-1.0:$SNAPCRAFT_STAGE/usr/include/libvirt-glib-1.0:$SNAPCRAFT_STAGE/usr/include/libvirt-gobject-1.0
+      - LD_LIBRARY_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$LD_LIBRARY_PATH
+      - PKG_CONFIG_PATH: $SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$PKG_CONFIG_PATH
+
+  libraries:
+    after: [ gnome-boxes ]
+    plugin: nil
+    stage-packages:
+      - libasn1-8-heimdal
+      - libcacard0
+      - libcurl3-gnutls
+      - libgssapi3-heimdal
+      - libgtk-vnc-2.0-0
+      - libgvnc-1.0-0
+      - libhcrypto4-heimdal
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libkrb5-26-heimdal
+      - libldap-2.4-2
+      - libnghttp2-14
+      - libnspr4
+      - libnss3
+      - libnuma1
+      - libopus0
+      - libosinfo-1.0-0
+      - libphodav-2.0-0
+      - libroken18-heimdal
+      - librtmp1
+      - libsasl2-2
+      - libspice-client-glib-2.0-8
+      - libspice-client-gtk-3.0-5
+      - libssh-4
+      - libusb-1.0-0
+      - libusbredirhost1
+      - libusbredirparser1
+      - libva-x11-2
+      - libwind0-heimdal
+      - libyajl2
+      - libosinfo-bin
+      - pci.ids
+      - usb.ids
+
+    stage:
+      - -usr/share/osinfo
+
+    prime:
+      - usr/lib/*/libasn*.so.*
+      - usr/lib/*/libcaca*.so.*
+      - usr/lib/*/libcurl*.so.*
+      - usr/lib/*/libgss**.so.*
+      - usr/lib/*/libgtk-vnc*.so.*
+      - usr/lib/*/libgvnc*.so.*
+      - usr/lib/*/libhcrypt*.so.*
+      - usr/lib/*/libhei*.so.*
+      - usr/lib/*/libhx*.so.*
+      - usr/lib/*/libkrb*.so.*
+      - usr/lib/*/liblber*.so.*
+      - usr/lib/*/libldap*.so.*
+      - usr/lib/*/libng*.so.*
+      - usr/lib/*/libns*.so*
+      - usr/lib/*/libnuma*.so.*
+      - usr/lib/*/libopus*.so.*
+      - usr/lib/*/libosinfo*.so.*
+      - usr/lib/*/libphodav*.so.*
+      - usr/lib/*/libplc*.so*
+      - usr/lib/*/libpld*.so*
+      - usr/lib/*/libroken*.so.*
+      - usr/lib/*/librtmp*.so.*
+      - usr/lib/*/libsasl*.so.*
+      - usr/lib/*/libspice*.so.*
+      - usr/lib/*/libssh*.so.*
+      - usr/lib/*/libusb*.so.*
+      - lib/*/libusb*.so.*
+      - usr/lib/*/libva*.so.*
+      - usr/lib/*/libwind*.so.*
+      - usr/lib/*/libyaj*.so.*
+      - usr/bin/osinfo*
+      - usr/share/misc/pci.ids
+      - usr/share/misc/usb.ids
+      - var/lib/usbutils/usb.ids
+      
+  osinfo-db:
+    plugin: make
+    after: [ libraries ]
+    source: https://salsa.debian.org/libvirt-team/osinfo-db.git
+    build-packages:
+      - gettext
+      - osinfo-db-tools
+      - wget
+    override-build: |
+      snapcraftctl build
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/share/osinfo
+      tar xf osinfo-db-*.tar.xz --strip-components=1 -C $SNAPCRAFT_PART_INSTALL/usr/share/osinfo
+      cp $SNAPCRAFT_PROJECT_DIR/ubuntu-daily.xml $SNAPCRAFT_PART_INSTALL/usr/share/osinfo/os/ubuntu.com/
+      # fix broken focal revision
+      FOCAL="$(wget -O- -q http://changelogs.ubuntu.com/meta-release-lts | grep "Version: 20.04" | cut -d' ' -f2)"
+      sed -i "s/20.04.3/$FOCAL/" $SNAPCRAFT_PART_INSTALL/usr/share/osinfo/os/ubuntu.com/ubuntu-20.04.xml
+
+  qemu:
+    plugin: nil
+    after: [ osinfo-db ]
+    stage-snaps: [ qemu-virgil/latest/edge ]
+    stage-packages:
+      - dnsmasq-base
+
+  launcher:
+    plugin: dump
+    after: [ qemu ]
+    source: scripts
+    organize:
+      launcher.sh: bin/launcher
+
+  # Find files provided by the base and platform snap and ensure they aren't
+  # duplicated in this snap
+  #cleanup:
+  #  after: [ libraries ]
+  #  plugin: nil
+  #  build-snaps: [core20, gtk-common-themes, gnome-3-38-2004]
+  #  override-prime: |
+  #    set -eux
+  #    for snap in "core20" "gtk-common-themes" "gnome-3-38-2004"; do
+  #      cd "/snap/$snap/current" && find . -type f,l -name *.so.* -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+  #    done
