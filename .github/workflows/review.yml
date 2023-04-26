@@ -15,8 +15,6 @@ jobs:
          working-directory: candidate-snaps-review
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: candidate-check
       - name: Review new candidates
         id: review
         run: ./candidate-snaps-review.py
