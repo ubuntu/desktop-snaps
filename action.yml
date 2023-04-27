@@ -25,8 +25,13 @@ runs:
       id: updatesnapyaml
       run: |
         ./desktop-snaps/updatesnap/updatesnapyaml.py --github-user $GITHUB_USER --github-token $GITHUB_TOKEN https://github.com/${{ github.repository }}
+        # Make sure to put the updated snapcraft.yaml file in the right location if it lives in a snap directory
         if [ -f output_file ]; then
+          if [ -d snap ]; then
+            mv output_file snap/snapcraft.yaml
+          else
             mv output_file snapcraft.yaml
+          fi
         fi
       env:
         GITHUB_USER: ubuntu
