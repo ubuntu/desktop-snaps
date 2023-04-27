@@ -67,7 +67,7 @@ class CompareABIs(Colors):
 
 
     def _load_library_files(self):
-        # pylint: disable=broad-exception-raised
+        #pylint: disable=broad-exception-raised
         """ Loads library files data (for old and new libraries) """
 
         if not os.path.isfile(self._old_library_path):
@@ -92,7 +92,7 @@ class CompareABIs(Colors):
 
     def set_snap_paths(self, base_old_path: str, base_new_path: str,
                            library_path: str):
-        # pylint: disable=broad-exception-raised
+        #pylint: disable=broad-exception-raised
         """ sets the paths of both libraries using the base paths for each SNAP,
             and the path of the library file inside the SNAPs. This
             presumes that both libraries are placed in the same relative place.
