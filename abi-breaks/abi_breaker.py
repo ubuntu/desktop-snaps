@@ -67,6 +67,7 @@ class CompareABIs(Colors):
 
 
     def _load_library_files(self):
+        # pylint: disable=broad-exception-raised
         """ Loads library files data (for old and new libraries) """
 
         if not os.path.isfile(self._old_library_path):
@@ -91,6 +92,7 @@ class CompareABIs(Colors):
 
     def set_snap_paths(self, base_old_path: str, base_new_path: str,
                            library_path: str):
+        # pylint: disable=broad-exception-raised
         """ sets the paths of both libraries using the base paths for each SNAP,
             and the path of the library file inside the SNAPs. This
             presumes that both libraries are placed in the same relative place.
@@ -154,6 +156,7 @@ class SnapComparer(Colors):
     """ Compares two snaps to find ABI breaks """
 
     def __init__(self):
+        super().__init__()
         self._path_pairs = []
 
     def _resolve_link(self, path: str) -> str:
@@ -188,9 +191,8 @@ class SnapComparer(Colors):
         elf_signature = bytearray([0x7F, 0x45, 0x4C, 0x46])
         with open(path1, 'rb') as old_library:
             with open(path2, 'rb') as new_library:
-                if old_library.read(4) != elf_signature:
-                    return False
-                if new_library.read(4) != elf_signature:
+                if ((old_library.read(4) != elf_signature) or
+                    (new_library.read(4) != elf_signature)):
                     return False
                 if os.stat(path1).st_size == os.stat(path2).st_size:
                     while True:
@@ -234,8 +236,7 @@ def usage():
     print("Usage: abi_breaker [--new] OLD_SNAP_PATH NEW_SNAP_PATH")
     sys.exit(1)
 
-
-if __name__ == '__main__':
+def _do_process():
     old_snap_path = None
     new_snap_path = None
     check_for_new = False
@@ -261,3 +262,6 @@ if __name__ == '__main__':
 
     comparer = SnapComparer()
     comparer.compare_snaps(old_snap_path, new_snap_path, check_for_new)
+
+if __name__ == '__main__':
+    _do_process()
