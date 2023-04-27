@@ -67,14 +67,13 @@ class CompareABIs(Colors):
 
 
     def _load_library_files(self):
-        #pylint: disable=broad-exception-raised
         """ Loads library files data (for old and new libraries) """
 
         if not os.path.isfile(self._old_library_path):
-            raise Exception(f"The old library path {self._old_library_path} "
+            raise ValueError(f"The old library path {self._old_library_path} "
                              "doesn't point to a file")
         if not os.path.isfile(self._new_library_path):
-            raise Exception(f"The new library path {self._new_library_path} "
+            raise ValueError(f"The new library path {self._new_library_path} "
                              "doesn't point to a file")
 
         self._old_library, self._old_library_symbols = self._process_file(self._old_library_path)
@@ -91,8 +90,7 @@ class CompareABIs(Colors):
 
 
     def set_snap_paths(self, base_old_path: str, base_new_path: str,
-                           library_path: str):
-        #pylint: disable=broad-exception-raised
+                       library_path: str):
         """ sets the paths of both libraries using the base paths for each SNAP,
             and the path of the library file inside the SNAPs. This
             presumes that both libraries are placed in the same relative place.
@@ -105,8 +103,8 @@ class CompareABIs(Colors):
             point to a library. """
         if library_path[0] == os.sep:
             if not library_path.startswith(base_old_path):
-                raise Exception(f"Library path {library_path} isn't inside the"
-                                f"old SNAP path {base_old_path}")
+                raise RuntimeError(f"Library path {library_path} isn't inside the"
+                                   f"old SNAP path {base_old_path}")
             self._old_library_path = library_path
             self._new_library_path = library_path.replace(base_old_path, base_new_path)
         else:
@@ -115,41 +113,37 @@ class CompareABIs(Colors):
         self._load_library_files()
 
 
-    def missing_symbols(self) -> bool:
+    def missing_symbols(self) -> list:
         """ Compares the library pointed by new_path with the one pointed
-            by base_path, and returns a boolean specifying if they are
-            ABI-compatible """
+            by base_path, and returns a list with the missing symbols """
 
         # Ensure that the new library has all the public symbols that the old
         # one exports
 
-        compatible = True
+        symbols = []
         old_symbols = [ unmangle_symbol(symbol.name) for symbol in
                         self._old_library_symbols["STT_FUNC"] ]
         new_symbols = [ unmangle_symbol(symbol.name) for symbol in
                         self._new_library_symbols["STT_FUNC"] ]
         for symbol in old_symbols:
-            if symbol not in new_symbols:
-                compatible = False
-                print(f"Missing public symbol {self.color_missing_public_symbol}{symbol}"
-                      f"{self.reset} in {self.color_library}{self._new_library_path}"
-                      f"{self.reset}", file=sys.stderr)
-        return compatible
+            if (symbol not in new_symbols) and (symbol not in symbols):
+                symbols.append(symbol)
+        return symbols
 
 
-    def new_symbols(self):
+    def new_symbols(self) -> list:
         """ Compares the library pointed by new_path with the one pointed
-            by base_path, and lists all the new symbols """
+            by base_path, and returns a list with all the new symbols """
 
+        symbols = []
         old_symbols = [ unmangle_symbol(symbol.name) for symbol in
                         self._old_library_symbols["STT_FUNC"] ]
         new_symbols = [ unmangle_symbol(symbol.name) for symbol in
                         self._new_library_symbols["STT_FUNC"] ]
         for symbol in new_symbols:
-            if symbol not in old_symbols:
-                print(f"New public symbol {self.color_new_public_symbol}{symbol}"
-                      f"{self.reset} in {self.color_library}{self._new_library_path}"
-                      f"{self.reset}")
+            if (symbol not in old_symbols) and (symbol not in symbols):
+                symbols.append(symbol)
+        return symbols
 
 
 class SnapComparer(Colors):
@@ -205,6 +199,29 @@ class SnapComparer(Colors):
         return True
 
 
+    def _do_comparison(self, full_old_path, full_new_path, show_new_symbols):
+        # pylint: disable=bare-except
+        compare = CompareABIs()
+        try:
+            compare.set_direct_paths(full_old_path, full_new_path)
+        except:
+            return
+        if show_new_symbols:
+            symbols = compare.new_symbols()
+            if len(symbols) != 0:
+                print(f"New public symbols in {full_new_path}:")
+                for symbol in symbols:
+                    print(f"    {self.color_new_public_symbol}{symbol}"
+                            f"{self.reset}")
+        else:
+            symbols = compare.missing_symbols()
+            if len(symbols) != 0:
+                print(f"Missing public symbols in {full_new_path}:")
+                for symbol in symbols:
+                    print(f"    {self.color_missing_public_symbol}{symbol}"
+                            f"{self.reset}")
+
+
     def compare_snaps(self, old_snap_path, new_snap_path, show_new_symbols):
         # pylint: disable=bare-except
         """ Does the comparison between the libraries of old_snap_path
@@ -220,15 +237,7 @@ class SnapComparer(Colors):
                     full_new_path = full_old_path.replace(old_path, new_path)
                     if not self._should_check(full_old_path, full_new_path):
                         continue
-                    compare = CompareABIs()
-                    try:
-                        compare.set_direct_paths(full_old_path, full_new_path)
-                    except:
-                        continue
-                    if show_new_symbols:
-                        compare.new_symbols()
-                    else:
-                        compare.missing_symbols()
+                    self._do_comparison(full_old_path, full_new_path, show_new_symbols)
 
 
 def usage():

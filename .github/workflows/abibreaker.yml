@@ -25,3 +25,7 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint abi-breaks/abi_breaker.py
+    - name: Code tests
+      run: |
+        cd abi-breaks
+        ./test_breaker.py
