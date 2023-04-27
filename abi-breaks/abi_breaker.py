@@ -203,7 +203,7 @@ class SnapComparer(Colors):
         return True
 
 
-    def compare_snaps(self, old_snap_path, new_snap_path):
+    def compare_snaps(self, old_snap_path, new_snap_path, show_new_symbols):
         # pylint: disable=bare-except
         """ Does the comparison between the libraries of old_snap_path
             and new_snap_path. """
@@ -223,14 +223,41 @@ class SnapComparer(Colors):
                         compare.set_direct_paths(full_old_path, full_new_path)
                     except:
                         continue
-                    #print(f"Checking {full_old_path} vs {full_new_path}")
-                    compare.missing_symbols()
+                    if show_new_symbols:
+                        compare.new_symbols()
+                    else:
+                        compare.missing_symbols()
 
+
+def usage():
+    """ Prints how to use the program """
+    print("Usage: abi_breaker [--new] OLD_SNAP_PATH NEW_SNAP_PATH")
+    sys.exit(1)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Usage: abi_breaker OLD_SNAP_PATH NEW_SNAP_PATH")
-        sys.exit(1)
+    old_snap_path = None
+    new_snap_path = None
+    check_for_new = False
+
+    for parameter in sys.argv[1:]:
+        if parameter[0] == '-':
+            if parameter == '--new':
+                check_for_new = True
+                continue
+            print(f"Unknown parameter {parameter}")
+            usage()
+        if old_snap_path is None:
+            old_snap_path = parameter
+            continue
+        if new_snap_path is None:
+            new_snap_path = parameter
+            continue
+        print("Too many parameters")
+        usage()
+
+    if (old_snap_path is None) or (new_snap_path is None):
+        usage()
+
     comparer = SnapComparer()
-    comparer.compare_snaps(sys.argv[1], sys.argv[2])
+    comparer.compare_snaps(old_snap_path, new_snap_path, check_for_new)
