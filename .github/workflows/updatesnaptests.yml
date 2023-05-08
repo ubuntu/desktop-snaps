@@ -29,10 +29,8 @@ jobs:
         GITHUB_TOKEN: ${{ inputs.token }}
       run: |
         cd updatesnap
-        ./test_yaml.py
+        ./unittests.py
     - name: Analysing the code with pylint
       run: |
-        pylint updatesnap/updatesnap.py
-        pylint updatesnap/updatesnapyaml.py
-        pylint updatesnap/SnapModule/snapmodule.py
-        pylint updatesnap/test_yaml.py
+        cd updatesnap
+        ./style_check.sh
