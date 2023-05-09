@@ -24,8 +24,9 @@ jobs:
         python3 -m pip install pyelftools
     - name: Analysing the code with pylint
       run: |
-        pylint abi-breaks/abi_breaker.py
+        cd abi-breaks
+        ./style_check.sh
     - name: Code tests
       run: |
         cd abi-breaks
-        ./test_breaker.py
+        ./unittests.py
