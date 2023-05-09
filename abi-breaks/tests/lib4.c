@@ -1,5 +1,3 @@
-char variable_one;
-
 int function1(int a, char *b) {
     return a+(*b);
 }

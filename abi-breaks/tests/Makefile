@@ -1,14 +1,16 @@
-all: libtest.so.1.1 libtest.so.1.2 libtest.so.1.3
-	strip libtest.so.1.*
+CC := gcc
+CFLAGS := -O2
+LDFLAGS := -fPIC -shared -Wl,-soname test
+SRCS := $(shell find -name 'lib*.c')
+OUTPUT := $(patsubst ./lib%.c,libtest.so.1.%,$(SRCS))
 
-CCPARAMS=-fPIC -shared -Wl,-soname test
+.PHONY: all clean
 
-libtest.so.1.1: lib1.c
-	gcc lib1.c ${CCPARAMS} -o libtest.so.1.1
-libtest.so.1.2: lib2.c
-	gcc lib2.c ${CCPARAMS} -o libtest.so.1.2
-libtest.so.1.3: lib3.c
-	gcc lib3.c ${CCPARAMS} -o libtest.so.1.3
+all: ${OUTPUT}
+
+libtest.so.1.%: lib%.c
+	${CC} $< ${CFLAGS} ${LDFLAGS} -o $@
+	strip $@
 
 clean:
 	rm -f libtest.so.1.*

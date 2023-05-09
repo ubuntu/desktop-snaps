@@ -53,7 +53,7 @@ class CompareABIs(Colors):
 
     def _process_file(self, path):
         # we need at least STT_FUNC
-        symbols = {"STT_FUNC": []}
+        symbols = {"STT_FUNC": [], "STT_OBJECT": []}
         with open(path, 'rb') as library:
             library_elf = elftools.elf.elffile.ELFFile(library)
             for section in library_elf.iter_sections():
@@ -112,7 +112,6 @@ class CompareABIs(Colors):
             self._new_library_path = os.path.join(base_new_path, library_path)
         self._load_library_files()
 
-
     def missing_symbols(self) -> list:
         """ Compares the library pointed by new_path with the one pointed
             by base_path, and returns a list with the missing symbols """
@@ -122,9 +121,11 @@ class CompareABIs(Colors):
 
         symbols = []
         old_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._old_library_symbols["STT_FUNC"] ]
+                        self._old_library_symbols["STT_FUNC"] +
+                        self._old_library_symbols["STT_OBJECT"] ]
         new_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._new_library_symbols["STT_FUNC"] ]
+                        self._new_library_symbols["STT_FUNC"] +
+                        self._new_library_symbols["STT_OBJECT"] ]
         for symbol in old_symbols:
             if (symbol not in new_symbols) and (symbol not in symbols):
                 symbols.append(symbol)
@@ -137,9 +138,11 @@ class CompareABIs(Colors):
 
         symbols = []
         old_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._old_library_symbols["STT_FUNC"] ]
+                        self._old_library_symbols["STT_FUNC"] +
+                        self._old_library_symbols["STT_OBJECT"] ]
         new_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._new_library_symbols["STT_FUNC"] ]
+                        self._new_library_symbols["STT_FUNC"] +
+                        self._new_library_symbols["STT_OBJECT"] ]
         for symbol in new_symbols:
             if (symbol not in old_symbols) and (symbol not in symbols):
                 symbols.append(symbol)
