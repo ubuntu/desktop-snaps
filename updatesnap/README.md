@@ -144,6 +144,13 @@ The available extra tokens are:
   greater than 90 will be ignored. Useful for projects that use these revision numbers
   as "prelude" to a new minor version.
 * ignore: don't try to check this entry. Useful for "archived" projects.
+* allow-neither-tag-nor-branch: allows this part to have neither *source-tag* nor
+  *source-branch* elements, thus using the default (usually *main*) branch. Without
+  this element, a file with a part that has neither *source-tag* nor *source-branch*
+  will be considered invalid.
+* allow-branch: allows to use *source-branch* in the part instead of *source-tag*.
+  A file with a part that has neither *source-tag* nor this element will be considered
+  invalid.
 
 ## TODO
 

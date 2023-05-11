@@ -18,7 +18,7 @@ def apply_local_secrets(snap, arguments):
         snap.set_secret("github", "token", arguments.github_token)
 
 
-def process_folder(folder_path, arguments):
+def process_folder(folder_path, arguments) -> tuple[list, bool]:
     """ Processes a folder, searching for the snapcraft.yaml files """
 
     snap = Snapcraft(arguments.s)
@@ -32,7 +32,7 @@ def process_folder(folder_path, arguments):
     return snap.process_parts()
 
 
-def process_data(data, arguments):
+def process_data(data, arguments) -> tuple[list, bool]:
     """ Processed a YAML data passed in the data argument """
 
     snap = Snapcraft(arguments.s)
@@ -100,18 +100,21 @@ def main():
             full_path = os.path.join(argument_list.folder, folder)
             if not os.path.isdir(full_path):
                 continue
-            retval += process_folder(full_path, argument_list)
+            data, _ = process_folder(full_path, argument_list)
+            retval += data
     else:
         if ((not argument_list.folder.startswith("http://")) and
                 (not argument_list.folder.startswith("https://"))):
-            retval = process_folder(argument_list.folder, argument_list)
+            data, _ = process_folder(argument_list.folder, argument_list)
+            retval = data
         else:
             response = requests.get(argument_list.folder, timeout=30)
             if not response:
                 print(f"Failed to get the file {argument_list.folder}: {response.status_code}",
                       file=sys.stderr)
                 sys.exit(-1)
-            retval = process_data(response.content.decode('utf-8'), argument_list)
+            data, _ = process_data(response.content.decode('utf-8'), argument_list)
+            retval = data
     print_summary(retval)
 
 

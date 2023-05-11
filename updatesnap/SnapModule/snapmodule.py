@@ -409,6 +409,7 @@ class Snapcraft(ProcessVersion):
         super().__init__(silent)
         self._secrets = {}
         self._config = None
+        self._branch_tag_error = False
         if github_pose:
             self._github = github_pose
         else:
@@ -526,17 +527,18 @@ class Snapcraft(ProcessVersion):
         branches = self._gitlab.get_branches(source)
         return branches
 
-    def process_parts(self) -> list:
+    def process_parts(self) -> tuple[list, bool]:
         """ Processes all the parts of the current YAML file
 
         It goes through each part in the current YAML file and
         updates the version to the latest one. """
         if self._config is None:
             return []
+        self._branch_tag_error = False
         parts = []
         for part in self._config['parts']:
             parts.append(self.process_part(part))
-        return parts
+        return parts, self._branch_tag_error
 
     def process_part(self, part: str) -> Optional[dict]:
         # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
@@ -628,9 +630,14 @@ class Snapcraft(ProcessVersion):
         if ('source-tag' not in data) and ('source-branch' not in data):
             tags = self._get_tags(source, current_tag, version_format)
             branches = self._get_branches(source)
-            self._print_message(part, f"{self._colors.warning}Has neither a source-tag "
-                                      f"nor a source-branch{self._colors.reset}",
-                                      source=source, override_silent=True)
+            message = "Has neither a source-tag nor a source-branch element"
+            if self._checkopt("allow-neither-tag-nor-branch", version_format):
+                self._print_message(part, f"{self._colors.warning}{message}{self._colors.reset}",
+                                    source=source, override_silent=True)
+            else:
+                self._print_message(part, f"{self._colors.critical}{message}{self._colors.reset}",
+                                    source=source, override_silent=True)
+                self._branch_tag_error = True
             if tags is not None:
                 self._print_last_tags(part, tags)
 
@@ -650,9 +657,15 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, f"Current version: {current_version}")
             branches = self._get_branches(source)
             self._sort_elements(part, current_version, branches, "branch")
-            self._print_message(part, f"{self._colors.note}Uses branches. Should be moved to an "
-                                      f"specific tag{self._colors.reset}", override_silent=True)
             self._print_last_branches(part, branches)
+            message = "Uses branches. Should be moved to an specific tag"
+            if self._checkopt("allow-branch", version_format):
+                self._print_message(part, f"{self._colors.warning}{message}{self._colors.reset}",
+                                    override_silent=True)
+            else:
+                self._branch_tag_error = True
+                self._print_message(part, f"{self._colors.critical}{message}{self._colors.reset}",
+                                    override_silent=True)
         if not self._silent:
             print("", file=sys.stderr)
         return part_data

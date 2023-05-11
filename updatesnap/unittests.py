@@ -65,7 +65,8 @@ class TestYAMLfiles(unittest.TestCase):
         """ tests if it detects the right list of available updates """
         snap, _ = self._load_test_file("gnome-calculator-test1.yaml",
                                        get_gnome_calculator_tags())
-        data = snap.process_parts()
+        data, tag_error = snap.process_parts()
+        assert not tag_error
         assert self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0"])
         assert not self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0", "42.2"])
 
@@ -73,7 +74,8 @@ class TestYAMLfiles(unittest.TestCase):
         """ tests if the updated snapcraft.yaml file is correct """
         snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
                                               get_gnome_calculator_tags())
-        data = snap.process_parts()
+        data, tag_error = snap.process_parts()
+        assert not tag_error
         manager_yaml = ManageYAML(datafile)
         has_update = False
         for part in data:
@@ -95,7 +97,8 @@ class TestYAMLfiles(unittest.TestCase):
         """ Ensure that the updated file identical to the expected one """
         snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
                                               get_gnome_calculator_tags())
-        data = snap.process_parts()
+        data, tag_error = snap.process_parts()
+        assert not tag_error
         assert len(data) == 2
         assert "name" in data[0]
         assert "version" in data[0]
@@ -172,7 +175,8 @@ class TestYAMLfiles(unittest.TestCase):
         snap, _ = self._load_test_file("gnome-boxes-test1.yaml",
                                        None,
                                        get_gnome_boxes_branches())
-        snap.process_parts()
+        _, tag_error = snap.process_parts()
+        assert tag_error
 
     def test_gitlab_tags_download(self):
         """ Check that tag download from gitlab works as expected """
@@ -190,6 +194,42 @@ class TestYAMLfiles(unittest.TestCase):
                     found = True
                     break
             assert found
+
+    def test_branch_no_permission(self):
+        """ Checks that a file using source-branch without permission triggers
+            an error """
+        snap, _ = self._load_test_file("test_branch_no_permission.yaml",
+                                       None,
+                                       get_gnome_boxes_branches())
+        _, tag_error = snap.process_parts()
+        assert tag_error
+
+    def test_branch_with_permission(self):
+        """ Checks that a file using source-branch with permission doesn't
+            trigger an error """
+        snap, _ = self._load_test_file("test_branch_with_permission.yaml",
+                                       None,
+                                       get_gnome_boxes_branches())
+        _, tag_error = snap.process_parts()
+        assert not tag_error
+
+    def test_no_tag_no_branch_no_permission(self):
+        """ Checks that a file with neither source-branch nor source-tag without
+            permission triggers an error """
+        snap, _ = self._load_test_file("test_no_tag_no_branch_no_permission.yaml",
+                                       None,
+                                       get_gnome_boxes_branches())
+        _, tag_error = snap.process_parts()
+        assert tag_error
+
+    def test_no_tag_no_branch_with_permission(self):
+        """ Checks that a file with neither source-branch nor source-tag with
+            permission doesn't trigger an error """
+        snap, _ = self._load_test_file("test_no_tag_no_branch_with_permission.yaml",
+                                       None,
+                                       get_gnome_boxes_branches())
+        _, tag_error = snap.process_parts()
+        assert not tag_error
 
 
 class GitPose:
