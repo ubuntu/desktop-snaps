@@ -8,14 +8,15 @@ import subprocess
 import elftools.elf.elffile
 import elftools.elf.sections
 
+
 class Colors:
-    #pylint: disable=too-few-public-methods
+    # pylint: disable=too-few-public-methods
     """ Container class to define the colors for the messages """
     def __init__(self):
         red = "\033[31m"
         green = "\033[32m"
         yellow = "\033[33m"
-        #cyan = "\033[36m"
+        # cyan = "\033[36m"
 
         self.reset = "\033[0m"
         self.clearline = "\033[2K"
@@ -43,13 +44,12 @@ class CompareABIs(Colors):
     """ Compares two libraries and determines if they are ABI-compatible """
     def __init__(self):
         super().__init__()
-        self._old_library_path:str = None
-        self._new_library_path:str = None
+        self._old_library_path: str = None
+        self._new_library_path: str = None
         self._old_library = None
         self._new_library = None
         self._old_library_symbols = {}
         self._new_library_symbols = {}
-
 
     def _process_file(self, path):
         # we need at least STT_FUNC
@@ -65,7 +65,6 @@ class CompareABIs(Colors):
                         symbols[symbol_type].append(symbol)
         return library_elf, symbols
 
-
     def _load_library_files(self):
         """ Loads library files data (for old and new libraries) """
 
@@ -79,7 +78,6 @@ class CompareABIs(Colors):
         self._old_library, self._old_library_symbols = self._process_file(self._old_library_path)
         self._new_library, self._new_library_symbols = self._process_file(self._new_library_path)
 
-
     def set_direct_paths(self, old_path: str, new_path: str):
         """ sets the paths of both libraries in an independent way. This
             is useful for testing. It can raise several exceptions if
@@ -87,7 +85,6 @@ class CompareABIs(Colors):
         self._old_library_path = old_path
         self._new_library_path = new_path
         self._load_library_files()
-
 
     def set_snap_paths(self, base_old_path: str, base_new_path: str,
                        library_path: str):
@@ -120,29 +117,28 @@ class CompareABIs(Colors):
         # one exports
 
         symbols = []
-        old_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._old_library_symbols["STT_FUNC"] +
-                        self._old_library_symbols["STT_OBJECT"] ]
-        new_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._new_library_symbols["STT_FUNC"] +
-                        self._new_library_symbols["STT_OBJECT"] ]
+        old_symbols = [unmangle_symbol(symbol.name) for symbol in
+                       self._old_library_symbols["STT_FUNC"] +
+                       self._old_library_symbols["STT_OBJECT"]]
+        new_symbols = [unmangle_symbol(symbol.name) for symbol in
+                       self._new_library_symbols["STT_FUNC"] +
+                       self._new_library_symbols["STT_OBJECT"]]
         for symbol in old_symbols:
             if (symbol not in new_symbols) and (symbol not in symbols):
                 symbols.append(symbol)
         return symbols
-
 
     def new_symbols(self) -> list:
         """ Compares the library pointed by new_path with the one pointed
             by base_path, and returns a list with all the new symbols """
 
         symbols = []
-        old_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._old_library_symbols["STT_FUNC"] +
-                        self._old_library_symbols["STT_OBJECT"] ]
-        new_symbols = [ unmangle_symbol(symbol.name) for symbol in
-                        self._new_library_symbols["STT_FUNC"] +
-                        self._new_library_symbols["STT_OBJECT"] ]
+        old_symbols = [unmangle_symbol(symbol.name) for symbol in
+                       self._old_library_symbols["STT_FUNC"] +
+                       self._old_library_symbols["STT_OBJECT"]]
+        new_symbols = [unmangle_symbol(symbol.name) for symbol in
+                       self._new_library_symbols["STT_FUNC"] +
+                       self._new_library_symbols["STT_OBJECT"]]
         for symbol in new_symbols:
             if (symbol not in old_symbols) and (symbol not in symbols):
                 symbols.append(symbol)
@@ -189,7 +185,7 @@ class SnapComparer(Colors):
         with open(path1, 'rb') as old_library:
             with open(path2, 'rb') as new_library:
                 if ((old_library.read(4) != elf_signature) or
-                    (new_library.read(4) != elf_signature)):
+                        (new_library.read(4) != elf_signature)):
                     return False
                 if os.stat(path1).st_size == os.stat(path2).st_size:
                     while True:
@@ -197,17 +193,15 @@ class SnapComparer(Colors):
                         data_new = new_library.read(4096)
                         if data_old != data_new:
                             return True
-                        if data_old == b'': # EOF
+                        if data_old == b'':  # EOF
                             return False
         return True
 
-
     def _do_comparison(self, full_old_path, full_new_path, show_new_symbols):
-        # pylint: disable=bare-except
         compare = CompareABIs()
         try:
             compare.set_direct_paths(full_old_path, full_new_path)
-        except:
+        except ValueError:
             return
         if show_new_symbols:
             symbols = compare.new_symbols()
@@ -215,15 +209,14 @@ class SnapComparer(Colors):
                 print(f"New public symbols in {full_new_path}:")
                 for symbol in symbols:
                     print(f"    {self.color_new_public_symbol}{symbol}"
-                            f"{self.reset}")
+                          f"{self.reset}")
         else:
             symbols = compare.missing_symbols()
             if len(symbols) != 0:
                 print(f"Missing public symbols in {full_new_path}:")
                 for symbol in symbols:
                     print(f"    {self.color_missing_public_symbol}{symbol}"
-                            f"{self.reset}")
-
+                          f"{self.reset}")
 
     def compare_snaps(self, old_snap_path, new_snap_path, show_new_symbols):
         # pylint: disable=bare-except
@@ -247,6 +240,7 @@ def usage():
     """ Prints how to use the program """
     print("Usage: abi_breaker [--new] OLD_SNAP_PATH NEW_SNAP_PATH")
     sys.exit(1)
+
 
 def _do_process():
     old_snap_path = None
@@ -274,6 +268,7 @@ def _do_process():
 
     comparer = SnapComparer()
     comparer.compare_snaps(old_snap_path, new_snap_path, check_for_new)
+
 
 if __name__ == '__main__':
     _do_process()

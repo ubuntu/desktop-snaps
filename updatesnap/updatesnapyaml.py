@@ -10,17 +10,17 @@ from SnapModule.snapmodule import ManageYAML
 
 UPDATE_BRANCH = 'update_versions'
 
+
 class ProjectManager:
     """ This class is the one that searches in a remote project for
         the corresponding snapcraft.yaml file """
-    def __init__(self, user = None, token = None):
+    def __init__(self, user=None, token=None):
         """ Constructor. """
         self._github = Github(True)
         if user:
             self._github.set_secret('user', user)
         if token:
             self._github.set_secret('token', token)
-
 
     def get_working_branch(self, project_url):
         """ Returns the main branch of the project """
@@ -40,7 +40,6 @@ class ProjectManager:
                 break
         return working_branch
 
-
     def get_yaml_file(self, project_url):
         """ Searches in a project for the 'snapcraft.yaml' file and
             returns its contents """
@@ -51,11 +50,12 @@ class ProjectManager:
             data = self._github.get_file(project_url, yaml_path)
         return data
 
+
 def main():
     """ Main code """
     parser = argparse.ArgumentParser(prog='Update Snap YAML',
-                                    description='Find the lastest source'
-                                    ' versions for snap files and generates a new snapcraft.yaml.')
+                                     description='Find the lastest source'
+                                     ' versions for snap files and generates a new snapcraft.yaml.')
     parser.add_argument('--github-user', action='store', default=None,
                         help='User name for accesing Github projects.')
     parser.add_argument('--github-token', action='store', default=None,
@@ -71,7 +71,6 @@ def main():
 
     # get the most-updated SNAPCRAFT.YAML file
 
-    #branch = manager.get_working_branch(arguments.project)
     data = manager.get_yaml_file(arguments.project)
     if not data:
         print('Failed to get the snapcraft.yaml file.', file=sys.stderr)
@@ -90,7 +89,7 @@ def main():
 
     if len(parts) == 0:
         print("The snapcraft.yaml file has no parts.", file=sys.stderr)
-        sys.exit(0) # no parts
+        sys.exit(0)  # no parts
 
     has_update = False
     for part in parts:
@@ -111,6 +110,7 @@ def main():
             output_file.write(manager_yaml.get_yaml())
     else:
         print("No updates available", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
