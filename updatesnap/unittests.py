@@ -13,16 +13,17 @@ from SnapModule.snapmodule import ProcessVersion
 from SnapModule.snapmodule import Github
 from SnapModule.snapmodule import Gitlab
 
+
 class TestYAMLfiles(unittest.TestCase):
     """ Unitary tests for snapmodule """
 
     def _load_secrets(self, obj):
         secrets = None
         if "GITHUB_USER" in os.environ and "GITHUB_TOKEN" in os.environ:
-            secrets = {"github": {"user":os.environ["GITHUB_USER"],
-                       "token":os.environ["GITHUB_TOKEN"]}}
+            secrets = {"github": {"user": os.environ["GITHUB_USER"],
+                       "token": os.environ["GITHUB_TOKEN"]}}
         elif len(sys.argv) >= 3:
-            secrets = {"github": {"user":sys.argv[1], "token":sys.argv[2]}}
+            secrets = {"github": {"user": sys.argv[1], "token": sys.argv[2]}}
         else:
             secrets_file = os.path.expanduser('~/.config/updatesnap/updatesnap.secrets')
             if os.path.exists(secrets_file):
@@ -31,8 +32,7 @@ class TestYAMLfiles(unittest.TestCase):
         if secrets is not None:
             obj.set_secrets(secrets)
 
-
-    def _load_test_file(self, filepath, tags, branches = None):
+    def _load_test_file(self, filepath, tags, branches=None):
         with open(os.path.join("tests", filepath), "r", encoding='utf-8') as datafile:
             data = datafile.read()
         while data[:-2] == "\n\n":
@@ -47,7 +47,6 @@ class TestYAMLfiles(unittest.TestCase):
         snap = Snapcraft(True, github_pose, gitlab_pose)
         snap.load_external_data(data)
         return snap, data
-
 
     def _ensure_tags(self, data, tags):
         tagdict = {}
@@ -69,7 +68,6 @@ class TestYAMLfiles(unittest.TestCase):
         data = snap.process_parts()
         assert self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0"])
         assert not self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0", "42.2"])
-
 
     def test_gnome_calculator_2(self):
         """ tests if the updated snapcraft.yaml file is correct """
@@ -93,7 +91,6 @@ class TestYAMLfiles(unittest.TestCase):
         assert version_data['data'] == "source-tag: '44.0'"
         assert remove_trailing_nls(manager_yaml.get_yaml()) == get_updated_yaml()
 
-
     def test_gnome_calculator_3(self):
         """ Ensure that the updated file identical to the expected one """
         snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
@@ -116,7 +113,7 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Test the no-9x-revision option """
         obj = ProcessVersion(silent=True)
-        entry_format = {"format":"%M.%m.%R", "no-9x-revisions": True}
+        entry_format = {"format": "%M.%m.%R", "no-9x-revisions": True}
         version = obj._get_version("testpart", "3.8.92", entry_format, False)
         assert version is None
         version = obj._get_version("testpart", "3.8.32", entry_format, False)
@@ -126,27 +123,25 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Test the no-9x-minors option """
         obj = ProcessVersion(silent=True)
-        entry_format = {"format":"%M.%m.%R", "no-9x-minors": True}
+        entry_format = {"format": "%M.%m.%R", "no-9x-minors": True}
         version = obj._get_version("testpart", "3.97.1", entry_format, False)
         assert version is None
         version = obj._get_version("testpart", "3.45.1", entry_format, False)
         assert str(version) == "3.45.1"
 
-
     def test_ignore_odd_minor(self):
         # pylint: disable=protected-access
         """ Tests the "ignore-odd-minor" option when parsing versions """
         obj = ProcessVersion(silent=True)
-        entry_format = {"format":"%M.%m.%R", "ignore-odd-minor": True}
+        entry_format = {"format": "%M.%m.%R", "ignore-odd-minor": True}
         version = obj._get_version("testpart", "2.43.6", entry_format, False)
         assert version is None
         version = obj._get_version("testpart", "3.42.1", entry_format, False)
         assert str(version) == "3.42.1"
 
-
     def test_github_file_download(self):
         """ Check that a file download from github works as expected """
-        gitobj = Github(silent = True)
+        gitobj = Github(silent=True)
         self._load_secrets(gitobj)
         data = gitobj.get_file("https://github.com/ubuntu/gnome-calculator", "snapcraft.yaml")
         assert data is not None
@@ -155,13 +150,12 @@ class TestYAMLfiles(unittest.TestCase):
         assert isinstance(content, str)
         assert content.find('name: gnome-calculator') != -1
 
-
     def test_github_tags_download(self):
         """ Check that tag download from github works as expected """
-        gitobj = Github(silent = True)
+        gitobj = Github(silent=True)
         self._load_secrets(gitobj)
         data = gitobj.get_tags("https://github.com/GNOME/gnome-calculator",
-                               "40.0", {"format":"%M.%m"})
+                               "40.0", {"format": "%M.%m"})
         assert isinstance(data, list)
         # ensure that the known tags are in the list
         tags = get_gnome_calculator_tags()["https://gitlab.gnome.org/GNOME/gnome-calculator.git"]
@@ -173,20 +167,19 @@ class TestYAMLfiles(unittest.TestCase):
                     break
             assert found
 
-
     def test_branches(self):
         """ Check that using branches in a part instead of tags does work """
         snap, _ = self._load_test_file("gnome-boxes-test1.yaml",
-                                              None,
-                                              get_gnome_boxes_branches())
+                                       None,
+                                       get_gnome_boxes_branches())
         snap.process_parts()
 
     def test_gitlab_tags_download(self):
         """ Check that tag download from gitlab works as expected """
-        gitobj = Gitlab(silent = True)
+        gitobj = Gitlab(silent=True)
         self._load_secrets(gitobj)
         data = gitobj.get_tags("https://gitlab.gnome.org/GNOME/gnome-calculator",
-                               "40.0", {"format":"%M.%m"})
+                               "40.0", {"format": "%M.%m"})
         assert isinstance(data, list)
         # ensure that the known tags are in the list
         tags = get_gnome_calculator_tags()["https://gitlab.gnome.org/GNOME/gnome-calculator.git"]
@@ -218,7 +211,7 @@ class GitPose:
         """ Sets the branches that will be returned by this object when asked """
         self._branches = branches
 
-    def get_tags(self, source, current_tag = None, version_format = None):
+    def get_tags(self, source, current_tag=None, version_format=None):
         # pylint: disable=unused-argument
         """ Implements the get_tags() method of GitClass """
         if self._tags is None:
@@ -234,6 +227,7 @@ class GitPose:
         if source in self._branches:
             return self._branches[source]
         return []
+
 
 def get_gnome_boxes_branches():
     """ Returns a plausible list of branches for several tests """
@@ -308,7 +302,8 @@ def get_gnome_boxes_branches():
             {'name': 'v5.2-maint', 'date': 0},
             {'name': 'v5.3-maint', 'date': 0}],
         "https://gitlab.gnome.org/GNOME/tracker.git":
-        [{'name': '34-build-failure-with-werror-format-security', 'date': 0},
+        [
+            {'name': '34-build-failure-with-werror-format-security', 'date': 0},
             {'name': 'abderrahim/build-fix', 'date': 0},
             {'name': 'api-cleanup', 'date': 0},
             {'name': 'configurable-bus-type', 'date': 0},
@@ -448,7 +443,8 @@ def get_gnome_boxes_branches():
             {'name': 'wip/tintou/fix-doc', 'date': 0}
         ],
         "https://gitlab.gnome.org/GNOME/gnome-boxes.git":
-        [{'name': 'account-for-interference-on-reboot-count', 'date': 0},
+        [
+            {'name': 'account-for-interference-on-reboot-count', 'date': 0},
             {'name': 'alatiera/sourceview', 'date': 0},
             {'name': 'bundle-mks', 'date': 0},
             {'name': 'check-kvm-user', 'date': 0},
@@ -499,52 +495,93 @@ def get_gnome_boxes_branches():
         ]
     }
 
+
 def get_gnome_calculator_tags():
     """ Returns a plausible list of tags for several tests """
     return {"https://gitlab.gnome.org/GNOME/gnome-calculator.git":
-        [
-            {'name': '44.0', 'date': datetime.datetime(2023, 3, 17, 22, 17, 18,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '44.rc', 'date': datetime.datetime(2023, 3, 3, 22, 33, 23,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '44.beta', 'date': datetime.datetime(2023, 2, 11, 21, 31, 11,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '43.0.1', 'date': datetime.datetime(2022, 9, 16, 20, 40, 1,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '43.0', 'date': datetime.datetime(2022, 9, 16, 19, 58, 24,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '43.rc', 'date': datetime.datetime(2022, 9, 2, 23, 14, 40,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '43.alpha', 'date': datetime.datetime(2022, 7, 8, 16, 48, 43,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '42.2', 'date': datetime.datetime(2022, 7, 1, 23, 15, 12,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '42.1', 'date': datetime.datetime(2022, 5, 27, 19, 27, 52,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '42.0', 'date': datetime.datetime(2022, 3, 19, 22, 15, 55,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '42.rc', 'date': datetime.datetime(2022, 3, 6, 8, 15, 44,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '42.beta', 'date': datetime.datetime(2022, 2, 13, 22, 0, 5,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '42.alpha', 'date': datetime.datetime(2022, 1, 8, 23, 22, 56,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '41.1', 'date': datetime.datetime(2021, 12, 6, 8, 47, 24,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '41.0', 'date': datetime.datetime(2021, 9, 18, 22, 40, 23,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '41.rc', 'date': datetime.datetime(2021, 9, 4, 20, 28, 37,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '41.alpha', 'date': datetime.datetime(2021, 7, 10, 8, 44, 20,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '40.1', 'date': datetime.datetime(2021, 4, 30, 16, 38, 38,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=10800)))},
-            {'name': '40.0', 'date': datetime.datetime(2021, 3, 19, 20, 32, 6,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))},
-            {'name': '40.rc', 'date': datetime.datetime(2021, 3, 12, 19, 32, 25,
-                    tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))}
-        ]
-    }
+            [
+                {'name': '44.0',
+                 'date': datetime.datetime(2023, 3, 17, 22, 17, 18,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '44.rc',
+                 'date': datetime.datetime(2023, 3, 3, 22, 33, 23,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '44.beta',
+                 'date': datetime.datetime(2023, 2, 11, 21, 31, 11,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '43.0.1',
+                 'date': datetime.datetime(2022, 9, 16, 20, 40, 1,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '43.0',
+                 'date': datetime.datetime(2022, 9, 16, 19, 58, 24,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '43.rc',
+                 'date': datetime.datetime(2022, 9, 2, 23, 14, 40,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '43.alpha',
+                 'date': datetime.datetime(2022, 7, 8, 16, 48, 43,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '42.2',
+                 'date': datetime.datetime(2022, 7, 1, 23, 15, 12,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '42.1',
+                 'date': datetime.datetime(2022, 5, 27, 19, 27, 52,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '42.0',
+                 'date': datetime.datetime(2022, 3, 19, 22, 15, 55,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '42.rc',
+                 'date': datetime.datetime(2022, 3, 6, 8, 15, 44,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '42.beta',
+                 'date': datetime.datetime(2022, 2, 13, 22, 0, 5,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '42.alpha',
+                 'date': datetime.datetime(2022, 1, 8, 23, 22, 56,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '41.1',
+                 'date': datetime.datetime(2021, 12, 6, 8, 47, 24,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '41.0',
+                 'date': datetime.datetime(2021, 9, 18, 22, 40, 23,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '41.rc',
+                 'date': datetime.datetime(2021, 9, 4, 20, 28, 37,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '41.alpha',
+                 'date': datetime.datetime(2021, 7, 10, 8, 44, 20,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '40.1',
+                 'date': datetime.datetime(2021, 4, 30, 16, 38, 38,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=10800)))},
+                {'name': '40.0',
+                 'date': datetime.datetime(2021, 3, 19, 20, 32, 6,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))},
+                {'name': '40.rc',
+                 'date': datetime.datetime(2021, 3, 12, 19, 32, 25,
+                                           tzinfo=datetime.timezone(
+                                            datetime.timedelta(seconds=7200)))}
+            ]
+            }
 
 
 def get_updated_yaml():
@@ -553,10 +590,12 @@ def get_updated_yaml():
         data = yaml_file.read()
     return remove_trailing_nls(data)
 
+
 def remove_trailing_nls(data):
     """ removes all the trailing empty lines in a string """
     while data[-1] == '\n':
         data = data[:-1]
     return data
+
 
 unittest.main()

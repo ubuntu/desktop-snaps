@@ -8,6 +8,7 @@ import os
 import requests
 from SnapModule.snapmodule import Snapcraft
 
+
 def apply_local_secrets(snap, arguments):
     """ Sets the github user and token in the snap processor object """
 
@@ -76,7 +77,7 @@ def print_summary(data):
 def main():
     """ Main function """
     parser = argparse.ArgumentParser(prog="Update Snap",
-                                    description="Find the lastest source versions for snap files.")
+                                     description="Find the lastest source versions for snap files.")
     parser.add_argument('-s', action='store_true', help='Silent output.')
     parser.add_argument('-r', action='store_true',
                         help='Process all the snaps recursively '
@@ -89,9 +90,9 @@ def main():
     parser.add_argument('parts', nargs='*', help='A list of parts to check.')
     argument_list = parser.parse_args(sys.argv[1:])
 
-    if argument_list.r: # recursive
+    if argument_list.r:  # recursive
         if (argument_list.folder.startswith("http://") or
-            argument_list.folder.startswith("https://")):
+                argument_list.folder.startswith("https://")):
             print("-r parameter can't be used with http or https. Aborting.", file=sys.stderr)
             sys.exit(-1)
         retval = []
@@ -102,7 +103,7 @@ def main():
             retval += process_folder(full_path, argument_list)
     else:
         if ((not argument_list.folder.startswith("http://")) and
-        (not argument_list.folder.startswith("https://"))):
+                (not argument_list.folder.startswith("https://"))):
             retval = process_folder(argument_list.folder, argument_list)
         else:
             response = requests.get(argument_list.folder, timeout=30)
@@ -112,6 +113,7 @@ def main():
                 sys.exit(-1)
             retval = process_data(response.content.decode('utf-8'), argument_list)
     print_summary(retval)
+
 
 if __name__ == "__main__":
     main()

@@ -21,6 +21,7 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         python3 -m pip install pylint
+        python3 -m pip install flake8
         python3 -m pip install requests
         python3 -m pip install pyyaml
     - name: Code tests
@@ -30,7 +31,7 @@ jobs:
       run: |
         cd updatesnap
         ./unittests.py
-    - name: Analysing the code with pylint
+    - name: Analysing the code with pylint and flake8
       run: |
         cd updatesnap
         ./style_check.sh

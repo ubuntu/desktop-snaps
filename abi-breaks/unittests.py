@@ -5,6 +5,7 @@
 import unittest
 import abi_breaker
 
+
 class TestBreakerfiles(unittest.TestCase):
     """ Unitary tests for abi_breaker """
 
@@ -30,6 +31,17 @@ class TestBreakerfiles(unittest.TestCase):
         symbols = comparer.missing_symbols()
         assert len(symbols) == 1
         assert symbols[0] == 'variable_one'
+
+    def test_path_doesnt_exist(self):
+        """ tests that the module doesn't break if a file doesn't exist """
+        comparer = abi_breaker.CompareABIs()
+        self.assertRaises(ValueError, comparer.set_direct_paths,
+                          'tests/libtest.so.1.1', 'tests/libtest_doesn_t_exist.so.1.4')
+        self.assertRaises(ValueError, comparer.set_direct_paths,
+                          'tests/libtest_doesn_t_exist.so.1.1', 'tests/libtest.so.1.4')
+        self.assertRaises(ValueError, comparer.set_direct_paths,
+                          'tests/libtest_doesn_t_exist.so.1.1',
+                          'tests/libtest_doesn_t_exist.so.1.4')
 
 
 unittest.main()
