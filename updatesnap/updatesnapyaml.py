@@ -85,7 +85,10 @@ def main():
         snap.set_secret('github', 'user', arguments.github_user)
     if arguments.github_token:
         snap.set_secret('github', 'token', arguments.github_token)
-    parts = snap.process_parts()
+    parts, tag_error = snap.process_parts()
+
+    if tag_error:
+        sys.exit(1)
 
     if len(parts) == 0:
         print("The snapcraft.yaml file has no parts.", file=sys.stderr)
