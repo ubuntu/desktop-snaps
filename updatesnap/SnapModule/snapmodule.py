@@ -56,6 +56,9 @@ class ProcessVersion:
     def _print_message(self, part, message, source=None, override_silent=False):
         if self._silent and not override_silent:
             return
+        self._print_error(part, message, source, False)
+
+    def _print_error(self, part, message, source=None, extra_cr=False):
         if part != self._last_part:
             print(f"Part: {self._colors.note}{part}{self._colors.reset}"
                   f"{f' ({source})' if source else ''}", file=sys.stderr)
@@ -63,6 +66,8 @@ class ProcessVersion:
         if message is not None:
             print("  " + message, end="", file=sys.stderr)
             print(self._colors.reset, file=sys.stderr)
+        if extra_cr:
+            print("", file=sys.stderr)
 
     @staticmethod
     def _read_number(text):
@@ -84,9 +89,9 @@ class ProcessVersion:
         # pylint: disable=too-many-return-statements
         if "format" not in entry_format:
             if check:
-                self._print_message(part_name, f"{self._colors.critical}"
-                                    "Missing tag version format for "
-                                    f"{part_name}{self._colors.reset}.")
+                self._print_error(part_name, f"{self._colors.critical}"
+                                  "Missing tag version format for "
+                                  f"{part_name}{self._colors.reset}.")
             return None  # unknown format
         major = 0
         minor = 0
@@ -604,32 +609,29 @@ class Snapcraft(ProcessVersion):
             (not source.startswith('https://')) and
             (not source.startswith('git://')) and
                 (('source-type' not in data) or (data['source-type'] != 'git'))):
-            self._print_message(part, f"{self._colors.critical}Source is neither http:// "
-                                      f"nor git://{self._colors.reset}", source=source)
-            print("", file=sys.stderr)
+            self._print_error(part, f"{self._colors.critical}Source is neither http:// "
+                                    f"nor git://{self._colors.reset}", source=source,
+                                    extra_cr=True)
             return part_data
 
         if (not source.endswith('.git')) and (('source-type' not in data) or
                                               (data['source-type'] != 'git')):
-            self._print_message(part, f"{self._colors.warning}Source is not a GIT "
-                                f"repository{self._colors.reset}", source=source)
-            print("", file=sys.stderr)
+            self._print_error(part, f"{self._colors.warning}Source is not a GIT "
+                              f"repository{self._colors.reset}", source=source, extra_cr=True)
             return part_data
 
         if "source-depth" not in data:
             self._tag_error = True
-            self._print_message(part, f"{self._colors.critical}No 'source-depth' entry"
-                                f"{self._colors.reset}", source=source)
-            print("", file=sys.stderr)
+            self._print_error(part, f"{self._colors.critical}No 'source-depth' entry"
+                              f"{self._colors.reset}", source=source, extra_cr=True)
             return part_data
 
         if 'savannah' in source:
             url = urllib.parse.urlparse(source)
             if 'savannah' in url.netloc:
-                self._print_message(part, f"{self._colors.warning}Savannah repositories "
-                                          f"not supported{self._colors.reset}", source=source)
-                if not self._silent:
-                    print("", file=sys.stderr)
+                self._print_error(part, f"{self._colors.warning}Savannah repositories "
+                                        f"not supported{self._colors.reset}", source=source,
+                                        extra_cr=True)
                 return part_data
 
         self._print_message(part, None, source=source)
@@ -639,11 +641,11 @@ class Snapcraft(ProcessVersion):
             branches = self._get_branches(source)
             message = "Has neither a source-tag nor a source-branch element"
             if self._checkopt("allow-neither-tag-nor-branch", version_format):
-                self._print_message(part, f"{self._colors.warning}{message}{self._colors.reset}",
-                                    source=source, override_silent=True)
+                self._print_error(part, f"{self._colors.warning}{message}{self._colors.reset}",
+                                  source=source, extra_cr=True)
             else:
-                self._print_message(part, f"{self._colors.critical}{message}{self._colors.reset}",
-                                    source=source, override_silent=True)
+                self._print_error(part, f"{self._colors.critical}{message}{self._colors.reset}",
+                                  source=source, extra_cr=True)
                 self._tag_error = True
             if tags is not None:
                 self._print_last_tags(part, tags)
@@ -653,7 +655,7 @@ class Snapcraft(ProcessVersion):
             part_data["use_tag"] = True
             self._print_message(part, f"Current tag: {data['source-tag']}", source=source)
             if tags is None:
-                self._print_message(part, f"{self._colors.critical}No tags found")
+                self._print_error(part, f"{self._colors.critical}No tags found", extra_cr=True)
             else:
                 self._sort_tags(part, data['source-tag'], tags, part_data)
 
@@ -667,14 +669,12 @@ class Snapcraft(ProcessVersion):
             self._print_last_branches(part, branches)
             message = "Uses branches. Should be moved to an specific tag"
             if self._checkopt("allow-branch", version_format):
-                self._print_message(part, f"{self._colors.warning}{message}{self._colors.reset}",
-                                    override_silent=True)
+                self._print_error(part, f"{self._colors.warning}{message}{self._colors.reset}",
+                                  extra_cr=True)
             else:
                 self._tag_error = True
-                self._print_message(part, f"{self._colors.critical}{message}{self._colors.reset}",
-                                    override_silent=True)
-        if not self._silent:
-            print("", file=sys.stderr)
+                self._print_error(part, f"{self._colors.critical}{message}{self._colors.reset}",
+                                  extra_cr=True)
         return part_data
 
     def _print_last_tags(self, part, tags):
@@ -702,9 +702,8 @@ class Snapcraft(ProcessVersion):
                 break
 
         if current_date is None:
-            self._print_message(part, f"{self._colors.critical}Error:{self._colors.reset} "
-                                      f"can't find the current tag in the tag list.",
-                                      override_silent=True)
+            self._print_error(part, f"{self._colors.critical}Error:{self._colors.reset} "
+                                    f"can't find the current tag in the tag list.")
             return
 
         version_format = part_data["version_format"]
