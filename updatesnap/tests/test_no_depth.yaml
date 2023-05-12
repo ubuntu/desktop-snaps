@@ -1,0 +1,46 @@
+name: gnome-boxes
+adopt-info: gnome-boxes
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+base: core20
+
+apps:
+  gnome-boxes:
+    command: usr/bin/gnome-boxes
+    command-chain: [ bin/launcher ]
+    extensions: [gnome-3-38]
+    plugs:
+      - audio-record
+      - audio-playback
+      - camera
+      - hardware-observe
+      - home
+      - kvm
+      - login-session-observe
+      - mount-observe
+      - network
+      - network-bind
+      - network-status
+      - process-control
+      - raw-usb
+      - system-observe
+      - time-control
+      - udisks2
+      - upower-observe
+    desktop: usr/share/applications/org.gnome.Boxes.desktop
+    common-id: org.gnome.Boxes.desktop
+    environment:
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-boxes
+      GI_TYPELIB_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gnome-boxes/girepository-1.0:$GI_TYPELIB_PATH
+      GTK_USE_PORTAL: '0'
+
+parts:
+  libvirt:
+    source: https://gitlab.com/libvirt/libvirt.git
+    source-branch: v6.0.0
+    plugin: autotools
+    build-packages:
+      - libxml2-dev
+# ext:updatesnap
+#   version-format:
+#     allow-branch: true

@@ -409,7 +409,7 @@ class Snapcraft(ProcessVersion):
         super().__init__(silent)
         self._secrets = {}
         self._config = None
-        self._branch_tag_error = False
+        self._tag_error = False
         if github_pose:
             self._github = github_pose
         else:
@@ -534,11 +534,11 @@ class Snapcraft(ProcessVersion):
         updates the version to the latest one. """
         if self._config is None:
             return []
-        self._branch_tag_error = False
+        self._tag_error = False
         parts = []
         for part in self._config['parts']:
             parts.append(self.process_part(part))
-        return parts, self._branch_tag_error
+        return parts, self._tag_error
 
     def process_part(self, part: str) -> Optional[dict]:
         # pylint: disable=too-many-return-statements,too-many-branches,too-many-statements
@@ -616,6 +616,13 @@ class Snapcraft(ProcessVersion):
             print("", file=sys.stderr)
             return part_data
 
+        if "source-depth" not in data:
+            self._tag_error = True
+            self._print_message(part, f"{self._colors.critical}No 'source-depth' entry"
+                                f"{self._colors.reset}", source=source)
+            print("", file=sys.stderr)
+            return part_data
+
         if 'savannah' in source:
             url = urllib.parse.urlparse(source)
             if 'savannah' in url.netloc:
@@ -637,7 +644,7 @@ class Snapcraft(ProcessVersion):
             else:
                 self._print_message(part, f"{self._colors.critical}{message}{self._colors.reset}",
                                     source=source, override_silent=True)
-                self._branch_tag_error = True
+                self._tag_error = True
             if tags is not None:
                 self._print_last_tags(part, tags)
 
@@ -663,7 +670,7 @@ class Snapcraft(ProcessVersion):
                 self._print_message(part, f"{self._colors.warning}{message}{self._colors.reset}",
                                     override_silent=True)
             else:
-                self._branch_tag_error = True
+                self._tag_error = True
                 self._print_message(part, f"{self._colors.critical}{message}{self._colors.reset}",
                                     override_silent=True)
         if not self._silent:
