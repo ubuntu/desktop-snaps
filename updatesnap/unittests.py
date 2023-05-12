@@ -231,6 +231,14 @@ class TestYAMLfiles(unittest.TestCase):
         _, tag_error = snap.process_parts()
         assert not tag_error
 
+    def test_no_depth(self):
+        """ Checks that a file without 'source-depth' triggers an error """
+        snap, _ = self._load_test_file("test_no_depth.yaml",
+                                       None,
+                                       get_gnome_boxes_branches())
+        _, tag_error = snap.process_parts()
+        assert tag_error
+
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test
