@@ -823,6 +823,8 @@ class ManageYAML:
         for entry in self._tree:
             if entry['data'] != 'parts:':
                 continue
+            if ('child' not in entry) or (entry['child'] is None):
+                continue
             for entry2 in entry['child']:
                 if entry2['data'] != f'{part_name}:':
                     continue
