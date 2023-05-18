@@ -179,7 +179,7 @@ class GitClass(ProcessVersion):
         # pylint: disable=unused-argument
         return False
 
-    def _read_pages(self, uri: str) -> list:
+    def _read_pages(self, uri: str) -> Optional[list]:
         elements = []
         while uri is not None:
             response = self._read_uri(uri)
@@ -187,7 +187,7 @@ class GitClass(ProcessVersion):
                 if not self._silent:
                     print(f"{self._colors.critical}Status code {response.status_code} "
                           f"when asking for {uri}{self._colors.reset}", file=sys.stderr)
-                return []
+                return None
             headers = response.headers
             data = response.json()
             for entry in data:
@@ -303,6 +303,8 @@ class Github(GitClass):
         tag_command = self.join_url(self._rb(self._api_url), self._rb(uri.path),
                                     'tags?sort=created&direction=desc')
         data = self._read_pages(tag_command)
+        if not data:
+            return None
         tags = []
         self._current_tag = None
         for tag in data:
@@ -367,6 +369,8 @@ class Gitlab(GitClass):
         branch_command = self.join_url(uri.scheme + '://', uri.netloc, 'api/v4/projects',
                                        self._project_name(uri), 'repository/branches')
         data = self._read_pages(branch_command)
+        if not data:
+            return None
         branches = []
         for branch in data:
             element = {"name": branch['name']}
@@ -400,6 +404,8 @@ class Gitlab(GitClass):
                                     self._project_name(uri),
                                     'repository/tags?order_by=updated&sort=desc')
         data = self._read_pages(tag_command)
+        if data is None:
+            return None
         tags = []
         for tag in data:
             tags.append({"name": tag['name'],
@@ -655,7 +661,8 @@ class Snapcraft(ProcessVersion):
             part_data["use_tag"] = True
             self._print_message(part, f"Current tag: {data['source-tag']}", source=source)
             if tags is None:
-                self._print_error(part, f"{self._colors.critical}No tags found", extra_cr=True)
+                self._print_error(part, f"{self._colors.critical}No tags found. "
+                                  "Ensure that the source URI is valid.", extra_cr=True)
             else:
                 self._sort_tags(part, data['source-tag'], tags, part_data)
 
@@ -665,6 +672,9 @@ class Snapcraft(ProcessVersion):
             current_version = data['source-branch']
             self._print_message(part, f"Current version: {current_version}")
             branches = self._get_branches(source)
+            if branches is None:
+                self._print_error(part, f"{self._colors.critical}No branches found. Ensure that "
+                                  "the source URI is valid.", extra_cr=True)
             self._sort_elements(part, current_version, branches, "branch")
             self._print_last_branches(part, branches)
             message = "Uses branches. Should be moved to an specific tag"
