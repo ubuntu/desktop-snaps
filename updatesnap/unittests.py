@@ -46,7 +46,7 @@ class TestYAMLfiles(unittest.TestCase):
         gitlab_pose.set_branches(branches)
         snap = Snapcraft(True, github_pose, gitlab_pose)
         snap.load_external_data(data)
-        return snap, data
+        return snap, data, github_pose, gitlab_pose
 
     def _ensure_tags(self, data, tags):
         tagdict = {}
@@ -63,8 +63,8 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_gnome_calculator_1(self):
         """ tests if it detects the right list of available updates """
-        snap, _ = self._load_test_file("gnome-calculator-test1.yaml",
-                                       get_gnome_calculator_tags())
+        snap, _, _, _ = self._load_test_file("gnome-calculator-test1.yaml",
+                                             get_gnome_calculator_tags())
         data, tag_error = snap.process_parts()
         assert not tag_error
         assert self._ensure_tags(data[0]["updates"], ["44.0", "43.0.1", "43.0"])
@@ -72,8 +72,8 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_gnome_calculator_2(self):
         """ tests if the updated snapcraft.yaml file is correct """
-        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
-                                              get_gnome_calculator_tags())
+        snap, datafile, _, _ = self._load_test_file("gnome-calculator-test1.yaml",
+                                                    get_gnome_calculator_tags())
         data, tag_error = snap.process_parts()
         assert not tag_error
         manager_yaml = ManageYAML(datafile)
@@ -95,8 +95,8 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_gnome_calculator_3(self):
         """ Ensure that the updated file identical to the expected one """
-        snap, datafile = self._load_test_file("gnome-calculator-test1.yaml",
-                                              get_gnome_calculator_tags())
+        snap, datafile, _, _ = self._load_test_file("gnome-calculator-test1.yaml",
+                                                    get_gnome_calculator_tags())
         data, tag_error = snap.process_parts()
         assert not tag_error
         assert len(data) == 2
@@ -172,9 +172,9 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_branches(self):
         """ Check that using branches in a part instead of tags does work """
-        snap, _ = self._load_test_file("gnome-boxes-test1.yaml",
-                                       None,
-                                       get_gnome_boxes_branches())
+        snap, _, _, _ = self._load_test_file("gnome-boxes-test1.yaml",
+                                             None,
+                                             get_gnome_boxes_branches())
         _, tag_error = snap.process_parts()
         assert tag_error
 
@@ -198,47 +198,64 @@ class TestYAMLfiles(unittest.TestCase):
     def test_branch_no_permission(self):
         """ Checks that a file using source-branch without permission triggers
             an error """
-        snap, _ = self._load_test_file("test_branch_no_permission.yaml",
-                                       None,
-                                       get_gnome_boxes_branches())
+        snap, _, _, _ = self._load_test_file("test_branch_no_permission.yaml",
+                                             None,
+                                             get_gnome_boxes_branches())
         _, tag_error = snap.process_parts()
         assert tag_error
 
     def test_branch_with_permission(self):
         """ Checks that a file using source-branch with permission doesn't
             trigger an error """
-        snap, _ = self._load_test_file("test_branch_with_permission.yaml",
-                                       None,
-                                       get_gnome_boxes_branches())
+        snap, _, _, _ = self._load_test_file("test_branch_with_permission.yaml",
+                                             None,
+                                             get_gnome_boxes_branches())
         _, tag_error = snap.process_parts()
         assert not tag_error
 
     def test_no_tag_no_branch_no_permission(self):
         """ Checks that a file with neither source-branch nor source-tag without
             permission triggers an error """
-        snap, _ = self._load_test_file("test_no_tag_no_branch_no_permission.yaml",
-                                       None,
-                                       get_gnome_boxes_branches())
+        snap, _, _, _ = self._load_test_file("test_no_tag_no_branch_no_permission.yaml",
+                                             None,
+                                             get_gnome_boxes_branches())
         _, tag_error = snap.process_parts()
         assert tag_error
 
     def test_no_tag_no_branch_with_permission(self):
         """ Checks that a file with neither source-branch nor source-tag with
             permission doesn't trigger an error """
-        snap, _ = self._load_test_file("test_no_tag_no_branch_with_permission.yaml",
-                                       None,
-                                       get_gnome_boxes_branches())
+        snap, _, _, _ = self._load_test_file("test_no_tag_no_branch_with_permission.yaml",
+                                             None,
+                                             get_gnome_boxes_branches())
         _, tag_error = snap.process_parts()
         assert not tag_error
 
     def test_no_depth(self):
         """ Checks that a file without 'source-depth' triggers an error """
-        snap, _ = self._load_test_file("test_no_depth.yaml",
-                                       None,
-                                       get_gnome_boxes_branches())
+        snap, _, _, _ = self._load_test_file("test_no_depth.yaml",
+                                             None,
+                                             get_gnome_boxes_branches())
         _, tag_error = snap.process_parts()
         assert tag_error
 
+    def test_invalid_uri(self):
+        """ Checks that an invalid URI in a source field triggers an error """
+        snap, _, github_pose, gitlab_pose = self._load_test_file("test_invalid_url.yaml",
+                                                                 None,
+                                                                 get_gnome_boxes_branches())
+        github_pose.set_uri_error(ValueError("Uri Error"))
+        _, tag_error = snap.process_parts()
+        assert tag_error
+
+    def test_invalid_uri2(self):
+        """ Checks that an invalid URI in a source field triggers an error """
+        snap, _, github_pose, gitlab_pose = self._load_test_file("test_invalid_url.yaml",
+                                                                 None,
+                                                                 get_gnome_boxes_branches())
+        github_pose.set_uri_error(ConnectionError("Parameters Error"))
+        _, tag_error = snap.process_parts()
+        assert tag_error
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test
@@ -247,6 +264,12 @@ class GitPose:
     def __init__(self):
         self._tags = {}
         self._branches = {}
+        self._uri_error = None
+
+    def set_uri_error(self, new_uri_error: Exception):
+        """ Sets whether the object will emulate an error in the URI or
+            work as expected """
+        self._uri_error = new_uri_error
 
     def set_secrets(self, data):
         """ emulates the set_secrets() method. """
@@ -262,6 +285,8 @@ class GitPose:
     def get_tags(self, source, current_tag=None, version_format=None):
         # pylint: disable=unused-argument
         """ Implements the get_tags() method of GitClass """
+        if self._uri_error is not None:
+            raise self._uri_error
         if self._tags is None:
             return []
         if source in self._tags:

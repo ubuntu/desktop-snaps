@@ -184,10 +184,10 @@ class GitClass(ProcessVersion):
         while uri is not None:
             response = self._read_uri(uri)
             if response.status_code != 200:
+                message = f"Status code {response.status_code} when asking for {uri}"
                 if not self._silent:
-                    print(f"{self._colors.critical}Status code {response.status_code} "
-                          f"when asking for {uri}{self._colors.reset}", file=sys.stderr)
-                return None
+                    print(f"{self._colors.critical}{message}{self._colors.reset}", file=sys.stderr)
+                raise ConnectionError(message)
             headers = response.headers
             data = response.json()
             for entry in data:
@@ -212,27 +212,31 @@ class GitClass(ProcessVersion):
     def _read_page(self, uri: str) -> Optional[dict]:
         response = self._read_uri(uri)
         if response.status_code != 200:
-            print(f"{self._colors.critical}Status code {response.status_code} "
-                  f"when asking for {uri}{self._colors.reset}", file=sys.stderr)
-            return None
+            message = f"Status code {response.status_code} when asking for {uri}"
+            if not self._silent:
+                print(f"{self._colors.critical}{message}{self._colors.reset}", file=sys.stderr)
+            raise ConnectionError(message)
         data = response.json()
         return data
 
     def _get_uri(self, repository, min_elements):
+        """ Returns an URI object for an specific repository, and also ensures
+            that the URI is valid. Throws an exception if the protocol or the
+            URI format is not recognized. """
         repository = repository.strip()
         if repository[-4:] == '.git':
             repository = repository[:-4]
         uri = urllib.parse.urlparse(repository)
         elements = uri.path.split("/")
         if uri.scheme not in ['http', 'https', 'git']:
-            print(f"{self._colors.critical}Unrecognized protocol in repository "
-                  f"{repository}{self._colors.reset}", file=sys.stderr)
-            return None
+            message = f"Unrecognized protocol in repository {repository}"
+            print(f"{self._colors.critical}{message}{self._colors.reset}", file=sys.stderr)
+            raise ValueError(message)
         elements = uri.path.split("/")
         if len(elements) < min_elements:
-            print(f"{self._colors.critical}Invalid uri format for repository "
-                  f"{repository}{self._colors.reset}", file=sys.stderr)
-            return None
+            message = f"Invalid uri format for repository {repository}"
+            print(f"{self._colors.critical}{message}{self._colors.reset}", file=sys.stderr)
+            raise ValueError(message)
         return uri
 
     @staticmethod
@@ -266,9 +270,9 @@ class Github(GitClass):
         self._api_url = 'https://api.github.com/repos/'
 
     def _is_github(self, repository: str):
+        """ Evaluates the URI of a repository and returns an URI
+            object with it, but only if it is a Github URI. """
         uri = self._get_uri(repository, 3)
-        if uri is None:
-            return None
         if uri.netloc not in ["github.com", "www.github.com"]:
             return None
         return uri
@@ -278,11 +282,10 @@ class Github(GitClass):
         uri = self._is_github(repository)
         if uri is None:
             return None
-
         branch_command = self.join_url(self._api_url, uri.path, 'branches')
         return self._read_pages(branch_command)
 
-    def _stop_download(self, data):
+    def _stop_download(self, data) -> bool:
         if self._current_tag is None:
             return False
         for entry in data:
@@ -346,9 +349,9 @@ class Gitlab(GitClass):
         super().__init__("gitlab", silent)
 
     def _is_gitlab(self, repository):
+        """ Evaluates the URI of a repository and returns an URI
+            object with it, but only if it is a Gitlab URI. """
         uri = self._get_uri(repository, 3)
-        if uri is None:
-            return None
         if "gitlab" not in uri.netloc:
             return None
         return uri
@@ -643,8 +646,14 @@ class Snapcraft(ProcessVersion):
         self._print_message(part, None, source=source)
 
         if ('source-tag' not in data) and ('source-branch' not in data):
-            tags = self._get_tags(source, current_tag, version_format)
-            branches = self._get_branches(source)
+            try:
+                tags = self._get_tags(source, current_tag, version_format)
+                branches = self._get_branches(source)
+            except (ValueError, ConnectionError) as e:
+                self._tag_error = True
+                self._print_error(part, f"{self._colors.critical}Invalid URI: {e}"
+                                  f"{self._colors.reset}", extra_cr=True)
+                return part_data
             message = "Has neither a source-tag nor a source-branch element"
             if self._checkopt("allow-neither-tag-nor-branch", version_format):
                 self._print_error(part, f"{self._colors.warning}{message}{self._colors.reset}",
@@ -657,24 +666,39 @@ class Snapcraft(ProcessVersion):
                 self._print_last_tags(part, tags)
 
         if 'source-tag' in data:
-            tags = self._get_tags(source, current_tag, version_format)
+            try:
+                tags = self._get_tags(source, current_tag, version_format)
+            except (ValueError, ConnectionError) as e:
+                self._tag_error = True
+                self._print_error(part, f"{self._colors.critical}Invalid URI: {e}"
+                                  f"{self._colors.reset}", extra_cr=True)
+                return part_data
             part_data["use_tag"] = True
             self._print_message(part, f"Current tag: {data['source-tag']}", source=source)
             if tags is None:
                 self._print_error(part, f"{self._colors.critical}No tags found. "
                                   "Ensure that the source URI is valid.", extra_cr=True)
-            else:
-                self._sort_tags(part, data['source-tag'], tags, part_data)
+                self._tag_error = True
+                return part_data
+            self._sort_tags(part, data['source-tag'], tags, part_data)
 
         if 'source-branch' in data:
             part_data["use_branch"] = True
             self._print_message(part, f"Current branch: {data['source-branch']}", source=source)
             current_version = data['source-branch']
             self._print_message(part, f"Current version: {current_version}")
-            branches = self._get_branches(source)
+            try:
+                branches = self._get_branches(source)
+            except (ValueError, ConnectionError) as e:
+                self._tag_error = True
+                self._print_error(part, f"{self._colors.critical}Invalid URI: {e}"
+                                  f"{self._colors.reset}", extra_cr=True)
+                return part_data
             if branches is None:
                 self._print_error(part, f"{self._colors.critical}No branches found. Ensure that "
                                   "the source URI is valid.", extra_cr=True)
+                self._tag_error = True
+                return part_data
             self._sort_elements(part, current_version, branches, "branch")
             self._print_last_branches(part, branches)
             message = "Uses branches. Should be moved to an specific tag"
