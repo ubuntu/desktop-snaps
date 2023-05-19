@@ -241,21 +241,22 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_invalid_uri(self):
         """ Checks that an invalid URI in a source field triggers an error """
-        snap, _, github_pose, gitlab_pose = self._load_test_file("test_invalid_url.yaml",
-                                                                 None,
-                                                                 get_gnome_boxes_branches())
+        snap, _, github_pose, _ = self._load_test_file("test_invalid_url.yaml",
+                                                       None,
+                                                       get_gnome_boxes_branches())
         github_pose.set_uri_error(ValueError("Uri Error"))
         _, tag_error = snap.process_parts()
         assert tag_error
 
     def test_invalid_uri2(self):
         """ Checks that an invalid URI in a source field triggers an error """
-        snap, _, github_pose, gitlab_pose = self._load_test_file("test_invalid_url.yaml",
-                                                                 None,
-                                                                 get_gnome_boxes_branches())
+        snap, _, github_pose, _ = self._load_test_file("test_invalid_url.yaml",
+                                                       None,
+                                                       get_gnome_boxes_branches())
         github_pose.set_uri_error(ConnectionError("Parameters Error"))
         _, tag_error = snap.process_parts()
         assert tag_error
+
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test

@@ -46,7 +46,7 @@ class ProjectManager:
         yaml_path = 'snapcraft.yaml'
         try:
             data = self._github.get_file(project_url, yaml_path)
-        except (ValueError, ConnectionError) as e:
+        except (ValueError, ConnectionError):
             return None
         if not data:
             yaml_path = 'snap/snapcraft.yaml'

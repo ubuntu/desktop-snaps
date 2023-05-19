@@ -649,9 +649,9 @@ class Snapcraft(ProcessVersion):
             try:
                 tags = self._get_tags(source, current_tag, version_format)
                 branches = self._get_branches(source)
-            except (ValueError, ConnectionError) as e:
+            except (ValueError, ConnectionError) as exception:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}Invalid URI: {e}"
+                self._print_error(part, f"{self._colors.critical}Invalid URI: {exception}"
                                   f"{self._colors.reset}", extra_cr=True)
                 return part_data
             message = "Has neither a source-tag nor a source-branch element"
@@ -668,9 +668,9 @@ class Snapcraft(ProcessVersion):
         if 'source-tag' in data:
             try:
                 tags = self._get_tags(source, current_tag, version_format)
-            except (ValueError, ConnectionError) as e:
+            except (ValueError, ConnectionError) as exception:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}Invalid URI: {e}"
+                self._print_error(part, f"{self._colors.critical}Invalid URI: {exception}"
                                   f"{self._colors.reset}", extra_cr=True)
                 return part_data
             part_data["use_tag"] = True
@@ -689,9 +689,9 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, f"Current version: {current_version}")
             try:
                 branches = self._get_branches(source)
-            except (ValueError, ConnectionError) as e:
+            except (ValueError, ConnectionError) as exception:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}Invalid URI: {e}"
+                self._print_error(part, f"{self._colors.critical}Invalid URI: {exception}"
                                   f"{self._colors.reset}", extra_cr=True)
                 return part_data
             if branches is None:
