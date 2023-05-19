@@ -44,7 +44,10 @@ class ProjectManager:
         """ Searches in a project for the 'snapcraft.yaml' file and
             returns its contents """
         yaml_path = 'snapcraft.yaml'
-        data = self._github.get_file(project_url, yaml_path)
+        try:
+            data = self._github.get_file(project_url, yaml_path)
+        except (ValueError, ConnectionError) as e:
+            return None
         if not data:
             yaml_path = 'snap/snapcraft.yaml'
             data = self._github.get_file(project_url, yaml_path)
