@@ -1,17 +1,21 @@
 cheese: []
 cherrytree: []
-chromium:
-- 2459
-eog: []
-epiphany: []
-evince: []
-firefox:
-- 2645
+chromium: []
+eog:
+- 716
+epiphany:
+- 148
+evince:
+- 1033
+firefox: []
 five-or-more: []
-gedit: []
-glade: []
+gedit:
+- 668
+glade:
+- 428
 glimpse-editor: []
-gnome-2048: []
+gnome-2048:
+- 56
 gnome-3-26-1604: []
 gnome-3-28-1804: []
 gnome-3-34-1804: []
@@ -19,43 +23,62 @@ gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
-- 102
+- 105
 gnome-42-2204-sdk:
-- 131
-gnome-boxes:
-- 3
+- 152
+gnome-boxes: []
 gnome-calculator:
-- 936
+- 942
 gnome-calendar: []
-gnome-characters: []
-gnome-chess: []
+gnome-characters:
+- 789
+gnome-chess:
+- 87
 gnome-clocks:
-- 455
+- 457
 gnome-contacts:
-- 190
-gnome-dictionary: []
-gnome-font-viewer: []
-gnome-hitori: []
-gnome-klotski: []
-gnome-logs: []
-gnome-mahjongg: []
-gnome-mines: []
+- 196
+gnome-dictionary:
+- 59
+gnome-font-viewer:
+- 45
+gnome-hitori:
+- 324
+gnome-klotski:
+- 112
+gnome-logs:
+- 119
+gnome-mahjongg:
+- 170
+gnome-mines:
+- 312
 gnome-nibbles: []
-gnome-recipes: []
-gnome-robots: []
-gnome-sudoku: []
-gnome-system-monitor: []
-gnome-taquin: []
-gnome-tetravex: []
-gnome-text-editor: []
+gnome-recipes:
+- 37
+gnome-robots:
+- 119
+gnome-sudoku:
+- 94
+gnome-system-monitor:
+- 184
+gnome-taquin:
+- 35
+gnome-tetravex:
+- 282
+gnome-text-editor:
+- 21
 gtk-common-themes: []
-iagno: []
+iagno:
+- 34
 libreoffice: []
-lightsoff: []
-quadrapassel: []
+lightsoff:
+- 156
+quadrapassel:
+- 483
 snap-store: []
 swell-foop: []
-tali: []
+tali:
+- 355
 thunderbird:
-- 323
+- 328
 ubuntu-desktop-installer: []
