@@ -1,0 +1,102 @@
+name: gnome-system-monitor
+adopt-info: gnome-system-monitor
+summary: System Monitor
+description: |
+  GNOME System Monitor is a GNOME process viewer and system monitor with
+  an attractive, easy-to-use interface, It has features, such as a tree
+  view for process dependencies, icons for processes, the ability to hide
+  processes that you don't want to see, graphical time histories of
+  CPU/memory/swap usage, the ability to kill/renice processes needing root
+  access, as well as the standard features that you might expect from a
+  process viewer.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+base: core22
+
+plugs:
+  run-systemd-sessions:
+    interface: system-files
+    read:
+    - /run/systemd/sessions
+
+slots:
+  # for GtkApplication registration
+  gnome-system-monitor:
+    interface: dbus
+    bus: session
+    name: org.gnome.SystemMonitor
+
+apps:
+  gnome-system-monitor:
+    extensions: [ gnome ]
+    command: usr/bin/gnome-system-monitor
+    plugs:
+      - unity7
+      - mount-observe
+      - network-observe
+      - hardware-observe
+      - system-observe
+      - process-control
+      - run-systemd-sessions
+    desktop: usr/share/applications/gnome-system-monitor.desktop
+    common-id: gnome-system-monitor.desktop
+
+parts:
+  gnome-system-monitor:
+    # ext:updatesnap
+    source: https://gitlab.gnome.org/GNOME/gnome-system-monitor.git
+    source-type: git
+    source-tag: '42.0'
+    source-depth: 1
+    plugin: meson
+    parse-info: [usr/share/metainfo/gnome-system-monitor.appdata.xml]
+    meson-parameters:
+      - --prefix=/snap/gnome-system-monitor/current/usr
+      - --buildtype=release
+      - -Dsystemd=true
+    organize:
+      snap/gnome-system-monitor/current/usr: usr
+    override-pull: |
+      craftctl default
+      craftctl set version=$(git describe --tags --abbrev=10)
+      sed -i.bak -e 's|Icon=org.gnome.SystemMonitor$|Icon=${SNAP}/meta/gui/org.gnome.SystemMonitor.svg|g' gnome-system-monitor.desktop.in.in
+      sed -i.bak -E -e 's|^(NotShowIn=.*)$|# \1|g' gnome-system-monitor.desktop.in.in
+    override-build: |
+      craftctl default
+      mkdir -p $CRAFT_PART_INSTALL/meta/gui/
+      cp $CRAFT_PART_BUILD/gnome-system-monitor.desktop $CRAFT_PART_INSTALL/meta/gui/
+      cp $CRAFT_PART_SRC/data/icons/public/hicolor/scalable/apps/org.gnome.SystemMonitor.svg $CRAFT_PART_INSTALL/meta/gui/
+    build-packages:
+      - desktop-file-utils
+      - docbook-to-man
+      - libgtop2-dev
+      - libsigc++-2.0-dev
+      - libsystemd-dev
+      - policykit-1
+      - yelp-tools
+    stage-packages:
+      - libsigc++-2.0-0v5
+
+  # workaround snapcraft trying to outsmart us by copying ldd listed libraries
+  libraries:
+    after: [gnome-system-monitor]
+    plugin: nil
+    stage-packages:
+      - libgtop-2.0-11
+    prime:
+      - "usr/lib/*/libgtop*"
+      - "usr/lib/*/libsigc-2.0.so.0*"
+
+  # Find files provided by the base and platform snap and ensure they aren't
+  # duplicated in this snap
+  cleanup:
+    after: [libraries]
+    plugin: nil
+    build-snaps: [core22, gnome-42-2204]
+    override-prime: |
+      set -eux
+      for snap in "core22" "gnome-42-2204"; do
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
+      done
+

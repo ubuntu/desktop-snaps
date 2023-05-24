@@ -821,10 +821,12 @@ class ManageYAML:
         data = []
         while len(contents) != 0:
             if len(contents[0].lstrip()) == 0 or contents[0][0] == '#':
-                data.append({'separator': '',
-                             'data': contents[0].lstrip(),
-                             'child': None,
-                             'level': clevel})
+                if data[-1]['child'] is None:
+                    data[-1]['child'] = []
+                data[-1]['child'].append({'separator': '',
+                                          'data': contents[0].lstrip(),
+                                          'child': None,
+                                          'level': clevel + 1})
                 contents = contents[1:]
                 continue
             if not contents[0].startswith(separator * level):
@@ -844,7 +846,10 @@ class ManageYAML:
                 level += 1
             contents, inner_data = self._split_yaml(contents, level, clevel+1, separator)
             level = old_level
-            data[-1]['child'] = inner_data
+            if data[-1]['child'] is None:
+                data[-1]['child'] = inner_data
+            else:
+                data[-1]['child'] += inner_data
         return [], data
 
     def get_part_data(self, part_name: str) -> Optional[dict]:
@@ -864,7 +869,7 @@ class ManageYAML:
                 return entry2['child']
         return None
 
-    def get_part_element(self, part_name: int, element: str) -> Optional[dict]:
+    def get_part_element(self, part_name: str, element: str) -> Optional[dict]:
         """ Returns an specific entry for an specific part in the YAML file.
             For example, it can returns the 'source-tag' entry of the part
             'glib' from a YAML file with several parts. """

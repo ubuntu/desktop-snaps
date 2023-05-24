@@ -32,11 +32,15 @@ class TestYAMLfiles(unittest.TestCase):
         if secrets is not None:
             obj.set_secrets(secrets)
 
-    def _load_test_file(self, filepath, tags, branches=None):
+    def _base_load_test_file(self, filepath):
         with open(os.path.join("tests", filepath), "r", encoding='utf-8') as datafile:
             data = datafile.read()
         while data[:-2] == "\n\n":
             data = data[:-1]
+        return data
+
+    def _load_test_file(self, filepath, tags, branches=None):
+        data = self._base_load_test_file(filepath)
 
         github_pose = GitPose()
         github_pose.set_tags(tags)
@@ -256,6 +260,48 @@ class TestYAMLfiles(unittest.TestCase):
         github_pose.set_uri_error(ConnectionError("Parameters Error"))
         _, tag_error = snap.process_parts()
         assert tag_error
+
+    def test_comments_aligned(self):
+        """ Checks that a comment with the right alignment
+            is added as a child of the right element """
+        data = self._base_load_test_file("aligned_comment.yaml")
+        yaml_obj = ManageYAML(data)
+        element = yaml_obj.get_part_element('gnome-system-monitor', 'source')
+        print(element)
+        assert isinstance(element, dict)
+        assert 'data' in element
+        assert element['data'] == 'source: https://gitlab.gnome.org/GNOME/gnome-system-monitor.git'
+        assert 'level' in element
+        assert element['level'] == 2
+        assert 'separator' in element
+        assert element['separator'] == '    '
+
+    def test_comments_not_aligned(self):
+        """ Checks that a comment with incorrect alignment
+            is added as a child of the right element """
+        data = self._base_load_test_file("unaligned_comment.yaml")
+        yaml_obj = ManageYAML(data)
+        element = yaml_obj.get_part_element('gnome-system-monitor', 'source')
+        assert isinstance(element, dict)
+        assert 'data' in element
+        assert element['data'] == 'source: https://gitlab.gnome.org/GNOME/gnome-system-monitor.git'
+        assert 'level' in element
+        assert element['level'] == 2
+        assert 'separator' in element
+        assert element['separator'] == '    '
+
+    def test_blank_line(self):
+        """ Checks that a blank line is added as a child of the right element """
+        data = self._base_load_test_file("blank_line.yaml")
+        yaml_obj = ManageYAML(data)
+        element = yaml_obj.get_part_element('gnome-system-monitor', 'source')
+        assert isinstance(element, dict)
+        assert 'data' in element
+        assert element['data'] == 'source: https://gitlab.gnome.org/GNOME/gnome-system-monitor.git'
+        assert 'level' in element
+        assert element['level'] == 2
+        assert 'separator' in element
+        assert element['separator'] == '    '
 
 
 class GitPose:
