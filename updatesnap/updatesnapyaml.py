@@ -14,9 +14,9 @@ UPDATE_BRANCH = 'update_versions'
 class ProjectManager:
     """ This class is the one that searches in a remote project for
         the corresponding snapcraft.yaml file """
-    def __init__(self, user=None, token=None):
+    def __init__(self, user=None, token=None, verbose=False):
         """ Constructor. """
-        self._github = Github(True)
+        self._github = Github(not verbose)
         if user:
             self._github.set_secret('user', user)
         if token:
@@ -63,6 +63,7 @@ def main():
                         help='User name for accesing Github projects.')
     parser.add_argument('--github-token', action='store', default=None,
                         help='Access token for accesing Github projects.')
+    parser.add_argument('--verbose', action='store_true', default=False)
     parser.add_argument('project', default='.', help='The project URI')
     arguments = parser.parse_args(sys.argv[1:])
 
@@ -70,7 +71,7 @@ def main():
         print('A project URI is mandatory', file=sys.stderr)
         sys.exit(-1)
 
-    manager = ProjectManager(arguments.github_user, arguments.github_token)
+    manager = ProjectManager(arguments.github_user, arguments.github_token, arguments.verbose)
 
     # get the most-updated SNAPCRAFT.YAML file
 
@@ -82,7 +83,7 @@ def main():
 
     manager_yaml = ManageYAML(contents)
 
-    snap = Snapcraft(True)
+    snap = Snapcraft(not arguments.verbose)
     snap.load_external_data(contents)
     if arguments.github_user:
         snap.set_secret('github', 'user', arguments.github_user)
