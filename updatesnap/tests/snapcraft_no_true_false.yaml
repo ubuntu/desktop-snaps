@@ -1,0 +1,58 @@
+name: swell-foop
+adopt-info: swell-foop
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+base: core22
+
+slots:
+  # for GtkApplication registration
+  swell-foop:
+    interface: dbus
+    bus: session
+    name: org.gnome.SwellFoop
+
+layout:
+ /usr/share/swell-foop:
+   symlink: $SNAP/usr/share/swell-foop
+
+apps:
+  swell-foop:
+    command: bin/snapcraft-preload $SNAP/usr/bin/swell-foop
+    extensions: [gnome]
+    plugs:
+      - opengl
+    desktop: usr/share/applications/org.gnome.SwellFoop.desktop
+    common-id: org.gnome.SwellFoop.desktop
+    environment:
+      GSETTINGS_SCHEMA_DIR: $SNAP/share/glib-2.0/schemas
+      DISABLE_WAYLAND: 'true'
+
+parts:
+  snapcraft-preload:
+# ext:updatesnap
+#   version-format:
+#     allow-neither-tag-nor-branch
+    source: https://github.com/sergiusens/snapcraft-preload.git
+    source-depth: 1
+    plugin: cmake
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/
+    build-packages:
+      - on amd64:
+        - gcc-multilib
+        - g++-multilib
+
+  swell-foop:
+    source: https://gitlab.gnome.org/GNOME/swell-foop.git
+    source-type: git
+    source-tag: '41.1'
+    source-depth: 1
+    plugin: meson
+    meson-parameters:
+      - --prefix=/usr
+    parse-info: [usr/share/metainfo/org.gnome.SwellFoop.appdata.xml]
+    override-build: |
+      sed -i.bak -e 's|Icon=org.gnome.SwellFoop$|Icon=${SNAP}/meta/gui/org.gnome.SwellFoop.png|g' $CRAFT_PART_SRC/data/org.gnome.SwellFoop.desktop.in
+      craftctl default
+      mkdir -p $CRAFT_PART_INSTALL/meta/gui/
+      cp $CRAFT_PART_SRC/data/icons/hicolor/512x512/apps/org.gnome.SwellFoop.png $CRAFT_PART_INSTALL/meta/gui/
