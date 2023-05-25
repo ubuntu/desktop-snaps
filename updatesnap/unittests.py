@@ -15,6 +15,7 @@ from SnapModule.snapmodule import Gitlab
 
 
 class TestYAMLfiles(unittest.TestCase):
+    # pylint: disable=too-many-public-methods
     """ Unitary tests for snapmodule """
 
     def _load_secrets(self, obj):
@@ -267,7 +268,6 @@ class TestYAMLfiles(unittest.TestCase):
         data = self._base_load_test_file("aligned_comment.yaml")
         yaml_obj = ManageYAML(data)
         element = yaml_obj.get_part_element('gnome-system-monitor', 'source')
-        print(element)
         assert isinstance(element, dict)
         assert 'data' in element
         assert element['data'] == 'source: https://gitlab.gnome.org/GNOME/gnome-system-monitor.git'
@@ -302,6 +302,14 @@ class TestYAMLfiles(unittest.TestCase):
         assert element['level'] == 2
         assert 'separator' in element
         assert element['separator'] == '    '
+
+    def test_no_true_or_false_on_option(self):
+        """ Checks if the file doesn't follow the right format """
+        data = self._base_load_test_file("snapcraft_no_true_false.yaml")
+        snap = Snapcraft(True)
+        with self.assertRaises(ValueError) as context:
+            snap.load_external_data(data)
+        assert context.exception
 
 
 class GitPose:

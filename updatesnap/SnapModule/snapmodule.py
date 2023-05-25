@@ -83,6 +83,10 @@ class ProcessVersion:
     def _checkopt(self, option, dictionary):
         """ Returns True if an option is in the dictionary and it's True.
             If it's False or it isn't in the dictionary, it returns False. """
+        if not isinstance(dictionary, dict):
+            raise ValueError(f"The element {dictionary} isn't a dictionary; "
+                             "ensure that your options have the following "
+                             "format: XXXXXXXX: true")
         return (option in dictionary) and dictionary[option]
 
     def _get_version(self, part_name, entry, entry_format, check):
@@ -457,18 +461,33 @@ class Snapcraft(ProcessVersion):
             print(f"Opening file {filename}", file=sys.stderr)
             with open(filename, "r", encoding="utf8") as file_data:
                 data = file_data.read()
-            self._open_yaml_file_with_extensions(data, "updatesnap")
+            if self._open_yaml_file_with_extensions(data, "updatesnap"):
+                self._check_extensions_are_right()
         self._load_secrets(filename)
 
     def load_external_data(self, data, secrets=None):
         """ process SNAPCRAFT.YAML data and SECRETS directly """
 
         self._load_secrets(None)
-        self._open_yaml_file_with_extensions(data, "updatesnap")
+        if self._open_yaml_file_with_extensions(data, "updatesnap"):
+            self._check_extensions_are_right()
         if secrets:
             self._secrets = yaml.safe_load(secrets)
             self._github.set_secrets(self._secrets)
             self._gitlab.set_secrets(self._secrets)
+
+    def _check_extensions_are_right(self):
+        for part_name in self._config["parts"]:
+            part_data = self._config["parts"][part_name]
+            if "version-format" not in part_data:
+                continue
+            if not isinstance(part_data["version-format"], dict):
+                self._print_error(part_name, "The version-format data is not "
+                                  "a dictionary. Ensure that the syntax is right "
+                                  "(specifically, that any option is in the format "
+                                  "'OptionName: true')")
+                raise ValueError(f"The version-format data in {part_name} is not "
+                                 "a dictionary.")
 
     def _open_yaml_file_with_extensions(self, data, ext_name):
         """ This method receives a YAML file content, explores it searching for a comment
@@ -488,6 +507,7 @@ class Snapcraft(ProcessVersion):
 
         newfile = ""
         replace_comments = False
+        has_extensions = False
         for line in data.split("\n"):
             line += '\n'  # restore the newline at the end
             if line[0] != '#':
@@ -496,6 +516,7 @@ class Snapcraft(ProcessVersion):
                 continue
             # the line contains a valid comment
             if line == f'# ext:{ext_name}\n':
+                has_extensions = True
                 replace_comments = True
                 continue
             if line == '# endext\n':
@@ -511,6 +532,7 @@ class Snapcraft(ProcessVersion):
         if data[-1] != '\n' and newfile[-1] == '\n':
             newfile = newfile[:-1]
         self._config = yaml.safe_load(newfile)
+        return has_extensions
 
     def _load_secrets(self, filename):
         secrets_file = os.path.expanduser('~/.config/updatesnap/updatesnap.secrets')
@@ -726,7 +748,6 @@ class Snapcraft(ProcessVersion):
             self._print_message(part, f"  {branch['name']} ({branch['date']})")
 
     def _sort_tags(self, part, current_tag, tags, part_data):
-
         current_date = None
         found_tag = None
         for tag in tags:
