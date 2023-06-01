@@ -8,7 +8,7 @@ epiphany: []
 evince:
 - 1033
 firefox:
-- 2731
+- 2741
 five-or-more:
 - 189
 gedit:
@@ -26,7 +26,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 105
 gnome-42-2204-sdk:
-- 153
+- 157
 gnome-boxes: []
 gnome-calculator:
 - 942
