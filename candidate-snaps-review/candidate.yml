@@ -1,14 +1,14 @@
 cheese: []
 cherrytree: []
 chromium:
-- 2489
+- 2495
 eog:
 - 718
 epiphany: []
 evince:
 - 1033
 firefox:
-- 2741
+- 2744
 five-or-more:
 - 189
 gedit:
@@ -29,7 +29,7 @@ gnome-42-2204-sdk:
 - 157
 gnome-boxes: []
 gnome-calculator:
-- 942
+- 945
 gnome-calendar: []
 gnome-characters:
 - 789
