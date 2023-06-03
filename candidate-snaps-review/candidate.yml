@@ -26,7 +26,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 105
 gnome-42-2204-sdk:
-- 157
+- 161
 gnome-boxes: []
 gnome-calculator:
 - 945
@@ -70,7 +70,8 @@ gnome-text-editor:
 gtk-common-themes: []
 iagno:
 - 34
-libreoffice: []
+libreoffice:
+- 278
 lightsoff:
 - 156
 quadrapassel:
