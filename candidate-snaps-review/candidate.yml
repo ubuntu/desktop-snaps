@@ -71,7 +71,7 @@ gtk-common-themes: []
 iagno:
 - 34
 libreoffice:
-- 278
+- 279
 lightsoff:
 - 156
 quadrapassel:
@@ -81,5 +81,6 @@ swell-foop:
 - 116
 tali:
 - 357
-thunderbird: []
+thunderbird:
+- 332
 ubuntu-desktop-installer: []
