@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-calculator
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-calculator runs and works correctly
+ STEPS:
+      1. Launch gnome-calculator from the desktop icon
+      2. Make sure the theme is correct
+      3. Make sure 2+2=4
+      4. Make sure hamburger menu -> Help brings up the Calculator Help page
+
+unit: test plan
+id: gnome-calculator-tp
+name: gnome-calculator test plan
+include: gnome-calculator
