@@ -58,7 +58,7 @@ class ProcessVersion:
         # pylint: disable=too-many-function-args
         if self._silent and not override_silent:
             return
-        self._print_error(part, None, message, source, False, None)
+        self._print_error(part, None, message, source, False)
 
     def _print_error(self, part, use_color, message, source=None, extra_cr=False):
         # pylint: disable=too-many-arguments
@@ -723,7 +723,7 @@ class Snapcraft(ProcessVersion):
                                   extra_cr=True)
                 return part_data
             part_data["use_tag"] = True
-            self._print_message(part, f"Current tag: {data['source-tag']}", source=source)
+            self._print_message(part, f"Current tag: {data['source-tag']}\n", source=source)
             if tags is None:
                 self._print_error(part, self._colors.critical, "No tags found. "
                                   "Ensure that the source URI is valid.", extra_cr=True)
@@ -733,9 +733,9 @@ class Snapcraft(ProcessVersion):
 
         if 'source-branch' in data:
             part_data["use_branch"] = True
-            self._print_message(part, f"Current branch: {data['source-branch']}", source=source)
+            self._print_message(part, f"Current branch: {data['source-branch']}\n", source=source)
             current_version = data['source-branch']
-            self._print_message(part, f"Current version: {current_version}")
+            self._print_message(part, f"Current version: {current_version}\n")
             try:
                 branches = self._get_branches(source)
             except (ValueError, ConnectionError) as exception:
@@ -761,16 +761,16 @@ class Snapcraft(ProcessVersion):
     def _print_last_tags(self, part, tags):
         tags.sort(reverse=True, key=lambda x: x.get('date'))
         tags = tags[:4]
-        self._print_message(part, "Last tags:")
+        self._print_message(part, "Last tags:\n")
         for tag in tags:
-            self._print_message(part, f"  {tag['name']} ({tag['date']})")
+            self._print_message(part, f"  {tag['name']} ({tag['date']})\n")
 
     def _print_last_branches(self, part, branches):
         branches.sort(reverse=True, key=lambda x: x.get('date'))
         branches = branches[:4]
-        self._print_message(part, "Last branches:")
+        self._print_message(part, "Last branches:\n")
         for branch in branches:
-            self._print_message(part, f"  {branch['name']} ({branch['date']})")
+            self._print_message(part, f"  {branch['name']} ({branch['date']})\n")
 
     def _sort_tags(self, part, current_tag, tags, part_data):
         current_date = None
@@ -787,7 +787,7 @@ class Snapcraft(ProcessVersion):
             return
 
         version_format = part_data["version_format"]
-        self._print_message(part, f"Current tag date: {current_date}")
+        self._print_message(part, f"Current tag date: {current_date}\n")
         part_data['version'] = (found_tag['name'], current_date)
         current_version = self._get_version(part, current_tag, version_format, True)
 
@@ -817,13 +817,13 @@ class Snapcraft(ProcessVersion):
             newer_tags.append(tag)
 
         if len(newer_tags) == 0:
-            self._print_message(part, f"{self._colors.all_ok}Tag updated{self._colors.reset}")
+            self._print_message(part, f"{self._colors.all_ok}Tag updated{self._colors.reset}\n")
             return
 
-        self._print_message(part, f"{self._colors.warning}Newer tags:{self._colors.reset}")
+        self._print_message(part, f"{self._colors.warning}Newer tags:{self._colors.reset}\n")
         newer_tags.sort(reverse=True, key=lambda x: x.get('date'))
         for tag in newer_tags:
-            self._print_message(part, f"  {tag['name']} ({tag['date']})")
+            self._print_message(part, f"  {tag['name']} ({tag['date']})\n")
             part_data["updates"].append(tag)
 
     def _sort_elements(self, part, current_version, elements, text):
@@ -840,12 +840,12 @@ class Snapcraft(ProcessVersion):
                                         (element['date'] > current_element['date'])):
                 newer_elements.append(element)
         if len(newer_elements) == 0:
-            self._print_message(part, f"{self._colors.all_ok}Branch updated{self._colors.reset}")
+            self._print_message(part, f"{self._colors.all_ok}Branch updated{self._colors.reset}\n")
         else:
             self._print_message(part, text)
             newer_elements.sort(reverse=True, key=lambda x: x.get('date'))
             for element in newer_elements:
-                self._print_message(part, "  " + str(element))
+                self._print_message(part, f"  {element}\n")
 
 
 class ManageYAML:
