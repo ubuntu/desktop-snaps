@@ -6,8 +6,7 @@ eog:
 epiphany: []
 evince:
 - 1033
-firefox:
-- 2744
+firefox: []
 five-or-more:
 - 189
 gedit:
@@ -24,8 +23,7 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 111
-gnome-42-2204-sdk:
-- 167
+gnome-42-2204-sdk: []
 gnome-boxes: []
 gnome-calculator: []
 gnome-calendar: []
