@@ -1,0 +1,16 @@
+plugin: manual
+id: swell-foop
+flags: simple
+_description:
+ PURPOSE:
+       Check that swell-foop runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: swell-foop-tp
+name: swell-foop test plan
+include: swell-foop

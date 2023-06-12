@@ -1,0 +1,16 @@
+plugin: manual
+id: eog
+flags: simple
+_description:
+ PURPOSE:
+       Check that eog runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: eog-tp
+name: eog test plan
+include: eog

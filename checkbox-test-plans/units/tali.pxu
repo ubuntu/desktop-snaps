@@ -1,0 +1,16 @@
+plugin: manual
+id: tali
+flags: simple
+_description:
+ PURPOSE:
+       Check that tali runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: tali-tp
+name: tali test plan
+include: tali

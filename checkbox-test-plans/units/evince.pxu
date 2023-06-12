@@ -1,0 +1,16 @@
+plugin: manual
+id: evince
+flags: simple
+_description:
+ PURPOSE:
+       Check that evince runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: evince-tp
+name: evince test plan
+include: evince

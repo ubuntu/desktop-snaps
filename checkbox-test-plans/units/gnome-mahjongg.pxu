@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-mahjongg
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-mahjongg runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-mahjongg-tp
+name: gnome-mahjongg test plan
+include: gnome-mahjongg

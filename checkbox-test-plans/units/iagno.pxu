@@ -1,0 +1,16 @@
+plugin: manual
+id: iagno
+flags: simple
+_description:
+ PURPOSE:
+       Check that iagno runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: iagno-tp
+name: iagno test plan
+include: iagno

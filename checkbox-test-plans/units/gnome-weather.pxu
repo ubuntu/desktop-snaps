@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-weather
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-weather runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-weather-tp
+name: gnome-weather test plan
+include: gnome-weather

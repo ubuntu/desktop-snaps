@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-system-monitor
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-system-monitor runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-system-monitor-tp
+name: gnome-system-monitor test plan
+include: gnome-system-monitor

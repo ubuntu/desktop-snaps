@@ -1,0 +1,16 @@
+plugin: manual
+id: cheese
+flags: simple
+_description:
+ PURPOSE:
+       Check that cheese runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: cheese-tp
+name: cheese test plan
+include: cheese

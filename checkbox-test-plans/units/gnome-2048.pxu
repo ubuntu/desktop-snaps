@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-2048
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-2048 runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-2048-tp
+name: gnome-2048 test plan
+include: gnome-2048

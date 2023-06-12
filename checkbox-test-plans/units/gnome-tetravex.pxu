@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-tetravex
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-tetravex runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-tetravex-tp
+name: gnome-tetravex test plan
+include: gnome-tetravex

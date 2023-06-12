@@ -1,0 +1,16 @@
+plugin: manual
+id: quadrapassel
+flags: simple
+_description:
+ PURPOSE:
+       Check that quadrapassel runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: quadrapassel-tp
+name: quadrapassel test plan
+include: quadrapassel

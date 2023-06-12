@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-klotski
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-klotski runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-klotski-tp
+name: gnome-klotski test plan
+include: gnome-klotski

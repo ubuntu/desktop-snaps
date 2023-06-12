@@ -1,0 +1,16 @@
+plugin: manual
+id: gedit
+flags: simple
+_description:
+ PURPOSE:
+       Check that gedit runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gedit-tp
+name: gedit test plan
+include: gedit

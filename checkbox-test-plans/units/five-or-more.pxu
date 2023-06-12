@@ -1,0 +1,16 @@
+plugin: manual
+id: five-or-more
+flags: simple
+_description:
+ PURPOSE:
+       Check that five-or-more runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: five-or-more-tp
+name: five-or-more test plan
+include: five-or-more

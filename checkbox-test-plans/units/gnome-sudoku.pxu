@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-sudoku
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-sudoku runs and works correctly
+ STEPS:
+      1. 
+      2. 
+      3. 
+      4. 
+
+unit: test plan
+id: gnome-sudoku-tp
+name: gnome-sudoku test plan
+include: gnome-sudoku
