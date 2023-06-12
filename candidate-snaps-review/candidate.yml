@@ -66,8 +66,7 @@ gnome-text-editor:
 gtk-common-themes: []
 iagno:
 - 34
-libreoffice:
-- 279
+libreoffice: []
 lightsoff:
 - 156
 quadrapassel:
