@@ -17,6 +17,7 @@ from SnapModule.snapmodule import Gitlab
 class TestYAMLfiles(unittest.TestCase):
     # pylint: disable=too-many-public-methods
     """ Unitary tests for snapmodule """
+    # pylint: disable=too-many-public-methods
 
     def _load_secrets(self, obj):
         secrets = None
@@ -310,6 +311,72 @@ class TestYAMLfiles(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             snap.load_external_data(data)
         assert context.exception
+
+    def test_ignore_version_as_string(self):
+        # pylint: disable=protected-access
+        """ Tests the "ignore-version" option when parsing a version as a string """
+        obj = ProcessVersion(silent=True)
+        entry_format = {"format": "%M.%m.%R", "ignore-version": "2.43.6"}
+        version = obj._get_version("testpart", "2.43.6", entry_format, False)
+        assert version is None
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                not in obj._error_list)
+        version = obj._get_version("testpart", "3.42.1", entry_format, False)
+        assert str(version) == "3.42.1"
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                not in obj._error_list)
+
+    def test_ignore_version_as_list(self):
+        # pylint: disable=protected-access
+        """ Tests the "ignore-version" option when parsing a version as a list of versions """
+        obj = ProcessVersion(silent=True)
+        entry_format = {"format": "%M.%m.%R", "ignore-version": ["2.43.6", "3.2.4"]}
+        version = obj._get_version("testpart", "2.43.6", entry_format, False)
+        assert version is None
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                not in obj._error_list)
+        assert ("The 'ignore-version' entry in testpart contains an element that is not a string."
+                not in obj._error_list)
+        version = obj._get_version("testpart", "3.2.4", entry_format, False)
+        assert version is None
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                not in obj._error_list)
+        assert ("The 'ignore-version' entry in testpart contains an element that is not a string."
+                not in obj._error_list)
+        version = obj._get_version("testpart", "3.42.1", entry_format, False)
+        assert str(version) == "3.42.1"
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                not in obj._error_list)
+        assert ("The 'ignore-version' entry in testpart contains an element that is not a string."
+                not in obj._error_list)
+
+    def test_ignore_version_as_other_thing(self):
+        # pylint: disable=protected-access
+        """ Tests that "ignore-version" shows an error when the version is neither
+            a string nor a list """
+        obj = ProcessVersion(silent=True)
+        entry_format = {"format": "%M.%m.%R", "ignore-version": {}}
+        with self.assertRaises(ValueError) as context:
+            obj._get_version("testpart", "2.43.6", entry_format, False)
+        assert context.exception
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                in obj._error_list)
+        assert ("The 'ignore-version' entry in testpart contains an element that is not a string."
+                not in obj._error_list)
+
+    def test_ignore_version_contains_other_thing(self):
+        # pylint: disable=protected-access
+        """ Tests that "ignore-version" shows an error when the version is neither
+            a string or a list """
+        obj = ProcessVersion(silent=True)
+        entry_format = {"format": "%M.%m.%R", "ignore-version": ["1.3.4", ["4.5", "8"]]}
+        with self.assertRaises(ValueError) as context:
+            obj._get_version("testpart", "2.43.6", entry_format, False)
+        assert context.exception
+        assert ("The 'ignore-version' entry in testpart is neither a string, nor a list."
+                not in obj._error_list)
+        assert ("The 'ignore-version' entry in testpart contains an element that is not a string."
+                in obj._error_list)
 
 
 class GitPose:

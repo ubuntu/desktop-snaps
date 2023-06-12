@@ -151,6 +151,10 @@ The available extra tokens are:
 * allow-branch: allows to use *source-branch* in the part instead of *source-tag*.
   A file with a part that has neither *source-tag* nor this element will be considered
   invalid.
+* ignore-version: it can contain either a single string with a version number, or a
+  list of strings with version numbers. Those versions would be ignored as update
+  candidates. It is useful to avoid updating to versions that fail to build, or
+  contain important errors.
 
 ## TODO
 

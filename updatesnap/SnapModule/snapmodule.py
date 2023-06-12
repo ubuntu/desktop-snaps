@@ -52,20 +52,28 @@ class ProcessVersion:
         self._silent = silent
         self._colors = Colors()
         self._last_part = None
+        self._error_list = []
 
     def _print_message(self, part, message, source=None, override_silent=False):
+        # pylint: disable=too-many-function-args
         if self._silent and not override_silent:
             return
-        self._print_error(part, message, source, False)
+        self._print_error(part, None, message, source, False)
 
-    def _print_error(self, part, message, source=None, extra_cr=False):
+    def _print_error(self, part, use_color, message, source=None, extra_cr=False):
+        # pylint: disable=too-many-arguments
+        self._error_list.append(message)
         if part != self._last_part:
             print(f"Part: {self._colors.note}{part}{self._colors.reset}"
                   f"{f' ({source})' if source else ''}", file=sys.stderr)
             self._last_part = part
         if message is not None:
-            print("  " + message, end="", file=sys.stderr)
-            print(self._colors.reset, file=sys.stderr)
+            print("  ", end="", file=sys.stderr)
+            if use_color is not None:
+                print(use_color, end="", file=sys.stderr)
+            print(message, end="", file=sys.stderr)
+            if use_color is not None:
+                print(self._colors.reset, file=sys.stderr)
         if extra_cr:
             print("", file=sys.stderr)
 
@@ -90,12 +98,14 @@ class ProcessVersion:
         return (option in dictionary) and dictionary[option]
 
     def _get_version(self, part_name, entry, entry_format, check):
-        # pylint: disable=too-many-return-statements
+        """ Gets the version number from a tag, and filters it against
+            the rules set in the part's version-format entry."""
+        # pylint: disable=too-many-return-statements, too-many-branches
         if "format" not in entry_format:
             if check:
-                self._print_error(part_name, f"{self._colors.critical}"
+                self._print_error(part_name, self._colors.critical,
                                   "Missing tag version format for "
-                                  f"{part_name}{self._colors.reset}.")
+                                  f"{part_name}.")
             return None  # unknown format
         major = 0
         minor = 0
@@ -121,6 +131,26 @@ class ProcessVersion:
                 return None
             entry = entry[len(part):]
         version = pkg_resources.parse_version(f"{major}.{minor}.{revision}")
+
+        if "ignore-version" in entry_format:
+            to_ignore = entry_format["ignore-version"]
+            if isinstance(to_ignore, str):
+                if version == pkg_resources.parse_version(to_ignore):
+                    return None
+            elif isinstance(to_ignore, list):
+                for ignore_version in to_ignore:
+                    if not isinstance(ignore_version, str):
+                        message = (f"The 'ignore-version' entry in {part_name} "
+                                   "contains an element that is not a string.")
+                        self._print_error(part_name, self._colors.critical, message)
+                        raise ValueError(message)
+                    if version == pkg_resources.parse_version(ignore_version):
+                        return None
+            else:
+                message = (f"The 'ignore-version' entry in {part_name} is neither a string, "
+                           "nor a list.")
+                self._print_error(part_name, self._colors.critical, message)
+                raise ValueError(message)
 
         if (("lower-than" in entry_format) and
                 (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
@@ -482,8 +512,8 @@ class Snapcraft(ProcessVersion):
             if "version-format" not in part_data:
                 continue
             if not isinstance(part_data["version-format"], dict):
-                self._print_error(part_name, "The version-format data is not "
-                                  "a dictionary. Ensure that the syntax is right "
+                self._print_error(part_name, self._colors.critical, "The version-format data "
+                                  "is not a dictionary. Ensure that the syntax is right "
                                   "(specifically, that any option is in the format "
                                   "'OptionName: true')")
                 raise ValueError(f"The version-format data in {part_name} is not "
@@ -640,29 +670,27 @@ class Snapcraft(ProcessVersion):
             (not source.startswith('https://')) and
             (not source.startswith('git://')) and
                 (('source-type' not in data) or (data['source-type'] != 'git'))):
-            self._print_error(part, f"{self._colors.critical}Source is neither http:// "
-                                    f"nor git://{self._colors.reset}", source=source,
-                                    extra_cr=True)
+            self._print_error(part, self._colors.critical, "Source is neither http:// nor git://",
+                              source=source, extra_cr=True)
             return part_data
 
         if (not source.endswith('.git')) and (('source-type' not in data) or
                                               (data['source-type'] != 'git')):
-            self._print_error(part, f"{self._colors.warning}Source is not a GIT "
-                              f"repository{self._colors.reset}", source=source, extra_cr=True)
+            self._print_error(part, self._colors.warning, "Source is not a GIT repository",
+                              source=source, extra_cr=True)
             return part_data
 
         if "source-depth" not in data:
             self._tag_error = True
-            self._print_error(part, f"{self._colors.critical}No 'source-depth' entry"
-                              f"{self._colors.reset}", source=source, extra_cr=True)
+            self._print_error(part, self._colors.critical, "No 'source-depth' entry",
+                              source=source, extra_cr=True)
             return part_data
 
         if 'savannah' in source:
             url = urllib.parse.urlparse(source)
             if 'savannah' in url.netloc:
-                self._print_error(part, f"{self._colors.warning}Savannah repositories "
-                                        f"not supported{self._colors.reset}", source=source,
-                                        extra_cr=True)
+                self._print_error(part, self._colors.warning, "Savannah repositories not supported",
+                                  source=source, extra_cr=True)
                 return part_data
 
         self._print_message(part, None, source=source)
@@ -673,16 +701,15 @@ class Snapcraft(ProcessVersion):
                 branches = self._get_branches(source)
             except (ValueError, ConnectionError) as exception:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}Invalid URI: {exception}"
-                                  f"{self._colors.reset}", extra_cr=True)
+                self._print_error(part, self._colors.critical, f"Invalid URI: {exception}",
+                                  extra_cr=True)
                 return part_data
             message = "Has neither a source-tag nor a source-branch element"
             if self._checkopt("allow-neither-tag-nor-branch", version_format):
-                self._print_error(part, f"{self._colors.warning}{message}{self._colors.reset}",
-                                  source=source, extra_cr=True)
+                self._print_error(part, self._colors.warning, message, source=source, extra_cr=True)
             else:
-                self._print_error(part, f"{self._colors.critical}{message}{self._colors.reset}",
-                                  source=source, extra_cr=True)
+                self._print_error(part, self._colors.critical, message, source=source,
+                                  extra_cr=True)
                 self._tag_error = True
             if tags is not None:
                 self._print_last_tags(part, tags)
@@ -692,13 +719,13 @@ class Snapcraft(ProcessVersion):
                 tags = self._get_tags(source, current_tag, version_format)
             except (ValueError, ConnectionError) as exception:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}Invalid URI: {exception}"
-                                  f"{self._colors.reset}", extra_cr=True)
+                self._print_error(part, self._colors.critical, f"Invalid URI: {exception}",
+                                  extra_cr=True)
                 return part_data
             part_data["use_tag"] = True
-            self._print_message(part, f"Current tag: {data['source-tag']}", source=source)
+            self._print_message(part, f"Current tag: {data['source-tag']}\n", source=source)
             if tags is None:
-                self._print_error(part, f"{self._colors.critical}No tags found. "
+                self._print_error(part, self._colors.critical, "No tags found. "
                                   "Ensure that the source URI is valid.", extra_cr=True)
                 self._tag_error = True
                 return part_data
@@ -706,18 +733,18 @@ class Snapcraft(ProcessVersion):
 
         if 'source-branch' in data:
             part_data["use_branch"] = True
-            self._print_message(part, f"Current branch: {data['source-branch']}", source=source)
+            self._print_message(part, f"Current branch: {data['source-branch']}\n", source=source)
             current_version = data['source-branch']
-            self._print_message(part, f"Current version: {current_version}")
+            self._print_message(part, f"Current version: {current_version}\n")
             try:
                 branches = self._get_branches(source)
             except (ValueError, ConnectionError) as exception:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}Invalid URI: {exception}"
-                                  f"{self._colors.reset}", extra_cr=True)
+                self._print_error(part, self._colors.critical, f"Invalid URI: {exception}",
+                                  extra_cr=True)
                 return part_data
             if branches is None:
-                self._print_error(part, f"{self._colors.critical}No branches found. Ensure that "
+                self._print_error(part, self._colors.critical, "No branches found. Ensure that "
                                   "the source URI is valid.", extra_cr=True)
                 self._tag_error = True
                 return part_data
@@ -725,27 +752,25 @@ class Snapcraft(ProcessVersion):
             self._print_last_branches(part, branches)
             message = "Uses branches. Should be moved to an specific tag"
             if self._checkopt("allow-branch", version_format):
-                self._print_error(part, f"{self._colors.warning}{message}{self._colors.reset}",
-                                  extra_cr=True)
+                self._print_error(part, self._colors.warning, message, extra_cr=True)
             else:
                 self._tag_error = True
-                self._print_error(part, f"{self._colors.critical}{message}{self._colors.reset}",
-                                  extra_cr=True)
+                self._print_error(part, self._colors.critical, message, extra_cr=True)
         return part_data
 
     def _print_last_tags(self, part, tags):
         tags.sort(reverse=True, key=lambda x: x.get('date'))
         tags = tags[:4]
-        self._print_message(part, "Last tags:")
+        self._print_message(part, "Last tags:\n")
         for tag in tags:
-            self._print_message(part, f"  {tag['name']} ({tag['date']})")
+            self._print_message(part, f"  {tag['name']} ({tag['date']})\n")
 
     def _print_last_branches(self, part, branches):
         branches.sort(reverse=True, key=lambda x: x.get('date'))
         branches = branches[:4]
-        self._print_message(part, "Last branches:")
+        self._print_message(part, "Last branches:\n")
         for branch in branches:
-            self._print_message(part, f"  {branch['name']} ({branch['date']})")
+            self._print_message(part, f"  {branch['name']} ({branch['date']})\n")
 
     def _sort_tags(self, part, current_tag, tags, part_data):
         current_date = None
@@ -757,12 +782,12 @@ class Snapcraft(ProcessVersion):
                 break
 
         if current_date is None:
-            self._print_error(part, f"{self._colors.critical}Error:{self._colors.reset} "
-                                    f"can't find the current tag in the tag list.")
+            self._print_error(part, self._colors.critical, f"Error:{self._colors.reset} "
+                              "can't find the current tag in the tag list.")
             return
 
         version_format = part_data["version_format"]
-        self._print_message(part, f"Current tag date: {current_date}")
+        self._print_message(part, f"Current tag date: {current_date}\n")
         part_data['version'] = (found_tag['name'], current_date)
         current_version = self._get_version(part, current_tag, version_format, True)
 
@@ -792,13 +817,13 @@ class Snapcraft(ProcessVersion):
             newer_tags.append(tag)
 
         if len(newer_tags) == 0:
-            self._print_message(part, f"{self._colors.all_ok}Tag updated{self._colors.reset}")
+            self._print_message(part, f"{self._colors.all_ok}Tag updated{self._colors.reset}\n")
             return
 
-        self._print_message(part, f"{self._colors.warning}Newer tags:{self._colors.reset}")
+        self._print_message(part, f"{self._colors.warning}Newer tags:{self._colors.reset}\n")
         newer_tags.sort(reverse=True, key=lambda x: x.get('date'))
         for tag in newer_tags:
-            self._print_message(part, f"  {tag['name']} ({tag['date']})")
+            self._print_message(part, f"  {tag['name']} ({tag['date']})\n")
             part_data["updates"].append(tag)
 
     def _sort_elements(self, part, current_version, elements, text):
@@ -815,12 +840,12 @@ class Snapcraft(ProcessVersion):
                                         (element['date'] > current_element['date'])):
                 newer_elements.append(element)
         if len(newer_elements) == 0:
-            self._print_message(part, f"{self._colors.all_ok}Branch updated{self._colors.reset}")
+            self._print_message(part, f"{self._colors.all_ok}Branch updated{self._colors.reset}\n")
         else:
             self._print_message(part, text)
             newer_elements.sort(reverse=True, key=lambda x: x.get('date'))
             for element in newer_elements:
-                self._print_message(part, "  " + str(element))
+                self._print_message(part, f"  {element}\n")
 
 
 class ManageYAML:
