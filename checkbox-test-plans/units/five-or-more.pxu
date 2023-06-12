@@ -5,10 +5,9 @@ _description:
  PURPOSE:
        Check that five-or-more runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run five-or-more from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click around and try to play a game
 
 unit: test plan
 id: five-or-more-tp
