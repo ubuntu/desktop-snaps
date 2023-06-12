@@ -5,10 +5,11 @@ _description:
  PURPOSE:
        Check that eog runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run eog from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Open a picture (if there are none, take a quick screenshot): hamburger menu -> Open
+      4. Rotate the picture a couple of times with the icons on the bottom
+      5. Save the rotated picture
 
 unit: test plan
 id: eog-tp
