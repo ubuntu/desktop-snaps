@@ -5,10 +5,11 @@ _description:
  PURPOSE:
        Check that gnome-taquin runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run gnome-taquin from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click around the puzzle to move the pieces around 
+      4. Make sure the move incrementor counter is working
+      5. Try changing the type of game
 
 unit: test plan
 id: gnome-taquin-tp
