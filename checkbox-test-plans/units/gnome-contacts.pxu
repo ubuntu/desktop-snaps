@@ -5,10 +5,11 @@ _description:
  PURPOSE:
        Check that gnome-contacts runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run gnome-contacts from the desktop icon. Does the icon look correct?
+      2. Connect to an address book. Use the default if there isn't one already defined
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click the + icon to create a new contact. Fill out name and save.
+      4. Close gnome-contacts and relaunch. Make sure your new contact is still there and editable.
 
 unit: test plan
 id: gnome-contacts-tp
