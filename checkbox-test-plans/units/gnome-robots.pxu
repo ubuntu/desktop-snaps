@@ -5,10 +5,9 @@ _description:
  PURPOSE:
        Check that gnome-robots runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run gnome-robots from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click around to play the game and expect it to respond 
 
 unit: test plan
 id: gnome-robots-tp
