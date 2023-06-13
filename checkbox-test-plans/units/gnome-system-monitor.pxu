@@ -5,10 +5,11 @@ _description:
  PURPOSE:
        Check that gnome-system-monitor runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run gnome-system-monitor from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click through the types of processes listed in the hamburger menu
+      4. Click through the processes/resources/file systems tabs
+      5. End a process and verify that it is no longer running
 
 unit: test plan
 id: gnome-system-monitor-tp
