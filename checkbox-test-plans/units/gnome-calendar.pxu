@@ -5,7 +5,7 @@ _description:
  PURPOSE:
        Check that gnome-calendar runs and works correctly
  STEPS:
-      1. Run epiphany from the desktop icon. Does the icon look correct?
+      1. Run gnome-calendar from the desktop icon. Does the icon look correct?
       2. Make sure hamburger menu -> About brings up the About page
       3. Create a fake event with a reminder. Make sure it goes off.
       4. Scroll through months

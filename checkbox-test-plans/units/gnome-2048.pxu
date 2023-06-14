@@ -5,7 +5,7 @@ _description:
  PURPOSE:
        Check that gnome-2048 runs and works correctly
  STEPS:
-      1. Run epiphany from the desktop icon. Does the icon look correct?
+      1. Run gnome-2048 from the desktop icon. Does the icon look correct?
       2. Make sure hamburger menu -> About brings up the About page
       3. A new game will autostart on run so use your arrow keys to arrow around and play a bit
 
