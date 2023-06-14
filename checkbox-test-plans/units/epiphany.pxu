@@ -8,7 +8,7 @@ _description:
       1. Run epiphany from the desktop icon. Does the icon look correct?
       2. Make sure hamburger menu -> Help brings up the Help page
       3. Go to some websites:
-         - search for something and expect a ducduckgo result
+         - search for something and expect a duckduckgo result
          - youtube.com - Play a video. Make sure it plays and sound works. Also keep a video running for some time. The screen should be kept on after the inactivity period.
          - markshuttleworth.com - In the address bar, there should be a Reader Mode icon. Click it. Reader mode should work correctly.
          - get.webgl.org - You should have WebGL support and see something like a 3D box with "Your browser supports WebGL".
