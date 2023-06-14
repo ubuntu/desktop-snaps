@@ -8,9 +8,8 @@ firefox: []
 five-or-more:
 - 189
 gedit:
-- 672
-glade:
-- 428
+- 674
+glade: []
 glimpse-editor: []
 gnome-2048: []
 gnome-3-26-1604: []
@@ -19,18 +18,15 @@ gnome-3-34-1804: []
 gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
-gnome-42-2204:
-- 111
-gnome-42-2204-sdk: []
+gnome-42-2204: []
+gnome-42-2204-sdk:
+- 171
 gnome-boxes: []
 gnome-calculator: []
 gnome-calendar: []
-gnome-characters:
-- 789
-gnome-chess:
-- 87
-gnome-clocks:
-- 459
+gnome-characters: []
+gnome-chess: []
+gnome-clocks: []
 gnome-contacts:
 - 196
 gnome-dictionary:
@@ -42,10 +38,8 @@ gnome-klotski:
 - 112
 gnome-logs:
 - 119
-gnome-mahjongg:
-- 170
-gnome-mines:
-- 312
+gnome-mahjongg: []
+gnome-mines: []
 gnome-nibbles: []
 gnome-recipes:
 - 37
@@ -53,12 +47,10 @@ gnome-robots:
 - 119
 gnome-sudoku:
 - 96
-gnome-system-monitor:
-- 184
+gnome-system-monitor: []
 gnome-taquin:
 - 35
-gnome-tetravex:
-- 282
+gnome-tetravex: []
 gnome-text-editor:
 - 21
 gtk-common-themes: []
