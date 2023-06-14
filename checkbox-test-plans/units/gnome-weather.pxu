@@ -5,10 +5,10 @@ _description:
  PURPOSE:
        Check that gnome-weather runs and works correctly
  STEPS:
-      1. 
-      2. 
-      3. 
-      4. 
+      1. Run gnome-weather from the desktop icon. Does the icon look correct?
+      2. Add a city and make sure the weather is correct. Test hourly and daily.
+      3. Use the hamburger menu to switch between fahrenheit and celcius
+      4. Make sure hamburger menu -> About brings up the About page
 
 unit: test plan
 id: gnome-weather-tp
