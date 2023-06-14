@@ -8,8 +8,8 @@ _description:
       1. Run cheese from the desktop icon. Does the icon look correct? 
       2. Make sure hamburger menu -> Help brings up the Cheese Help page
       3. See if cheese connects to any available webcams
-      4. See if screenshots work
-      5. See if video recording works
+      4. See if screenshots work. Check for the screenshots to be saved in $HOME/Pictures/Webcam/
+      5. See if video recording works. Check for the video recordings to be saved in $HOME/Videos/Webcam/
  If there are any issues, please file them here: https://github.com/ubuntu/cheese/issues 
 
 
