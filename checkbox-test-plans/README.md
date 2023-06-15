@@ -1,6 +1,6 @@
 This is a how-to guide on setting up checkbox on a 22.04 VM and executing manual tests with it. We ultimately would like to automate the checkbox test cases, with the use of other tools down the road.
 
-Because a GitHub runner, running a workflow on ‘ubuntu-latest’, will be running 22.04. So I’m starting with a fresh 22.04 VM.
+Because a GitHub runner, running a workflow on ‘ubuntu-latest’, will be running 22.04, we will start with a fresh 22.04 VM.
 
 ## First time setup
 
