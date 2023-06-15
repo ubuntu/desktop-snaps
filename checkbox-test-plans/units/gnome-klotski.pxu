@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-klotski
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-klotski runs and works correctly
+ STEPS:
+      1. Run gnome-klotski from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Drag blocks around to play. Make sure the move counter in the top is incrementing. 
+      4. Change the puzzle a few times to make sure it responds
+
+unit: test plan
+id: gnome-klotski-tp
+name: gnome-klotski test plan
+include: gnome-klotski

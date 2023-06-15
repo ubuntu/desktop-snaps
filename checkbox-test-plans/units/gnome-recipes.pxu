@@ -1,0 +1,14 @@
+plugin: manual
+id: gnome-recipes
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-recipes runs and works correctly
+ STEPS:
+      1. Run gnome-recipes from the desktop icon. Does the icon look correct?
+      2. Create a new recipe and save it. Make sure it shows up under "My Recipes"
+
+unit: test plan
+id: gnome-recipes-tp
+name: gnome-recipes test plan
+include: gnome-recipes

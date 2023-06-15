@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-sudoku
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-sudoku runs and works correctly
+ STEPS:
+      1. Run gnome-sudoku from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Play some of an easy puzzle
+      4. Make sure the pause/play/undo buttons work
+
+unit: test plan
+id: gnome-sudoku-tp
+name: gnome-sudoku test plan
+include: gnome-sudoku

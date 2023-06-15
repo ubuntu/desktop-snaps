@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-mines
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-mines runs and works correctly
+ STEPS:
+      1. Run gnome-mines from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Play a bit of a game
+      4. Try different game sizes
+
+unit: test plan
+id: gnome-mines-tp
+name: gnome-mines test plan
+include: gnome-mines

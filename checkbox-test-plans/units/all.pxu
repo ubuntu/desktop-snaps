@@ -1,0 +1,51 @@
+plugin: manual
+id: all-desktop-snappers-snaps
+flags: simple
+_name: all-desktop-snappers-snaps
+_description:
+ PURPOSE:
+       Run all testplans for all snaps owned by desktop-snappers: https://launchpad.net/~desktop-snappers/+snaps
+ STEPS:
+      1. Follow each test plan
+      2. Record your result
+
+unit: test plan
+id: all-desktop-snappers-tp
+_name: Run all desktop-snapers snap test plans
+_description: This test plan contains all of the test plans for all snaps owned by desktop-snappers: https://launchpad.net/~desktop-snappers/+snaps
+include: 
+    cheese
+    eog
+    epiphany
+    evince
+    five-or-more
+    gedit
+    glade
+    gnome-2048
+    gnome-boxes
+    gnome-calculator
+    gnome-calendar
+    gnome-characters
+    gnome-chess
+    gnome-clocks
+    gnome-contacts
+    gnome-dictionary
+    gnome-font-viewer
+    gnome-hitori
+    gnome-klotski
+    gnome-logs
+    gnome-mahjongg
+    gnome-mines
+    gnome-recipes
+    gnome-robots
+    gnome-sudoku
+    gnome-system-monitor
+    gnome-taquin
+    gnome-tetravex
+    gnome-text-editor
+    gnome-weather
+    iagno
+    lightsoff
+    quadrapassel
+    swell-foop
+    tali

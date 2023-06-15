@@ -1,0 +1,17 @@
+plugin: manual
+id: gnome-text-editor
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-text-editor runs and works correctly
+ STEPS:
+      1. Run gnome-text-editor from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Type and save a document. Relaunch and make sure you can open it or another document
+      4. Open a new tab
+      5. Try some different settings available with the wheel icon
+
+unit: test plan
+id: gnome-text-editor-tp
+name: gnome-text-editor test plan
+include: gnome-text-editor

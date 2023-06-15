@@ -1,0 +1,16 @@
+plugin: manual
+id: swell-foop
+flags: simple
+_description:
+ PURPOSE:
+       Check that swell-foop runs and works correctly
+ STEPS:
+      1. Run swell-foop from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Use your arrow/enter keys to clear the blocks and play
+      4. Make sure the undo/redo buttons work
+
+unit: test plan
+id: swell-foop-tp
+name: swell-foop test plan
+include: swell-foop

@@ -1,0 +1,16 @@
+plugin: manual
+id: glade
+flags: simple
+_description:
+ PURPOSE:
+       Check that glade runs and works correctly
+ STEPS:
+      1. Run glade from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> User Manual brings up the Help page
+      3. Create a new document and add some elements. Save and close.
+      4. Relaunch glade and open the saved document.
+
+unit: test plan
+id: glade-tp
+name: glade test plan
+include: glade

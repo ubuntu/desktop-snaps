@@ -1,0 +1,16 @@
+plugin: manual
+id: iagno
+flags: simple
+_description:
+ PURPOSE:
+       Check that iagno runs and works correctly
+ STEPS:
+      1. Run iagno from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click around to play the game a bit
+      4. Make sure the undo button works
+
+unit: test plan
+id: iagno-tp
+name: iagno test plan
+include: iagno

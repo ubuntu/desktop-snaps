@@ -1,0 +1,16 @@
+plugin: manual
+id: quadrapassel
+flags: simple
+_description:
+ PURPOSE:
+       Check that quadrapassel runs and works correctly
+ STEPS:
+      1. Run quadrapassel from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Hit play and using the arrow keys play the game
+      4. Make sure the pause/play buttons work
+
+unit: test plan
+id: quadrapassel-tp
+name: quadrapassel test plan
+include: quadrapassel

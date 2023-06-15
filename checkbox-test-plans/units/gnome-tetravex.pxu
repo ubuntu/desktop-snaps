@@ -1,0 +1,17 @@
+plugin: manual
+id: gnome-tetravex
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-tetravex runs and works correctly
+ STEPS:
+      1. Run gnome-tetravex from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Drag the blocks around to play the game
+      4. Make sure pause/play/undo works
+      5. Click the "?" icon to view solution
+
+unit: test plan
+id: gnome-tetravex-tp
+name: gnome-tetravex test plan
+include: gnome-tetravex

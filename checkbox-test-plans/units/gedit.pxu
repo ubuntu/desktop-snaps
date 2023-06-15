@@ -1,0 +1,17 @@
+plugin: manual
+id: gedit
+flags: simple
+_description:
+ PURPOSE:
+       Check that gedit runs and works correctly
+ STEPS:
+      1. Run gedit from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Start typing. Does the color contrast make readable text with your given theme?
+      4. Save a file somewhere in the home directory. Relaunch and open the file again.
+      5. Open some tabs
+
+unit: test plan
+id: gedit-tp
+name: gedit test plan
+include: gedit

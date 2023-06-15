@@ -1,0 +1,16 @@
+plugin: manual
+id: tali
+flags: simple
+_description:
+ PURPOSE:
+       Check that tali runs and works correctly
+ STEPS:
+      1. Run tali from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click around on empty lines and watch it update
+      4. Make sure the Roll all button updates the die values
+
+unit: test plan
+id: tali-tp
+name: tali test plan
+include: tali

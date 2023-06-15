@@ -1,0 +1,23 @@
+plugin: manual
+id: epiphany
+flags: simple
+_description:
+ PURPOSE:
+       Check that epiphany runs and works correctly
+ STEPS:
+      1. Run epiphany from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Go to some websites:
+         - search for something and expect a duckduckgo result
+         - youtube.com - Play a video. Make sure it plays and sound works. Also keep a video running for some time. The screen should be kept on after the inactivity period.
+         - markshuttleworth.com - In the address bar, there should be a Reader Mode icon. Click it. Reader mode should work correctly.
+         - get.webgl.org - You should have WebGL support and see something like a 3D box with "Your browser supports WebGL".
+      4. Close the browser leaving a tab opened with a web page. Relaunch. It should load your previous session.
+      5. Set as default browser when opening the browser. Relaunch. The "set browser as default" banner should be gone.
+      6. Add a bookmark. Relaunch. Visit the bookmark. Remove it. The behavior should be as expected.
+      7. Save a file to the home folder. You should be able to navigate your directories, choose one and the file should be saved there.
+
+unit: test plan
+id: epiphany-tp
+name: epiphany test plan
+include: epiphany

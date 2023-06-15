@@ -6,9 +6,11 @@ _description:
        Check that gnome-calculator runs and works correctly
  STEPS:
       1. Launch gnome-calculator from the desktop icon
-      2. Make sure the theme is correct
+      2. Make sure switching themes does what is expected. For example, if you are on light theme, then with the snap open, switch to dark theme and observe the snap adjusting to the dark theme.
       3. Make sure 2+2=4
       4. Make sure hamburger menu -> Help brings up the Calculator Help page
+      5. Make sure switching between calculator types properly registers the different layout.
+      6. Make sure the Undo button does undo one operation.
 
 unit: test plan
 id: gnome-calculator-tp

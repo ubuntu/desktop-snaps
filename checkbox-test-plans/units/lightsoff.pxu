@@ -1,0 +1,16 @@
+plugin: manual
+id: lightsoff
+flags: simple
+_description:
+ PURPOSE:
+       Check that lightsoff runs and works correctly
+ STEPS:
+      1. Run lightsoff from the desktop icon. Does the icon look correct?
+      2. Make sure hamburger menu -> Help brings up the Help page
+      3. Click around to play the game. Make sure the incrementor works.
+      4. Change the puzzle
+
+unit: test plan
+id: lightsoff-tp
+name: lightsoff test plan
+include: lightsoff

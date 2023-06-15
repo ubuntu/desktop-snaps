@@ -1,0 +1,16 @@
+plugin: manual
+id: gnome-font-viewer
+flags: simple
+_description:
+ PURPOSE:
+       Check that gnome-font-viewer runs and works correctly
+ STEPS:
+      1. Run gnome-font-viewer icon. Does the icon look correct?
+      2. Make sure "i" in a circle icon shows the info box
+      3. Scroll through the fonts. Make sure they look different and they each have a title
+      4. Click on a few different fonts and check for the page displaying well
+
+unit: test plan
+id: gnome-font-viewer-tp
+name: gnome-font-viewer test plan
+include: gnome-font-viewer
