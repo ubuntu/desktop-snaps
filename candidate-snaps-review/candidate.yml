@@ -29,35 +29,25 @@ gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
 gnome-clocks: []
-gnome-contacts:
-- 196
-gnome-dictionary:
-- 59
-gnome-font-viewer:
-- 45
+gnome-contacts: []
+gnome-dictionary: []
+gnome-font-viewer: []
 gnome-hitori: []
-gnome-klotski:
-- 112
-gnome-logs:
-- 119
+gnome-klotski: []
+gnome-logs: []
 gnome-mahjongg: []
 gnome-mines: []
 gnome-nibbles: []
 gnome-recipes:
 - 37
-gnome-robots:
-- 119
-gnome-sudoku:
-- 96
+gnome-robots: []
+gnome-sudoku: []
 gnome-system-monitor: []
-gnome-taquin:
-- 35
+gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor:
-- 21
+gnome-text-editor: []
 gtk-common-themes: []
-iagno:
-- 34
+iagno: []
 libreoffice: []
 lightsoff: []
 quadrapassel: []
