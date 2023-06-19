@@ -5,7 +5,8 @@ chromium:
 eog: []
 epiphany:
 - 152
-evince: []
+evince:
+- 1034
 firefox: []
 five-or-more:
 - 189
