@@ -10,7 +10,8 @@ evince:
 firefox: []
 five-or-more:
 - 189
-gedit: []
+gedit:
+- 676
 glade: []
 glimpse-editor: []
 gnome-2048: []
