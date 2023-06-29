@@ -51,6 +51,7 @@ class TestYAMLfiles(unittest.TestCase):
         gitlab_pose.set_tags(tags)
         gitlab_pose.set_branches(branches)
         snap = Snapcraft(True, github_pose, gitlab_pose)
+        snap.set_full_silent()
         snap.load_external_data(data)
         return snap, data, github_pose, gitlab_pose
 
@@ -122,6 +123,7 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Test the no-9x-revision option """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "no-9x-revisions": True}
         version = obj._get_version("testpart", "3.8.92", entry_format, False)
         assert version is None
@@ -132,6 +134,7 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Test the no-9x-minors option """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "no-9x-minors": True}
         version = obj._get_version("testpart", "3.97.1", entry_format, False)
         assert version is None
@@ -142,6 +145,7 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Tests the "ignore-odd-minor" option when parsing versions """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "ignore-odd-minor": True}
         version = obj._get_version("testpart", "2.43.6", entry_format, False)
         assert version is None
@@ -151,6 +155,7 @@ class TestYAMLfiles(unittest.TestCase):
     def test_github_file_download(self):
         """ Check that a file download from github works as expected """
         gitobj = Github(silent=True)
+        gitobj.set_full_silent()
         self._load_secrets(gitobj)
         data = gitobj.get_file("https://github.com/ubuntu/gnome-calculator", "snapcraft.yaml")
         assert data is not None
@@ -162,6 +167,7 @@ class TestYAMLfiles(unittest.TestCase):
     def test_github_tags_download(self):
         """ Check that tag download from github works as expected """
         gitobj = Github(silent=True)
+        gitobj.set_full_silent()
         self._load_secrets(gitobj)
         data = gitobj.get_tags("https://github.com/GNOME/gnome-calculator",
                                "40.0", {"format": "%M.%m"})
@@ -187,6 +193,7 @@ class TestYAMLfiles(unittest.TestCase):
     def test_gitlab_tags_download(self):
         """ Check that tag download from gitlab works as expected """
         gitobj = Gitlab(silent=True)
+        gitobj.set_full_silent()
         self._load_secrets(gitobj)
         data = gitobj.get_tags("https://gitlab.gnome.org/GNOME/gnome-calculator",
                                "40.0", {"format": "%M.%m"})
@@ -308,6 +315,7 @@ class TestYAMLfiles(unittest.TestCase):
         """ Checks if the file doesn't follow the right format """
         data = self._base_load_test_file("snapcraft_no_true_false.yaml")
         snap = Snapcraft(True)
+        snap.set_full_silent()
         with self.assertRaises(ValueError) as context:
             snap.load_external_data(data)
         assert context.exception
@@ -316,6 +324,7 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Tests the "ignore-version" option when parsing a version as a string """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "ignore-version": "2.43.6"}
         version = obj._get_version("testpart", "2.43.6", entry_format, False)
         assert version is None
@@ -330,6 +339,7 @@ class TestYAMLfiles(unittest.TestCase):
         # pylint: disable=protected-access
         """ Tests the "ignore-version" option when parsing a version as a list of versions """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "ignore-version": ["2.43.6", "3.2.4"]}
         version = obj._get_version("testpart", "2.43.6", entry_format, False)
         assert version is None
@@ -355,6 +365,7 @@ class TestYAMLfiles(unittest.TestCase):
         """ Tests that "ignore-version" shows an error when the version is neither
             a string nor a list """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "ignore-version": {}}
         with self.assertRaises(ValueError) as context:
             obj._get_version("testpart", "2.43.6", entry_format, False)
@@ -369,6 +380,7 @@ class TestYAMLfiles(unittest.TestCase):
         """ Tests that "ignore-version" shows an error when the version is neither
             a string or a list """
         obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
         entry_format = {"format": "%M.%m.%R", "ignore-version": ["1.3.4", ["4.5", "8"]]}
         with self.assertRaises(ValueError) as context:
             obj._get_version("testpart", "2.43.6", entry_format, False)
@@ -387,6 +399,12 @@ class GitPose:
         self._tags = {}
         self._branches = {}
         self._uri_error = None
+        self._silent = True
+        self._full_silent = False
+
+    def set_full_silent(self):
+        """ Implements the method to avoid errors. """
+        self._full_silent = True
 
     def set_uri_error(self, new_uri_error: Exception):
         """ Sets whether the object will emulate an error in the URI or
