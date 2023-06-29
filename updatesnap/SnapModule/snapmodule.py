@@ -53,6 +53,12 @@ class ProcessVersion:
         self._colors = Colors()
         self._last_part = None
         self._error_list = []
+        self._full_silent = False
+
+    def set_full_silent(self):
+        """ Fully disables all the messages, not only the warnings or
+            the current process. Useful for testings."""
+        self._full_silent = True
 
     def _print_message(self, part, message, source=None, override_silent=False):
         # pylint: disable=too-many-function-args
@@ -63,6 +69,8 @@ class ProcessVersion:
     def _print_error(self, part, use_color, message, source=None, extra_cr=False):
         # pylint: disable=too-many-arguments
         self._error_list.append(message)
+        if self._full_silent:
+            return
         if part != self._last_part:
             print(f"Part: {self._colors.note}{part}{self._colors.reset}"
                   f"{f' ({source})' if source else ''}", file=sys.stderr)
@@ -466,6 +474,11 @@ class Snapcraft(ProcessVersion):
             self._gitlab = gitlab_pose
         else:
             self._gitlab = Gitlab(silent)
+
+    def set_full_silent(self):
+        super().set_full_silent()
+        self._github.set_full_silent()
+        self._gitlab.set_full_silent()
 
     def set_secret(self, backend, key, value):
         """ Sets an specific secret value for a backend """
