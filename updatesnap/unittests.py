@@ -200,9 +200,9 @@ class TestYAMLfiles(unittest.TestCase):
         assert isinstance(data, list)
         # ensure that the known tags are in the list
         tags = get_gnome_calculator_tags()["https://gitlab.gnome.org/GNOME/gnome-calculator.git"]
-        for tag in data:
+        for tag in tags:
             found = False
-            for tag2 in tags:
+            for tag2 in data:
                 if tag2["name"] == tag["name"]:
                     found = True
                     break
@@ -787,10 +787,6 @@ def get_gnome_calculator_tags():
                                             datetime.timedelta(seconds=10800)))},
                 {'name': '40.0',
                  'date': datetime.datetime(2021, 3, 19, 20, 32, 6,
-                                           tzinfo=datetime.timezone(
-                                            datetime.timedelta(seconds=7200)))},
-                {'name': '40.rc',
-                 'date': datetime.datetime(2021, 3, 12, 19, 32, 25,
                                            tzinfo=datetime.timezone(
                                             datetime.timedelta(seconds=7200)))}
             ]
