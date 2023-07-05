@@ -652,6 +652,9 @@ class Snapcraft(ProcessVersion):
         if 'source' not in data:
             return None
 
+        if data['source'].find("://") == -1:
+            return None
+
         if 'source-tag' in data:
             current_tag = data['source-tag']
         else:

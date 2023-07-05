@@ -390,6 +390,15 @@ class TestYAMLfiles(unittest.TestCase):
         assert ("The 'ignore-version' entry in testpart contains an element that is not a string."
                 in obj._error_list)
 
+    def test_no_source_or_local_source(self):
+        """ tests if a part without source or with a local source is ignored """
+        snap, _, _, _ = self._load_test_file("gnome-calculator-test1-local-source.yaml",
+                                             get_gnome_calculator_tags())
+        data, _ = snap.process_parts()
+        assert len(data) == 2
+        assert data[0] is None
+        assert data[1] is None
+
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test
