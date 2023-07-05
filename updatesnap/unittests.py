@@ -382,10 +382,11 @@ class TestYAMLfiles(unittest.TestCase):
         """ tests if a part without source or with a local source is ignored """
         snap, _, _, _ = self._load_test_file("gnome-calculator-test1-local-source.yaml",
                                              get_gnome_calculator_tags())
-        data, tag_error = snap.process_parts()
+        data, _ = snap.process_parts()
         assert len(data) == 2
         assert data[0] is None
         assert data[1] is None
+
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test
