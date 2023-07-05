@@ -1,14 +1,12 @@
 cheese: []
 cherrytree: []
-chromium:
-- 2529
+chromium: []
 eog:
 - 720
 epiphany: []
 evince:
 - 1036
-firefox:
-- 2850
+firefox: []
 five-or-more:
 - 189
 gedit:
@@ -50,11 +48,13 @@ gnome-tetravex: []
 gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
-libreoffice: []
+libreoffice:
+- 281
 lightsoff: []
 quadrapassel: []
 snap-store: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 344
 ubuntu-desktop-installer: []
