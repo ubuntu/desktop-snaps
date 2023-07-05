@@ -2,9 +2,14 @@ name: 'Update snap tag'
 description: 'Update the snapcraft.yaml for a given snap with the latest upstream tag'
 
 # Inputs required by the action to perform correctly.
+# user: This is the user of GITHUB_TOKEN. If no user is provided, the default user is 'ubuntu'.
 # token: This is the GITHUB_TOKEN that exists for the other repo whose workflow uses this action. Without the other repo's token, this action does not have permission to perform tasks on the other repo, like pushing changes or opening a PR
 # repo: This is the repo who is using this action. This repo contains the snapcraft.yaml that this action will be working on.
 inputs:
+  user:
+    description: 'The user of the GITHUB_TOKEN'
+    required: false
+    default: 'ubuntu'
   token:
     description: 'A Github PAT'
     required: true
@@ -51,7 +56,7 @@ runs:
           fi
         fi
       env:
-        GITHUB_USER: ubuntu
+        #GITHUB_USER: ubuntu
         GITHUB_TOKEN: ${{ inputs.token }}
       shell: bash
 
@@ -76,7 +81,7 @@ runs:
       if: ${{ env.IS_CHANGE }}
       uses: ad-m/github-push-action@master
       env:
-        GITHUB_USER: ubuntu
+        #GITHUB_USER: ubuntu
         GITHUB_TOKEN: ${{ inputs.token }}
       with:
         branch: ${{ github.ref }}
