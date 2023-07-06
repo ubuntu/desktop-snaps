@@ -80,6 +80,10 @@ runs:
     - name: Push changes
       if: ${{ env.IS_CHANGE }}
       uses: ad-m/github-push-action@master
+      run: |
+        set -eux
+        echo $GITHUB_USER
+      shell: bash
       env:
         GITHUB_USER: ${{ inputs.user || 'ubuntu' }}
         GITHUB_TOKEN: ${{ inputs.token }}
