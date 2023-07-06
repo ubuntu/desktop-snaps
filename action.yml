@@ -33,6 +33,15 @@ runs:
   using: "composite"
 
   steps:
+# Temporary sanity check on expanding the $GITHUB_USER to make sure it's correct
+    - name: User sanity check
+      run: |
+        set -eux
+        echo $GITHUB_USER
+      shell: bash
+      env:
+        GITHUB_USER: ${{ inputs.user || 'ubuntu' }}
+
 # Step to checkout the desktop-snaps repo so that we can run updatesnapyaml.py. We need to define a folder called desktop-snaps to avoid the checkout overwriting the other repo's checkout which comes first in the other repo's workflow
     - name: checkout desktop-snaps repo
       uses: actions/checkout@v3
@@ -80,10 +89,6 @@ runs:
     - name: Push changes
       if: ${{ env.IS_CHANGE }}
       uses: ad-m/github-push-action@master
-      run: |
-        set -eux
-        echo $GITHUB_USER
-      shell: bash
       env:
         GITHUB_USER: ${{ inputs.user || 'ubuntu' }}
         GITHUB_TOKEN: ${{ inputs.token }}
