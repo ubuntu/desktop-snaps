@@ -6,7 +6,7 @@ A simple script that checks a snapcraft yaml file and shows possible new version
 
 Just run:
 
-    sudo install.sh
+    sudo ./install.sh
 
 will install it at /usr/local/bin
 
