@@ -23,8 +23,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 123
 gnome-42-2204-sdk: []
-gnome-boxes:
-- 4
+gnome-boxes: []
 gnome-calculator:
 - 948
 gnome-calendar: []
@@ -41,7 +40,7 @@ gnome-mahjongg: []
 gnome-mines: []
 gnome-nibbles: []
 gnome-recipes:
-- 37
+- 40
 gnome-robots: []
 gnome-sudoku: []
 gnome-system-monitor: []
@@ -58,5 +57,5 @@ snap-store: []
 swell-foop: []
 tali: []
 thunderbird:
-- 344
+- 348
 ubuntu-desktop-installer: []
