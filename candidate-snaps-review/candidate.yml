@@ -6,9 +6,10 @@ eog:
 epiphany: []
 evince:
 - 1036
-firefox: []
+firefox:
+- 2908
 five-or-more:
-- 189
+- 191
 gedit:
 - 678
 glade: []
@@ -40,8 +41,7 @@ gnome-logs: []
 gnome-mahjongg: []
 gnome-mines: []
 gnome-nibbles: []
-gnome-recipes:
-- 40
+gnome-recipes: []
 gnome-robots: []
 gnome-sudoku: []
 gnome-system-monitor: []
