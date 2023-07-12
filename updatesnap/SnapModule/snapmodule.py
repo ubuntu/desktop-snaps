@@ -722,7 +722,7 @@ class Snapcraft(ProcessVersion):
                 return part_data
             message = "Has neither a source-tag nor a source-branch element"
             if self._checkopt("allow-neither-tag-nor-branch", version_format):
-                self._print_error(part, self._colors.warning, message, source=source, extra_cr=True)
+                self._print_error(part, self._colors.warning, f"Warning: {message}", source=source, extra_cr=True)
             else:
                 self._print_error(part, self._colors.critical, message, source=source,
                                   extra_cr=True)
