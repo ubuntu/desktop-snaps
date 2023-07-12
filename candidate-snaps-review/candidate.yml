@@ -6,10 +6,8 @@ eog:
 epiphany: []
 evince:
 - 1036
-firefox:
-- 2908
-five-or-more:
-- 191
+firefox: []
+five-or-more: []
 gedit:
 - 678
 glade: []
@@ -25,7 +23,8 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 123
 gnome-42-2204-sdk: []
-gnome-boxes: []
+gnome-boxes:
+- 5
 gnome-calculator:
 - 948
 gnome-calendar: []
@@ -58,5 +57,5 @@ snap-store: []
 swell-foop: []
 tali: []
 thunderbird:
-- 348
+- 350
 ubuntu-desktop-installer: []
