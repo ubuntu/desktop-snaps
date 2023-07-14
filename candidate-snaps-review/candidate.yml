@@ -1,15 +1,13 @@
 cheese: []
 cherrytree: []
 chromium: []
-eog:
-- 720
+eog: []
 epiphany: []
 evince:
 - 1036
 firefox: []
 five-or-more: []
-gedit:
-- 678
+gedit: []
 glade: []
 glimpse-editor: []
 gnome-2048: []
