@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2550
 eog: []
 epiphany: []
 evince:
@@ -49,12 +50,12 @@ gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
 libreoffice:
-- 281
+- 283
 lightsoff: []
 quadrapassel: []
 snap-store: []
 swell-foop: []
 tali: []
 thunderbird:
-- 350
+- 353
 ubuntu-desktop-installer: []
