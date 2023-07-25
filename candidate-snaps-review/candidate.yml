@@ -49,8 +49,7 @@ gnome-tetravex: []
 gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
-libreoffice:
-- 285
+libreoffice: []
 lightsoff: []
 quadrapassel: []
 snap-store: []
