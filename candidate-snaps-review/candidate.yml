@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2565
 eog: []
 epiphany: []
 evince:
@@ -24,8 +25,7 @@ gnome-42-2204-sdk:
 - 185
 gnome-boxes:
 - 9
-gnome-calculator:
-- 950
+gnome-calculator: []
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
@@ -55,5 +55,5 @@ snap-store: []
 swell-foop: []
 tali: []
 thunderbird:
-- 357
+- 358
 ubuntu-desktop-installer: []
