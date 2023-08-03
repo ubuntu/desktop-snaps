@@ -1,0 +1,39 @@
+plugin: manual
+id: snapd-desktop-integration
+flags: simple
+_description:
+ PURPOSE:
+       Check that snapd-desktop-integration works properly
+ BACKGROUND KNOWLEDGE AND SETUP:
+       The daemon to be tested is at io.snapcraft.SnapDesktopIntegration, and what has to be tested is the io.snapcraft.SnapDesktopIntegration interface of the /io/snapcraft/SnapDesktopIntegration object.
+       The four methods of the SnapDesktopIntegration object are:
+           - ApplicationIsBeingRefreshed(string application_name, String lock_file, Dict of {String, Variant} extra_parameters)
+           - ApplicationRefreshCompleted(string application_name, Dict of {String, Variant} extra_parameters)
+           - ApplicationRefreshPercentage(string application_name, String bar_text, Double percentage, Dict of {String, Variant} extra_parameters)
+           - ApplicationRefreshPulse(string application_name, String bar_text, Dict of {String, Variant} extra_parameters)
+       These functions will be tested in a program called d-feet. Here is how to get setup for testing these functions in d-feet:
+           1. Install it with `sudo apt install d-feet`
+           2. Run the application
+           3. With d-feet you can search in either "System Bus" or "Session Bus". For testing snapd-desktop-integration, we want to search in "Session Bus" so click that.
+           4. In the search bar, type "desktopintegration" and it will find one object, io.snapcraft.SnapDesktopIntegration
+           5. Once you select io.snapcraft.SnapDesktopIntegration in the left panel, you can expand the /io/snapcraft/SnapDesktopIntegration object to find the four methods to test. See https://github.com/ubuntu/desktop-snaps/blob/stable/checkbox-test-plans/unit-assets/snapd-desktop-integration_d-feet.png. The object path is: /io/snapcraft/SnapDesktopIntegration -> Interfaces -> io.snapcraft.SnapDesktopIntegration -> Methods to find the four methods to test.
+           6. Proceed with the four test cases below.
+
+ TEST CASE 1:
+      1. Create a non-empty temporal text file (let’s say: /var/lib/snapd/inhibit/test.lock; it must be in a place reachable by SnapdDesktopIntegration):
+         $ sudo cat /var/lib/snapd/inhibit/test.lock
+         30
+      2. In d-feet, double click on ApplicationIsBeingRefreshed in the right panel, to open the "Execute D-Bus Method" window   
+      3. Put this in the "Method Input" box:
+         "app1","/var/lib/snapd/inhibit/test.lock",{"wait_change_in_lock_file": GLib.Variant("b", True)}
+      4. Click on "Execute"
+      5. You should see a progress window appear saying that “app1” is being refreshed, and with a pulsed progress bar moving left-to-right and vice-versa.
+      6. With the progress window open, go delete the /var/lib/snapd/inhibit/test.lock file in a terminal and the progress window should go away.
+ TEST CASE 2:
+ TEST CASE 3:
+ TEST CASE 4:
+
+unit: test plan
+id: snapd-desktop-integration-tp
+name: snapd-desktop-integration test plan
+include: snapd-desktop-integration
