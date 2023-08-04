@@ -1,11 +1,13 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2572
 eog: []
 epiphany: []
 evince:
 - 1036
-firefox: []
+firefox:
+- 2971
 five-or-more: []
 gedit: []
 glade: []
@@ -52,6 +54,5 @@ quadrapassel: []
 snap-store: []
 swell-foop: []
 tali: []
-thunderbird:
-- 358
+thunderbird: []
 ubuntu-desktop-installer: []
