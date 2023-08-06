@@ -1,0 +1,20 @@
+plugin: manual
+id: simple-scan
+flags: simple
+_description:
+ PURPOSE:
+       Check that simple-scan runs and works correctly
+ STEPS:
+      1. Launch simple-scan from the desktop icon
+      2. Make sure switching themes does what is expected. For example, if you are on light theme, then with the snap open, switch to dark theme and observe the snap adjusting to the dark theme.
+      3. With a scanner device available, open simple scan and verify that the scanner is detected.
+      4. Scan any document.
+      5. Make sure hamburger menu -> Help brings up the simple-scan Help page
+      6. Make sure hamburger menu -> Print opens up the gnome printing dialog
+      7. Test emailing the document to yourself.
+      8. Test downloading the document locally. 
+
+unit: test plan
+id: simple-scan-tp
+name: simple-scan test plan
+include: simple-scan
