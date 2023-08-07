@@ -14,7 +14,7 @@ _description:
       7. Maximize the VM window and make sure it resizes to fit the screen.
       8. With an existing VM running, make sure you can mount/unmount an ISO and that the system sees it with `df`.
       9. Adjust the RAM/CPU resources on an existing VM and restart it. Make sure that is reflected in the running system, verified with `htop`.
-      10. Play a video and make sure the video/audio playback works as expected.
+      10. Play a video in Firefox and make sure the video/audio playback works as expected: https://videoplayback.vhx.tv/player-team-test/videos/bbb-sunflower-native-60fps-normal
 
  INSTALL TESTS
       FROM ISO
@@ -22,7 +22,7 @@ _description:
        - Click "Install from File" and select a locally hosted .iso file. (If you do not have one, you can download one from cdimage.ubuntu.com.)
        - In the "New Virtual Machine" window, edit the name (to make sure that works) and click Create.
        - Select "Try or install Ubuntu" and go through the install.
-       - 
+       - Make sure you are prompted to unmount the ISO and restart after the install is complete. When the system restarts, make sure you are brought to a login screen, rather than being prompted to install again.
       DOWNLOAD
        - Create a new VM by clicking the "+" button in the top left corner.
        - Click "Downoad OS" and try to download Ubuntu (or another OS)
