@@ -20,8 +20,7 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 126
-gnome-42-2204-sdk:
-- 185
+gnome-42-2204-sdk: []
 gnome-boxes:
 - 9
 gnome-calculator: []
