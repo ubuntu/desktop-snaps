@@ -1,0 +1,21 @@
+plugin: manual
+id: shotwell
+flags: simple
+_description:
+ PURPOSE:
+       Check that shotwell runs and works correctly
+ STEPS:
+      1. Launch shotwell from the desktop icon
+      2. Make sure Help -> Help brings up the Shotwell Help page
+      3. Create a folder on your local system with some photos in it. Include different file extensions like .jpg, .png, and .webp. Then import the folder into shotwell: File -> Import from Folder. Make sure the import is successful and you see all expected photos.
+      4. Create a folder on an external device like a USB stick and make sure you can import the photos just as you did with the locally hosted folder.
+      5. Try changing the theme and make sure it switches dark <-> light properly. Note that your system theme will need to match whatever theme you set in shotwell. To set the theme in shotwell: Edit -> Preferences -> Library tab -> Use dark theme (toggle)
+      6. Make sure a slideshow of all the photos works as expected. You should be able to click the arrow keys to cycle through the photos faster but also you should expect the photos to cycle on their own at a consistent rate. The pause/play button should pause and resume the slideshow.
+         * Edit -> Select all.  
+         * View -> Slideshow
+      7. Enable the Publishing plugins (Edit -> Preferences -> Plugins -> Publishing) and try to publish a photo (the share icon at the bottom of the selected photo)
+
+unit: test plan
+id: shotwell-tp
+name: shotwell test plan
+include: shotwell
