@@ -8,22 +8,22 @@ The very first time checkbox is setup on a system for testing, you will need to 
 
 ### General tools needed
 
-```
-jammy:~$ sudo apt install python3-pip python3-distutils-extra
+```bash
+sudo apt install python3-pip python3-distutils-extra
 ```
 
 ### Setting up checkbox
 
-```
-jammy:~$ sudo snap install checkbox -classic
-jammy:~$ sudo snap install checkbox22
+```bash
+sudo snap install checkbox22
+sudo snap install checkbox --classic
 ```
 
 ### Create an empty side-loaded provider
 
-```
-jammy:~$ jammy:~$ mkdir -p /var/tmp/checkbox-providers && cd /var/tmp/checkbox-provider
-jammy:/var/tmp/checkbox-providers$ checkbox.checkbox-cli startprovider --empty com.desktop-snaps:myprovider
+```bash
+mkdir -p /var/tmp/checkbox-providers && cd /var/tmp/checkbox-providers
+checkbox.checkbox-cli startprovider --empty com.desktop-snaps:myprovider
 ```
 
 ## Creating the first test plan for the provider
@@ -32,9 +32,11 @@ This is most useful really for someone doing the initial setup of checkbox, incl
 
 ### Create a test plan
 
+```bash
+mkdir com.desktop-snaps\:myprovider/units && cd com.desktop-snaps\:myprovider
+vim units/gnome-calculator.pxu
 ```
-jammy:/var/tmp/checkbox-providers/com.desktop-snaps:myprovider$ mkdir units && cd units
-jammy:/var/tmp/checkbox-providers/com.desktop-snaps:myprovider/units$ vim gnome-calculator.pxu
+```
 plugin: manual
 id: my-first-job
 flags: simple
@@ -55,8 +57,10 @@ include: my-first-job
 
 ### Run the test plan
 
+```bash
+checkbox.checkbox-cli
 ```
-jammy:/var/tmp/checkbox-providers/com.desktop-snaps:myprovider$ checkbox.checkbox-cli
+```
 $PROVIDERPATH is defined, so following provider sources are ignored ['/home/heather/.local/share/plainbox-providers-1', '/var/tmp/checkbox-providers-develop']
 Using sideloaded provider: com.desktop-snaps:myprovider, version 1.0 from /var/tmp/checkbox-providers/com.desktop-snaps:myprovider
 =========================[ Resume Incomplete Session ]==========================
@@ -137,8 +141,8 @@ The test plans live in the `units/` directory and they are for the following sna
 ### Running one test
 
 Run checkbox from the command line:
-```
-jammy:~$ checkbox.checkbox-cli
+```bash
+checkbox.checkbox-cli
 ```
 
 Search the database with the "/" character. Start typing the app for testing. For example, you can search for "calculator" to discover the gnome-calculator test plan.
