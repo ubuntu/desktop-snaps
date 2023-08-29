@@ -52,5 +52,6 @@ snap-store: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 373
 ubuntu-desktop-installer: []
