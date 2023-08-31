@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2607
 eog: []
 epiphany: []
 evince:
@@ -18,7 +19,8 @@ gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204: []
-gnome-42-2204-sdk: []
+gnome-42-2204-sdk:
+- 189
 gnome-boxes:
 - 9
 gnome-calculator: []
@@ -44,7 +46,8 @@ gnome-tetravex: []
 gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
-libreoffice: []
+libreoffice:
+- 289
 lightsoff: []
 quadrapassel: []
 snap-store: []
@@ -53,4 +56,5 @@ swell-foop: []
 tali: []
 thunderbird:
 - 373
-ubuntu-desktop-installer: []
+ubuntu-desktop-installer:
+- 1217
