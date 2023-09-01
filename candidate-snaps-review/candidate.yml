@@ -21,8 +21,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204: []
 gnome-42-2204-sdk:
 - 189
-gnome-boxes:
-- 9
+gnome-boxes: []
 gnome-calculator: []
 gnome-calendar: []
 gnome-characters: []
@@ -57,4 +56,4 @@ tali: []
 thunderbird:
 - 373
 ubuntu-desktop-installer:
-- 1217
+- 1221
