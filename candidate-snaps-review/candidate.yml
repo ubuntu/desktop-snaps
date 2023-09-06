@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2614
 eog: []
 epiphany: []
 evince:
@@ -49,7 +50,8 @@ libreoffice:
 lightsoff: []
 quadrapassel: []
 snap-store: []
-steam: []
+steam:
+- 163
 swell-foop: []
 tali: []
 thunderbird:
