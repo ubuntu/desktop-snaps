@@ -6,7 +6,7 @@ epiphany: []
 evince:
 - 1036
 firefox:
-- 3126
+- 3131
 five-or-more: []
 gedit: []
 glade: []
@@ -51,10 +51,10 @@ lightsoff: []
 quadrapassel: []
 snap-store: []
 steam:
-- 163
+- 165
 swell-foop: []
 tali: []
 thunderbird:
 - 375
 ubuntu-desktop-installer:
-- 1235
+- 1237
