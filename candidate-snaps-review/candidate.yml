@@ -5,8 +5,7 @@ eog: []
 epiphany: []
 evince:
 - 1036
-firefox:
-- 3131
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -55,6 +54,6 @@ steam:
 swell-foop: []
 tali: []
 thunderbird:
-- 375
+- 377
 ubuntu-desktop-installer:
 - 1237
