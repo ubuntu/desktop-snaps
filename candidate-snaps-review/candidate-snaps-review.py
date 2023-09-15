@@ -66,6 +66,8 @@ for snapline in snaps.normalsnaps + snaps.specialsnaps:
     oldchan = "stable"
     newchan = "candidate"
 
+    track = "/" + snapline[8] if snapline[8] else ""
+
     store_revisions = set()
     revisions_to_delete = set()
 
@@ -73,9 +75,9 @@ for snapline in snaps.normalsnaps + snaps.specialsnaps:
     if not snapline[1]:
         debug("skip %s since there is no stable build" % src)
 
-    debug("* considering source %s" % src)
-    if src not in candidatedict:
-        candidatedict[src] = []
+    debug("* considering source %s %s" % (src, "latest" if track == "" else track[0:-1]))
+    if track + src not in candidatedict:
+        candidatedict[track + src] = []
 
     store_versions_table = store_parse_versions(src)
     debug("store versions")
@@ -86,33 +88,34 @@ for snapline in snaps.normalsnaps + snaps.specialsnaps:
             debug("Limiting to amd64 for now")
             continue
 
-        if oldchan not in store_versions_table[architecture].keys():
-            debug("Ignoring since there is no version in %s" % oldchan)
+        if track + oldchan not in store_versions_table[architecture].keys():
+            debug("Ignoring since there is no version in %s" % track + oldchan)
             continue
 
         for channel in store_versions_table[architecture]:
-            if channel != newchan:
+            if channel != track + newchan:
                 continue
 
             rev = store_versions_table[architecture][channel]
             store_revisions.add(rev)
 
-            if rev == store_versions_table[architecture][oldchan]:
+            if rev == store_versions_table[architecture][track + oldchan]:
                 debug("The new channel revision is identic, nothing to do")
-                if rev in candidatedict[src]:
+                if rev in candidatedict[track + src]:
                     revisions_to_delete.add(rev)
                 continue
 
-            if rev in candidatedict[src]:
+            if rev in candidatedict[track + src]:
                 debug("rev %s has already been handled" % rev)
                 continue
 
             changes = subprocess.check_output(
-                ["./snapchanges.py", oldchan, newchan, src], encoding="UTF-8"
+                ["./snapchanges.py", oldchan, newchan, src, "latest" if track == "" else track[0:-1] ], encoding="UTF-8"
             )
 
             report = {}
-            report["title"] = "New candidate build available for %s on %s (r%s)" % (
+            report["title"] = "New %scandidate build available for %s on %s (r%s)" % (
+                track,
                 src,
                 architecture,
                 rev,
@@ -130,15 +133,15 @@ for snapline in snaps.normalsnaps + snaps.specialsnaps:
                 "reports/%s-%s-%s.json" % (src, architecture, rev), "w"
             ) as reportfile:
                 json.dump(report, reportfile)
-            candidatedict[src].append(rev)
+            candidatedict[track + src].append(rev)
 
-    for rev in candidatedict[src]:
+    for rev in candidatedict[track + src]:
         if rev not in store_revisions:
-            debug("Remove %s rev %s which isn't in the store anymore" % (src, rev))
+            debug("Remove %s rev %s which isn't in the store anymore" % (track + src, rev))
             revisions_to_delete.add(rev)
     for rev in revisions_to_delete:
         debug("Cleaning out outdated revision %s from the cache" % rev)
-        candidatedict[src].remove(rev)
+        candidatedict[track + src].remove(rev)
     debug("")
 
 # write updated cache
