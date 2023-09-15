@@ -40,17 +40,18 @@ arg = parser.parse_args()
 
 
 def get_snap_rev(snap, arch, channel):
-    """Get the revision of a snap by name/arch/channel"""
+    """Get the revision of a snap by name/arch/latest/channel"""
     url = (
-        f"https://api.snapcraft.io/api/v1/snaps/details/{snap}?channel={channel}"
+        f"https://api.snapcraft.io/v2/snaps/info/{snap}?architecture={arch}"
     )
-    store = {"X-Ubuntu-Series": "16", "X-Ubuntu-Architecture": f"{arch}"}
+    store = {"Snap-Device-Series": "16"}
     req = urllib.request.Request(
         url,
         headers=store
     )
     snapdetails = urllib.request.urlopen(req)
-    return json.load(snapdetails)["revision"]
+    channelmap = json.load(snapdetails)["channel-map"]
+    return [item["revision"] for item in channelmap if (item["channel"]["risk"] == channel and item["channel"]["track"] == "latest")][0]
 
 
 REDCOLOR = "\033[91m"
