@@ -61,6 +61,9 @@ specialsnaps = [
 ("gtk-common-themes", "https://launchpad.net/~desktop-snappers/+snap/gtk-common-themes", None, None, "https://gitlab.gnome.org/Community/Ubuntu/gtk-common-themes/-/raw/main/snap/snapcraft.yaml", None, None, None, None),
 ("snap-store", "https://launchpad.net/~desktop-snappers/+snap/snap-store-stable", None, "https://launchpad.net/~desktop-snappers/+snap/snap-store", "https://git.launchpad.net/snap-store-desktop/plain/snap/snapcraft.yaml?h=snap-store-stable", None, "https://git.launchpad.net/snap-store-desktop/plain/snap/snapcraft.yaml", None, None),
 ("ubuntu-desktop-installer", None, None, "https://launchpad.net/~ubuntu-desktop/ubuntu-desktop-installer/+snap/ubuntu-desktop-installer", None, None, "https://git.launchpad.net/ubuntu-desktop-installer/plain/snap/snapcraft.yaml", None, None),
+("gaming-graphics-core22", "https://launchpad.net/~desktop-snappers/gaming-graphics/+snap/oibaf-latest-core22", None, None, "https://github.com/canonical/gaming-graphics/tree/oibaf-latest-core22", None, None, None, "oibaf-latest"),
+("gaming-graphics-core22", "https://launchpad.net/~desktop-snappers/gaming-graphics/+snap/kisak-fresh-core22", None, None, "https://github.com/canonical/gaming-graphics/tree/kisak-fresh-core22", None, None, None, "kisak-fresh"),
+("gaming-graphics-core22", "https://launchpad.net/~desktop-snappers/gaming-graphics/+snap/kisak-turtle-core22", None, None, "https://github.com/canonical/gaming-graphics/tree/kisak-turtle-core22", None, None, None, "kisak-turtle"),
 ]
 
 snapstable = normalsnaps + specialsnaps
