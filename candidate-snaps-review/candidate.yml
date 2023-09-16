@@ -53,6 +53,7 @@ steam:
 - 165
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 379
 ubuntu-desktop-installer:
-- 1237
+- 1241
