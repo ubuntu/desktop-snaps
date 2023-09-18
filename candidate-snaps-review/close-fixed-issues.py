@@ -20,11 +20,11 @@ req = urllib.request.Request(sys.argv[1])
 issues = urllib.request.urlopen(req)
 for entry in json.load(issues):
     title = entry["title"]
-    regexp = re.compile(r"New candidate build available for (.*) on .*\(r(\d*)\).*")
+    regexp = re.compile(r"New (.*)candidate build available for (.*) on .*\(r(\d*)\).*")
     parsed = regexp.search(title)
     if parsed:
-        source, rev = parsed.groups()
-        if source not in candidatedict or int(rev) not in candidatedict[source]:
+        track, source, rev = parsed.groups()
+        if track + source not in candidatedict or int(rev) not in candidatedict[track + source]:
             n = entry["number"]
             close_data = {"state": "closed"}
             msg_data = {
@@ -34,7 +34,7 @@ for entry in json.load(issues):
                 "authorization": "Bearer %s" % sys.argv[2],
             }
 
-            print("Closing issue %s since %s r%s isn't in candidate anymore" % (n, source, rev))
+            print("Closing issue %s since %s r%s isn't in %scandidate anymore" % (n, source, rev, track))
 
             req = urllib.request.Request(
                 f"https://api.github.com/repos/ubuntu/desktop-snaps/issues/{n}/comments",

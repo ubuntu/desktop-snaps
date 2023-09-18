@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("channelold")
 parser.add_argument("channelnew")
 parser.add_argument("source")
+parser.add_argument("track")
 parser.add_argument(
     "-a",
     "--arch",
@@ -38,19 +39,19 @@ parser.add_argument(
 )
 arg = parser.parse_args()
 
-
-def get_snap_rev(snap, arch, channel):
-    """Get the revision of a snap by name/arch/channel"""
+def get_snap_rev(snap, arch, channel, track):
+    """Get the revision of a snap by name/arch/track/channel"""
     url = (
-        f"https://api.snapcraft.io/api/v1/snaps/details/{snap}?channel={channel}"
+        f"https://api.snapcraft.io/v2/snaps/info/{snap}?architecture={arch}"
     )
-    store = {"X-Ubuntu-Series": "16", "X-Ubuntu-Architecture": f"{arch}"}
+    store = {"Snap-Device-Series": "16"}
     req = urllib.request.Request(
         url,
         headers=store
     )
     snapdetails = urllib.request.urlopen(req)
-    return json.load(snapdetails)["revision"]
+    channelmap = json.load(snapdetails)["channel-map"]
+    return [item["revision"] for item in channelmap if (item["channel"]["risk"] == channel and item["channel"]["track"] == track)][0]
 
 
 REDCOLOR = "\033[91m"
@@ -104,8 +105,8 @@ if arg.clean and os.path.exists("cache"):
     shutil.rmtree("cache")
 
 # Get the revisions
-oldrev = get_snap_rev(arg.source, arg.arch, arg.channelold)
-newrev = get_snap_rev(arg.source, arg.arch, arg.channelnew)
+oldrev = get_snap_rev(arg.source, arg.arch, arg.channelold, arg.track)
+newrev = get_snap_rev(arg.source, arg.arch, arg.channelnew, arg.track)
 
 if oldrev == newrev:
     print("The channels are on the same revision, nothing to compare")
@@ -119,14 +120,16 @@ new_snap_dir = f"cache/{arg.source}-{newrev}"
 download_env = os.environ.copy()
 download_env["UBUNTU_STORE_ARCH"] = arg.arch
 
+arg.track = arg.track + "/"
+
 # download the old snap from the corresponding channel
 print(
-    f"Downloading {arg.source} {arg.arch} from channel {arg.channelold} (r{oldrev}) to cache directory"
+    f"Downloading {arg.source} {arg.arch} from channel {arg.track}{arg.channelold} (r{oldrev}) to cache directory"
 )
 cmd = [
     "snap",
     "download",
-    "--channel=%s" % arg.channelold,
+    "--channel=%s%s" % (arg.track, arg.channelold),
     "--target-directory=cache/",
     arg.source,
 ]
@@ -143,12 +146,12 @@ else:
 
 # download the new snap from the corresponding channel
 print(
-    f"Downloading {arg.source} {arg.arch} from channel {arg.channelnew} (r{newrev}) to cache directory"
+    f"Downloading {arg.source} {arg.arch} from channel {arg.track}{arg.channelnew} (r{newrev}) to cache directory"
 )
 cmd = [
     "snap",
     "download",
-    "--channel=%s" % arg.channelnew,
+    "--channel=%s%s" % (arg.track, arg.channelnew),
     "--target-directory=cache/",
     arg.source,
 ]
