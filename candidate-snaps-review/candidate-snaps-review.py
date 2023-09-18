@@ -66,7 +66,7 @@ for snapline in snaps.normalsnaps + snaps.specialsnaps:
     oldchan = "stable"
     newchan = "candidate"
 
-    track = "/" + snapline[8] if snapline[8] else ""
+    track = snapline[8] + "/" if snapline[8] else ""
 
     store_revisions = set()
     revisions_to_delete = set()
