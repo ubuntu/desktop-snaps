@@ -1,15 +1,17 @@
-cheese: []
+cheese:
+- 34
 cherrytree: []
-chromium:
-- 2642
+chromium: []
 eog: []
-epiphany: []
+epiphany:
+- 156
 evince:
-- 1036
+- 1038
 firefox:
 - 3166
 five-or-more: []
-gedit: []
+gedit:
+- 682
 glade: []
 glimpse-editor: []
 gnome-2048: []
@@ -21,40 +23,48 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204: []
 gnome-42-2204-sdk:
-- 202
-gnome-boxes: []
+- 206
+gnome-boxes:
+- 10
 gnome-calculator: []
 gnome-calendar: []
-gnome-characters: []
+gnome-characters:
+- 791
 gnome-chess: []
-gnome-clocks: []
+gnome-clocks:
+- 461
 gnome-contacts: []
 gnome-dictionary: []
-gnome-font-viewer: []
-gnome-hitori: []
+gnome-font-viewer:
+- 47
+gnome-hitori:
+- 326
 gnome-klotski: []
-gnome-logs: []
+gnome-logs:
+- 121
 gnome-mahjongg: []
 gnome-mines: []
 gnome-nibbles: []
 gnome-recipes: []
 gnome-robots: []
-gnome-sudoku: []
+gnome-sudoku:
+- 98
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
-kisak-fresh/gaming-graphics-core22: []
+kisak-fresh/gaming-graphics-core22:
+- 115
 kisak-turtle/gaming-graphics-core22: []
 libreoffice: []
 lightsoff: []
-oibaf-latest/gaming-graphics-core22: []
+oibaf-latest/gaming-graphics-core22:
+- 114
 quadrapassel: []
 snap-store: []
-steam:
-- 165
+steam: []
 swell-foop: []
 tali: []
 thunderbird:
