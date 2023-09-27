@@ -2,11 +2,11 @@ cheese:
 - 34
 cherrytree: []
 chromium: []
-eog:
-- 724
+eog: []
 epiphany:
 - 156
-evince: []
+evince:
+- 1040
 firefox: []
 five-or-more: []
 gedit: []
@@ -27,9 +27,11 @@ gnome-boxes:
 gnome-calculator:
 - 953
 gnome-calendar: []
-gnome-characters: []
+gnome-characters:
+- 793
 gnome-chess: []
-gnome-clocks: []
+gnome-clocks:
+- 463
 gnome-contacts: []
 gnome-dictionary: []
 gnome-font-viewer: []
@@ -41,7 +43,8 @@ gnome-mines: []
 gnome-nibbles: []
 gnome-recipes: []
 gnome-robots: []
-gnome-sudoku: []
+gnome-sudoku:
+- 100
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
@@ -61,5 +64,5 @@ steam: []
 swell-foop: []
 tali: []
 thunderbird:
-- 385
+- 386
 ubuntu-desktop-installer: []
