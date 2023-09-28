@@ -1,14 +1,13 @@
 cheese:
 - 37
 cherrytree: []
-chromium: []
+chromium:
+- 2649
 eog: []
 epiphany:
 - 156
-evince:
-- 1040
-firefox:
-- 3206
+evince: []
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -29,13 +28,14 @@ gnome-calculator:
 - 953
 gnome-calendar: []
 gnome-characters:
-- 793
+- 795
 gnome-chess: []
 gnome-clocks:
 - 463
 gnome-contacts: []
 gnome-dictionary: []
-gnome-font-viewer: []
+gnome-font-viewer:
+- 49
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs: []
