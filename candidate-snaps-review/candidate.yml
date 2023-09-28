@@ -1,5 +1,5 @@
 cheese:
-- 34
+- 37
 cherrytree: []
 chromium: []
 eog: []
@@ -7,7 +7,8 @@ epiphany:
 - 156
 evince:
 - 1040
-firefox: []
+firefox:
+- 3206
 five-or-more: []
 gedit: []
 glade: []
@@ -20,7 +21,7 @@ gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
-- 138
+- 141
 gnome-42-2204-sdk: []
 gnome-boxes:
 - 10
@@ -54,7 +55,8 @@ iagno: []
 kisak-fresh/gaming-graphics-core22:
 - 115
 kisak-turtle/gaming-graphics-core22: []
-libreoffice: []
+libreoffice:
+- 298
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
 - 114
@@ -64,5 +66,5 @@ steam: []
 swell-foop: []
 tali: []
 thunderbird:
-- 386
+- 388
 ubuntu-desktop-installer: []
