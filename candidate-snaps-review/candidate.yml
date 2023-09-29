@@ -20,7 +20,7 @@ gnome-3-34-1804-sdk: []
 gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
-- 141
+- 145
 gnome-42-2204-sdk: []
 gnome-boxes:
 - 10
@@ -55,8 +55,7 @@ iagno: []
 kisak-fresh/gaming-graphics-core22:
 - 115
 kisak-turtle/gaming-graphics-core22: []
-libreoffice:
-- 298
+libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
 - 114
@@ -67,4 +66,5 @@ swell-foop: []
 tali: []
 thunderbird:
 - 389
-ubuntu-desktop-installer: []
+ubuntu-desktop-installer:
+- 1245
