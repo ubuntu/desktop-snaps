@@ -1,8 +1,7 @@
-cheese:
-- 37
+cheese: []
 cherrytree: []
 chromium:
-- 2649
+- 2651
 eog: []
 epiphany:
 - 156
@@ -25,18 +24,14 @@ gnome-42-2204:
 gnome-42-2204-sdk: []
 gnome-boxes:
 - 10
-gnome-calculator:
-- 953
+gnome-calculator: []
 gnome-calendar: []
-gnome-characters:
-- 795
+gnome-characters: []
 gnome-chess: []
-gnome-clocks:
-- 463
+gnome-clocks: []
 gnome-contacts: []
 gnome-dictionary: []
-gnome-font-viewer:
-- 49
+gnome-font-viewer: []
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs: []
@@ -45,8 +40,7 @@ gnome-mines: []
 gnome-nibbles: []
 gnome-recipes: []
 gnome-robots: []
-gnome-sudoku:
-- 100
+gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
@@ -54,12 +48,13 @@ gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 115
-kisak-turtle/gaming-graphics-core22: []
+- 117
+kisak-turtle/gaming-graphics-core22:
+- 116
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
-- 114
+- 118
 quadrapassel: []
 snap-store: []
 steam: []
