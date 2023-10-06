@@ -1,7 +1,7 @@
 cheese: []
 cherrytree: []
 chromium:
-- 2651
+- 2655
 eog: []
 epiphany:
 - 156
@@ -44,7 +44,8 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor: []
+gnome-text-editor:
+- 22
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
@@ -60,6 +61,5 @@ snap-store: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 389
+thunderbird: []
 ubuntu-desktop-installer: []
