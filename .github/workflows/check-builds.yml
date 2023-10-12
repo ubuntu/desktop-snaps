@@ -1,0 +1,19 @@
+name: Check for broken builds
+
+on:
+  schedule:
+    # Daily for now
+    - cron: '9 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+         working-directory: candidate-snaps-review
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check for broken builds
+        id: check-builds
+        run: ./check-builds.py ${{ secrets.GITHUB_TOKEN }}
