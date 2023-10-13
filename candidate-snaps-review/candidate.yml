@@ -1,7 +1,6 @@
 cheese: []
 cherrytree: []
-chromium:
-- 2666
+chromium: []
 eog: []
 epiphany:
 - 156
@@ -49,15 +48,17 @@ gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22: []
 kisak-turtle/gaming-graphics-core22: []
-libreoffice: []
+libreoffice:
+- 300
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
 quadrapassel: []
-snap-store: []
+snap-store:
+- 1058
 steam: []
 swell-foop: []
 tali: []
 thunderbird:
-- 394
+- 395
 ubuntu-desktop-installer:
-- 1260
+- 1264
