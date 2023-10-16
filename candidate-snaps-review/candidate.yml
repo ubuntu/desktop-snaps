@@ -39,7 +39,8 @@ gnome-mines: []
 gnome-nibbles: []
 gnome-recipes: []
 gnome-robots: []
-gnome-sudoku: []
+gnome-sudoku:
+- 102
 gnome-system-monitor:
 - 186
 gnome-taquin: []
