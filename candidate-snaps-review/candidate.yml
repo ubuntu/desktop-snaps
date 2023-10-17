@@ -34,7 +34,8 @@ gnome-font-viewer: []
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs: []
-gnome-mahjongg: []
+gnome-mahjongg:
+- 172
 gnome-mines: []
 gnome-nibbles: []
 gnome-recipes: []
