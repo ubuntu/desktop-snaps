@@ -4,7 +4,8 @@ chromium: []
 eog: []
 epiphany: []
 evince: []
-firefox: []
+firefox:
+- 3290
 five-or-more: []
 gedit: []
 glade: []
@@ -26,7 +27,8 @@ gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
 gnome-clocks: []
-gnome-contacts: []
+gnome-contacts:
+- 199
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
