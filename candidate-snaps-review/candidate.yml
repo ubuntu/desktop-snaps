@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2673
 eog: []
 epiphany: []
 evince: []
@@ -41,7 +42,8 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor: []
+gnome-text-editor:
+- 24
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
