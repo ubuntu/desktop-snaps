@@ -22,7 +22,8 @@ gnome-42-2204-sdk:
 - 224
 gnome-boxes:
 - 10
-gnome-calculator: []
+gnome-calculator:
+- 955
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
@@ -43,7 +44,7 @@ gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor:
-- 24
+- 27
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
