@@ -47,14 +47,11 @@ gnome-text-editor:
 - 27
 gtk-common-themes: []
 iagno: []
-kisak-fresh/gaming-graphics-core22:
-- 120
-kisak-turtle/gaming-graphics-core22:
-- 121
+kisak-fresh/gaming-graphics-core22: []
+kisak-turtle/gaming-graphics-core22: []
 libreoffice: []
 lightsoff: []
-oibaf-latest/gaming-graphics-core22:
-- 119
+oibaf-latest/gaming-graphics-core22: []
 quadrapassel: []
 snap-store:
 - 1058
