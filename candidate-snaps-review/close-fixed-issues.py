@@ -37,14 +37,14 @@ for entry in json.load(issues):
             print("Closing issue %s since %s r%s isn't in %scandidate anymore" % (n, source, rev, track))
 
             req = urllib.request.Request(
-                f"https://api.github.com/repos/ubuntu/desktop-snaps/issues/{n}/comments",
+                sys.argv[1]+f"/{n}/comments",
                 method="POST",
                 headers=headers,
                 data=bytes(json.dumps(msg_data), encoding="utf-8"),
             )
             urllib.request.urlopen(req)
             req = urllib.request.Request(
-                f"https://api.github.com/repos/ubuntu/desktop-snaps/issues/{n}",
+                sys.argv[1]+f"/{n}",
                 method="PATCH",
                 headers=headers,
                 data=bytes(json.dumps(close_data), encoding="utf-8"),

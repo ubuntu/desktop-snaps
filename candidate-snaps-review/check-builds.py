@@ -7,7 +7,7 @@ import urllib.request
 
 import snaps
 
-req = urllib.request.Request("https://api.github.com/repos/ubuntu/desktop-snaps/issues")
+req = urllib.request.Request(sys.argv[1])
 issues = json.load(urllib.request.urlopen(req))
 
 def get_builds(launchpad_url):
@@ -28,10 +28,10 @@ def open_issue(name, arch, url):
         "body": "The last attempt to build %s on %s failed. Launchpad is reporting a \"Failed to build\" status. \n %s" % (name, arch, url),
         }
     headers = {
-        "authorization": "Bearer %s" % sys.argv[1],
+        "authorization": "Bearer %s" % sys.argv[2],
         }
     req = urllib.request.Request(
-        f"https://api.github.com/repos/ubuntu/desktop-snaps/issues",
+        sys.argv[1],
         method="POST",
         headers=headers,
         data=bytes(json.dumps(data), encoding="utf-8"),
@@ -53,10 +53,10 @@ def check_for_issues(name, arch):
 def close_issue(n):            
     close_data = {"state": "closed"}
     headers = {
-        "authorization": "Bearer %s" % sys.argv[1],
+        "authorization": "Bearer %s" % sys.argv[2],
         }
     req = urllib.request.Request(
-        f"https://api.github.com/repos/ubuntu/desktop-snaps/issues/{n}",
+        sys.argv[1]+f"/{n}",
         method="PATCH",
         headers=headers,
         data=bytes(json.dumps(close_data), encoding="utf-8"),
