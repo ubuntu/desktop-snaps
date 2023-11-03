@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2680
 eog: []
 epiphany: []
 evince: []
@@ -18,12 +19,10 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 149
-gnome-42-2204-sdk:
-- 224
+gnome-42-2204-sdk: []
 gnome-boxes:
 - 10
-gnome-calculator:
-- 955
+gnome-calculator: []
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
@@ -43,12 +42,13 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor:
-- 27
+gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
-kisak-fresh/gaming-graphics-core22: []
-kisak-turtle/gaming-graphics-core22: []
+kisak-fresh/gaming-graphics-core22:
+- 123
+kisak-turtle/gaming-graphics-core22:
+- 122
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
@@ -59,7 +59,6 @@ steam:
 - 171
 swell-foop: []
 tali: []
-thunderbird:
-- 405
+thunderbird: []
 ubuntu-desktop-installer:
 - 1271
