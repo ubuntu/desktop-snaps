@@ -4,7 +4,8 @@ chromium: []
 eog: []
 epiphany: []
 evince: []
-firefox: []
+firefox:
+- 3358
 five-or-more: []
 gedit: []
 glade: []
@@ -41,13 +42,14 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor: []
+gnome-text-editor:
+- 28
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 123
+- 126
 kisak-turtle/gaming-graphics-core22:
-- 122
+- 125
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
