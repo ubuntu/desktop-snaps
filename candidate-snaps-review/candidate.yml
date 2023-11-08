@@ -4,8 +4,7 @@ chromium: []
 eog: []
 epiphany: []
 evince: []
-firefox:
-- 3358
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -53,7 +52,7 @@ kisak-turtle/gaming-graphics-core22:
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
-- 124
+- 127
 quadrapassel: []
 snap-store:
 - 1058
