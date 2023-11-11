@@ -18,8 +18,7 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 149
-gnome-42-2204-sdk:
-- 230
+gnome-42-2204-sdk: []
 gnome-boxes:
 - 10
 gnome-calculator: []
@@ -42,8 +41,7 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor:
-- 28
+gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
