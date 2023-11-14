@@ -18,7 +18,8 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 158
-gnome-42-2204-sdk: []
+gnome-42-2204-sdk:
+- 236
 gnome-boxes:
 - 10
 gnome-calculator: []
@@ -60,6 +61,6 @@ steam:
 swell-foop: []
 tali: []
 thunderbird:
-- 409
+- 412
 ubuntu-desktop-installer:
 - 1272
