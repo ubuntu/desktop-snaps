@@ -4,8 +4,7 @@ chromium: []
 eog: []
 epiphany: []
 evince: []
-firefox:
-- 3416
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -47,9 +46,9 @@ gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 131
+- 133
 kisak-turtle/gaming-graphics-core22:
-- 132
+- 134
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
@@ -61,6 +60,5 @@ steam:
 - 171
 swell-foop: []
 tali: []
-thunderbird:
-- 412
+thunderbird: []
 ubuntu-desktop-installer: []
