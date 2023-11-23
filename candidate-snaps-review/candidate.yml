@@ -49,7 +49,8 @@ kisak-fresh/gaming-graphics-core22:
 - 133
 kisak-turtle/gaming-graphics-core22:
 - 134
-libreoffice: []
+libreoffice:
+- 302
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
 - 130
@@ -60,5 +61,6 @@ steam:
 - 171
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 417
 ubuntu-desktop-installer: []
