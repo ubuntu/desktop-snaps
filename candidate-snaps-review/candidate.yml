@@ -5,8 +5,7 @@ chromium:
 eog: []
 epiphany: []
 evince: []
-firefox:
-- 3504
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -21,7 +20,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 158
 gnome-42-2204-sdk:
-- 243
+- 246
 gnome-boxes:
 - 10
 gnome-calculator: []
@@ -51,8 +50,7 @@ kisak-fresh/gaming-graphics-core22:
 - 137
 kisak-turtle/gaming-graphics-core22:
 - 135
-libreoffice:
-- 302
+libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22:
 - 136
