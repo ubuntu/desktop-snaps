@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2712
 eog: []
 epiphany: []
 evince: []
@@ -49,13 +50,12 @@ gnome-text-editor: []
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 137
+- 138
 kisak-turtle/gaming-graphics-core22:
-- 135
+- 139
 libreoffice: []
 lightsoff: []
-oibaf-latest/gaming-graphics-core22:
-- 136
+oibaf-latest/gaming-graphics-core22: []
 quadrapassel: []
 snap-store:
 - 1058
