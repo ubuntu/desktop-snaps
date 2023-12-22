@@ -46,7 +46,8 @@ gnome-sudoku:
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor: []
+gnome-text-editor:
+- 34
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
