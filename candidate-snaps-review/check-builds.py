@@ -7,7 +7,7 @@ import urllib.request
 
 import snaps
 
-if(sys.argv != 3):
+if(len(sys.argv) != 3):
     print("Usage: two arguments are required, the issues API url for the repo and the token used by the action.")
     print("./check-builds.py https://api.github.com/repos/${{ github.repository }}/issues ${{ secrets.GITHUB_TOKEN }}")
     sys.exit()
