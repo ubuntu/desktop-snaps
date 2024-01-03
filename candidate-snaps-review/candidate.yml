@@ -1,9 +1,10 @@
-cheese: []
+cheese:
+- 40
 cherrytree: []
 chromium: []
 eog: []
 epiphany:
-- 162
+- 164
 evince: []
 firefox: []
 five-or-more: []
@@ -20,9 +21,9 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 163
 gnome-42-2204-sdk:
-- 246
+- 249
 gnome-boxes:
-- 10
+- 11
 gnome-calculator: []
 gnome-calendar: []
 gnome-characters: []
@@ -47,13 +48,13 @@ gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor:
-- 34
+- 37
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 138
+- 142
 kisak-turtle/gaming-graphics-core22:
-- 139
+- 143
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
