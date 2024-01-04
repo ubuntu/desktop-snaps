@@ -52,9 +52,9 @@ gnome-text-editor:
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 142
+- 144
 kisak-turtle/gaming-graphics-core22:
-- 143
+- 145
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
@@ -65,5 +65,4 @@ steam: []
 swell-foop: []
 tali: []
 thunderbird: []
-ubuntu-desktop-installer:
-- 1278
+ubuntu-desktop-installer: []
