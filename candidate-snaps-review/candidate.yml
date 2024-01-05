@@ -1,7 +1,8 @@
 cheese:
 - 40
 cherrytree: []
-chromium: []
+chromium:
+- 2724
 eog: []
 epiphany:
 - 164
@@ -21,7 +22,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 163
 gnome-42-2204-sdk:
-- 249
+- 252
 gnome-boxes:
 - 11
 gnome-calculator: []
@@ -51,10 +52,8 @@ gnome-text-editor:
 - 37
 gtk-common-themes: []
 iagno: []
-kisak-fresh/gaming-graphics-core22:
-- 144
-kisak-turtle/gaming-graphics-core22:
-- 145
+kisak-fresh/gaming-graphics-core22: []
+kisak-turtle/gaming-graphics-core22: []
 libreoffice: []
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
