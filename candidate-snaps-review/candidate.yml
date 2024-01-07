@@ -4,7 +4,7 @@ cherrytree: []
 chromium: []
 eog: []
 epiphany:
-- 164
+- 166
 evince: []
 firefox: []
 five-or-more: []
@@ -30,7 +30,7 @@ gnome-chess: []
 gnome-clocks:
 - 465
 gnome-contacts:
-- 206
+- 208
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
@@ -42,7 +42,7 @@ gnome-nibbles: []
 gnome-recipes: []
 gnome-robots: []
 gnome-sudoku:
-- 106
+- 108
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
