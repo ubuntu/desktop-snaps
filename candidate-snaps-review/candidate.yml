@@ -3,8 +3,7 @@ cheese:
 cherrytree: []
 chromium: []
 eog: []
-epiphany:
-- 166
+epiphany: []
 evince: []
 firefox: []
 five-or-more: []
@@ -30,7 +29,7 @@ gnome-chess: []
 gnome-clocks:
 - 465
 gnome-contacts:
-- 208
+- 212
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
