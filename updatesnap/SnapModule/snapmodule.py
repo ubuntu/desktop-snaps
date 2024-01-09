@@ -115,6 +115,14 @@ class ProcessVersion:
                                   "Missing tag version format for "
                                   f"{part_name}.")
             return None  # unknown format
+        # Check for variations in the version format and beta releases.
+        if ('%V' in entry_format['format']):
+            version_part = entry.split("/")[-1]
+            version = pkg_resources.parse_version(version_part)
+            if (("lower-than" in entry_format) and
+                (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
+                return None
+            return version
         major = 0
         minor = 0
         revision = 0
@@ -394,6 +402,9 @@ class Gitlab(GitClass):
         """ Evaluates the URI of a repository and returns an URI
             object with it, but only if it is a Gitlab URI. """
         uri = self._get_uri(repository, 3)
+        ## Check for gitlab instance used by debian
+        if "salsa" in uri.netloc:
+            return uri
         if "gitlab" not in uri.netloc:
             return None
         return uri
@@ -667,7 +678,7 @@ class Snapcraft(ProcessVersion):
 
         if ("format" not in version_format) and (current_tag is not None):
             # if the version format is not specified,
-            # automagically detect it between any of these common formats:
+            # automatically detect it between any of these common formats:
             # * %M.%m.%R
             # * v%M.%m.%R
             # * %M.%m
