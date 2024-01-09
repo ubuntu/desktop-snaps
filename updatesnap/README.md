@@ -126,6 +126,10 @@ The available extra tokens are:
   The %M token specifies where is the Major value; the %m specifies the minor, and
   the %R the revision.
 
+  Format can also be defined in form of "%V" or "prefix/%V". The %V token indicates variation in versions or beta-releases.
+  For example if tags follows format "1.0b2" or "debian/3.22.10+dfsg0-4", then token should be:
+    format: "%V" or format: "debian/%V" respectively 
+
   If the format is "%M.%m.%R", "%M.%m" or "v%M.%m.%R", *update_snap* will autodetect
   it, so in those cases it can be skipped.
 * lower-than: followed by a version number in %M.%m.%R format, specifies that the only

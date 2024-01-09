@@ -116,11 +116,10 @@ class ProcessVersion:
                                   f"{part_name}.")
             return None  # unknown format
         # Check for variations in the version format and beta releases.
-        if ('%V' in entry_format['format']):
-            version_part = entry.split("/")[-1]
-            version = pkg_resources.parse_version(version_part)
+        if '%V' in entry_format['format']:
+            version = pkg_resources.parse_version(entry.split("/")[-1])
             if (("lower-than" in entry_format) and
-                (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
+                    (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
                 return None
             return version
         major = 0
@@ -402,7 +401,7 @@ class Gitlab(GitClass):
         """ Evaluates the URI of a repository and returns an URI
             object with it, but only if it is a Gitlab URI. """
         uri = self._get_uri(repository, 3)
-        ## Check for gitlab instance used by debian
+        # Check for gitlab instance used by debian
         if "salsa" in uri.netloc:
             return uri
         if "gitlab" not in uri.netloc:
