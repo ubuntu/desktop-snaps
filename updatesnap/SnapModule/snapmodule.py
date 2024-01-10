@@ -115,6 +115,15 @@ class ProcessVersion:
                                   "Missing tag version format for "
                                   f"{part_name}.")
             return None  # unknown format
+        # Check for variations in the version format and beta releases.
+        if '%V' in entry_format['format']:
+            if not entry.startswith(entry_format['format'].split('%')[0]):
+                return None
+            version = pkg_resources.parse_version(entry[len(entry_format['format'].split('%')[0]):])
+            if (("lower-than" in entry_format) and
+                    (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
+                return None
+            return version
         major = 0
         minor = 0
         revision = 0
