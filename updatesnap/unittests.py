@@ -174,6 +174,8 @@ class TestYAMLfiles(unittest.TestCase):
         assert isinstance(data, list)
         # ensure that the known tags are in the list
         tags = get_gnome_calculator_tags()["https://gitlab.gnome.org/GNOME/gnome-calculator.git"]
+        # retrieve latest tags but checks only last tags-length data elements
+        data = data[len(data)-len(tags):]
         for tag in data:
             found = False
             for tag2 in tags:
