@@ -403,6 +403,9 @@ class Gitlab(GitClass):
         """ Evaluates the URI of a repository and returns an URI
             object with it, but only if it is a Gitlab URI. """
         uri = self._get_uri(repository, 3)
+        # Check for gitlab instance used by debian
+        if "salsa" in uri.netloc:
+            return uri
         if "gitlab" not in uri.netloc:
             return None
         return uri
