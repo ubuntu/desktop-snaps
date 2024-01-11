@@ -403,7 +403,7 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_version_variation_and_beta_release(self):
         # pylint: disable=protected-access
-        """ Something"""
+        """ tests if a part support version variation and beta-release"""
         obj = ProcessVersion(silent=True)
         obj.set_full_silent()
         data = get_version_variation_and_beta_release()
@@ -830,7 +830,7 @@ def remove_trailing_nls(data):
 
 
 def get_version_variation_and_beta_release():
-    """ Something"""
+    """ returns a list of different types of version-variation and beta release"""
     return [{
         'part_name': 'part1',
         'version': '1.0b2',
