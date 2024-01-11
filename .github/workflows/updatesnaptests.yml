@@ -24,6 +24,7 @@ jobs:
         python3 -m pip install flake8
         python3 -m pip install requests
         python3 -m pip install pyyaml
+        python3 -m pip install python-debian
     - name: Code tests
       env:
         GITHUB_USER: ubuntu
