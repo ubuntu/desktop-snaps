@@ -13,7 +13,8 @@ from typing import Optional
 import requests
 import yaml
 
-import pkg_resources
+import packaging.version
+import debian.debian_support
 
 
 class Colors:
@@ -119,11 +120,22 @@ class ProcessVersion:
         if '%V' in entry_format['format']:
             if not entry.startswith(entry_format['format'].split('%')[0]):
                 return None
-            version = pkg_resources.parse_version(entry[len(entry_format['format'].split('%')[0]):])
-            if (("lower-than" in entry_format) and
-                    (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
-                return None
-            return version
+            try:
+                version = packaging.version.parse(
+                        entry[len(entry_format['format'].split('%')[0]):])
+                if (("lower-than" in entry_format) and
+                        (version >= packaging.version.parse(
+                            str(entry_format["lower-than"])))):
+                    return None
+                return version
+            except packaging.version.InvalidVersion:
+                version = debian.debian_support.Version(
+                    entry[len(entry_format['format'].split('%')[0]):])
+                if (("lower-than" in entry_format) and
+                        (version >= debian.debian_support.Version(
+                            str(entry_format["lower-than"])))):
+                    return None
+                return version
         major = 0
         minor = 0
         revision = 0
@@ -147,12 +159,12 @@ class ProcessVersion:
             if not entry.startswith(part):
                 return None
             entry = entry[len(part):]
-        version = pkg_resources.parse_version(f"{major}.{minor}.{revision}")
+        version = packaging.version.parse(f"{major}.{minor}.{revision}")
 
         if "ignore-version" in entry_format:
             to_ignore = entry_format["ignore-version"]
             if isinstance(to_ignore, str):
-                if version == pkg_resources.parse_version(to_ignore):
+                if version == packaging.version.parse(to_ignore):
                     return None
             elif isinstance(to_ignore, list):
                 for ignore_version in to_ignore:
@@ -161,7 +173,7 @@ class ProcessVersion:
                                    "contains an element that is not a string.")
                         self._print_error(part_name, self._colors.critical, message)
                         raise ValueError(message)
-                    if version == pkg_resources.parse_version(ignore_version):
+                    if version == packaging.version.parse(ignore_version):
                         return None
             else:
                 message = (f"The 'ignore-version' entry in {part_name} is neither a string, "
@@ -170,7 +182,7 @@ class ProcessVersion:
                 raise ValueError(message)
 
         if (("lower-than" in entry_format) and
-                (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
+                (version >= packaging.version.parse(str(entry_format["lower-than"])))):
             return None
         if self._checkopt("ignore-odd-minor", entry_format) and ((minor % 2) == 1):
             return None
