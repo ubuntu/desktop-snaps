@@ -403,7 +403,7 @@ class TestYAMLfiles(unittest.TestCase):
 
     def test_version_variation_and_beta_release(self):
         # pylint: disable=protected-access
-        """ tests if a part support version variation and beta-release"""
+        """ tests if a part support valid version variation and beta-release"""
         obj = ProcessVersion(silent=True)
         obj.set_full_silent()
         data = get_version_variation_and_beta_release()
@@ -411,6 +411,17 @@ class TestYAMLfiles(unittest.TestCase):
             version = obj._get_version(
                 part['part_name'], part['version'], part['entry_format'], False)
             assert version is not None
+
+    def test_invalid_version_variation_and_beta_release(self):
+        # pylint: disable=protected-access
+        """ tests if a part filter out invalid version variation and beta-release"""
+        obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
+        data = get_invalid_version_variation_and_beta_release()
+        for part in data:
+            version = obj._get_version(
+                part['part_name'], part['version'], part['entry_format'], False)
+            assert version is None
 
 
 class GitPose:
@@ -830,7 +841,7 @@ def remove_trailing_nls(data):
 
 
 def get_version_variation_and_beta_release():
-    """ returns a list of different types of version-variation and beta release"""
+    """ returns a list of different types of valid version-variation and beta release"""
     return [{
         'part_name': 'part1',
         'version': '1.0b2',
@@ -875,6 +886,27 @@ def get_version_variation_and_beta_release():
         'part_name': 'part10',
         'version': '12.0~beta2',
         'entry_format': {'format': '%V'}
+    }]
+
+
+def get_invalid_version_variation_and_beta_release():
+    """ returns a list of different types of invalid version-variation and beta release"""
+    return [{
+        'part_name': 'part1',
+        'version': '1.2.3',
+        'entry_format': {'format': 'debian%V'}
+    }, {
+        'part_name': 'part2',
+        'version': '20240109',
+        'entry_format': {'format': 'debian%V'}
+    }, {
+        'part_name': 'part3',
+        'version': 'debian/3.22.10+dfsg0-4',
+        'entry_format': {'format': 'upstream/%V'}
+    }, {
+        'part_name': 'part4',
+        'version': '3.1a2b3',
+        'entry_format': {'format': 'debian%V'}
     }]
 
 
