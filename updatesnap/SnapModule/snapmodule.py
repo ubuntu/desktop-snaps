@@ -14,6 +14,7 @@ import requests
 import yaml
 
 import pkg_resources
+import debian.debian_support
 
 
 class Colors:
@@ -119,11 +120,22 @@ class ProcessVersion:
         if '%V' in entry_format['format']:
             if not entry.startswith(entry_format['format'].split('%')[0]):
                 return None
-            version = pkg_resources.parse_version(entry[len(entry_format['format'].split('%')[0]):])
-            if (("lower-than" in entry_format) and
-                    (version >= pkg_resources.parse_version(str(entry_format["lower-than"])))):
-                return None
-            return version
+            try:
+                version = pkg_resources.parse_version(
+                        entry[len(entry_format['format'].split('%')[0]):])
+                if (("lower-than" in entry_format) and
+                        (version >= pkg_resources.parse_version(
+                            str(entry_format["lower-than"])))):
+                    return None
+                return version
+            except pkg_resources.extern.packaging.version.InvalidVersion:
+                version = debian.debian_support.Version(
+                    entry[len(entry_format['format'].split('%')[0]):])
+                if (("lower-than" in entry_format) and
+                        (version >= debian.debian_support.Version(
+                            str(entry_format["lower-than"])))):
+                    return None
+                return version
         major = 0
         minor = 0
         revision = 0
