@@ -401,6 +401,17 @@ class TestYAMLfiles(unittest.TestCase):
         assert data[0] is None
         assert data[1] is None
 
+    def test_version_variation_and_beta_release(self):
+        # pylint: disable=protected-access
+        """ Something"""
+        obj = ProcessVersion(silent=True)
+        obj.set_full_silent()
+        data = get_version_variation_and_beta_release()
+        for part in data:
+            version = obj._get_version(
+                part['part_name'], part['version'], part['entry_format'], False)
+            assert version is not None
+
 
 class GitPose:
     """ Helper class. It emulates a GitClass class, to allow to test
@@ -816,6 +827,55 @@ def remove_trailing_nls(data):
     while data[-1] == '\n':
         data = data[:-1]
     return data
+
+
+def get_version_variation_and_beta_release():
+    """ Something"""
+    return [{
+        'part_name': 'part1',
+        'version': '1.0b2',
+        'entry_format': {'format': '%V'}
+    }, {
+        'part_name': 'part2',
+        'version': '20240109',
+        'entry_format': {'format': '%V'}
+    }, {
+        'part_name': 'part3',
+        'version': 'debian/3.22.10+dfsg0-4',
+        'entry_format': {'format': 'debian/%V'}
+    }, {
+        'part_name': 'part4',
+        'version': 'debian/0.3-7',
+        'entry_format': {'format': 'debian/%V'}
+    }, {
+        'part_name': 'part5',
+        'version': 'debian/0.8.9-10',
+        'entry_format': {'format': 'debian/%V'}
+    }, {
+        'part_name': 'part6',
+        'version': 'debian/27-11',
+        'entry_format': {'format': 'debian/%V'}
+    }, {
+        'part_name': 'part7',
+        'version': 'debian/20200505dfsg0-2',
+        'entry_format': {'format': 'debian/%V'}
+    }, {
+        'part_name': 'part8',
+        'version': 'debian/1.4+repack0-6',
+        'entry_format': {'format': 'debian/%V'}
+    }, {
+        'part_name': 'part9',
+        'version': 'v6',
+        'entry_format': {'format': 'v%V'}
+    }, {
+        'part_name': 'part10',
+        'version': '3.1a2b3',
+        'entry_format': {'format': '%V'}
+    }, {
+        'part_name': 'part10',
+        'version': '12.0~beta2',
+        'entry_format': {'format': '%V'}
+    }]
 
 
 unittest.main()
