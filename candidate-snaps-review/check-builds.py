@@ -73,8 +73,16 @@ for snapline in snaps.normalsnaps + snaps.specialsnaps:
     if(snapline[1] != None):
         response = get_builds(snapline[1].replace("launchpad.net", "api.launchpad.net/1.0")+"/builds")
         for arch, result in response.items():
-            issue = check_for_issues(snapline[0], arch)
+            # if the snap entry is tracking a specific channel, prepend it
+            if snapline[8]:
+                issue = check_for_issues(snapline[8]+"/"+snapline[0], arch)
+            else:
+                issue = check_for_issues(snapline[0], arch)
             if issue != 0 and result:
                 close_issue(issue)
             elif issue == 0 and not result:
-                open_issue(snapline[0], arch, snapline[1])
+                # if the snap entry is tracking a specific channel, prepend it
+                if snapline[8]:
+                    open_issue(snapline[8]+"/"+snapline[0], arch, snapline[1])
+                else:
+                    open_issue(snapline[0], arch, snapline[1])
