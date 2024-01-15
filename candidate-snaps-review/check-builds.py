@@ -70,19 +70,22 @@ def close_issue(n):
       
 # iterate over the list of snaps
 for snapline in snaps.normalsnaps + snaps.specialsnaps:
-    if(snapline[1] != None):
-        response = get_builds(snapline[1].replace("launchpad.net", "api.launchpad.net/1.0")+"/builds")
+    name = snapline[0]
+    url = snapline[1]
+    track = snapline[8]
+    if(url != None):
+        response = get_builds(url.replace("launchpad.net", "api.launchpad.net/1.0")+"/builds")
         for arch, result in response.items():
             # if the snap entry is tracking a specific channel, prepend it
-            if snapline[8]:
-                issue = check_for_issues(snapline[8]+"/"+snapline[0], arch)
+            if track:
+                issue = check_for_issues(track+"/"+name, arch)
             else:
-                issue = check_for_issues(snapline[0], arch)
+                issue = check_for_issues(name, arch)
             if issue != 0 and result:
                 close_issue(issue)
             elif issue == 0 and not result:
                 # if the snap entry is tracking a specific channel, prepend it
-                if snapline[8]:
-                    open_issue(snapline[8]+"/"+snapline[0], arch, snapline[1])
+                if track:
+                    open_issue(track+"/"+name, arch, url)
                 else:
-                    open_issue(snapline[0], arch, snapline[1])
+                    open_issue(name, arch, url)
