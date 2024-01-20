@@ -1,7 +1,6 @@
 cheese: []
 cherrytree: []
-chromium:
-- 2734
+chromium: []
 eog: []
 epiphany:
 - 171
@@ -62,6 +61,7 @@ snap-store:
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 432
 ubuntu-desktop-installer:
 - 1282
