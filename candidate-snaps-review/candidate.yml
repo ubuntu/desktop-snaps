@@ -3,10 +3,9 @@ cherrytree: []
 chromium: []
 eog: []
 epiphany:
-- 171
+- 173
 evince: []
-firefox:
-- 3687
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -44,7 +43,7 @@ gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor:
-- 39
+- 40
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22: []
