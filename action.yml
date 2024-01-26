@@ -41,6 +41,12 @@ runs:
         ref: stable
         path: desktop-snaps
 
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install gitpython
+      shell: bash
+
 # Step to run the script that will generate a new output_file with an updated tag, if one is available. If there was a change, then we move this to the snapcraft.yaml and note that there was a change. 
     - name: run updatesnapyaml
       id: updatesnapyaml
