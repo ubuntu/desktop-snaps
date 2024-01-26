@@ -37,6 +37,14 @@ For example, to run it locally on another repo (gnome-calculator in this case) t
 ./updatesnap/updatesnapyaml.py --github-user GITHUB_USER --github-token GITHUB_TOKEN https://github.com/ubuntu/gnome-calculator.git
 ```
 
+This tool can also be used to automate version updates of snap based on a specified version schema.
+When the `--version-schema` (optional) flag is provided as input, the tool will automatically increment the version according to the specified schema.
+
+To include this feature as a github worflow you need to pass an optional input in `with` command.
+
+```
+./updatesnap/updatesnapyaml.py --github-user GITHUB_USER --github-token GITHUB_TOKEN --version-schema VERSION_SCHEMA https://github.com/ubuntu/gnome-calculator.git
+```
 ### GitHub action
 This action should be utilized by other repos' workflows. The action checks out this repository to use updatesnapyaml.py and replaces the old snapcraft.yaml with the new one.
 
@@ -62,4 +70,28 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: ${{ github.repository }}
+```
+
+For example, to use snap version automation
+```
+name: Push new tag update to stable branch
+
+on:
+  schedule:
+    # Daily for now
+    - cron: '9 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-snapcraft-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+      - name: Run desktop-snaps action  
+        uses: ubuntu/desktop-snaps@stable
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ github.repository }}
+          version-schema: '^debian/(\d+\.\d+\.\d+)'
 ```
