@@ -662,7 +662,8 @@ class Snapcraft(ProcessVersion):
             "use_tag": False,
             "missing_format": False,
             "updates": [],
-            "version_format": {}
+            "version_format": {},
+            "source_url": None,
         }
 
         if self._config is None:
@@ -705,6 +706,7 @@ class Snapcraft(ProcessVersion):
         if "format" not in version_format:
             part_data['missing_format'] = True
         source = data['source']
+        part_data["source_url"] = source
 
         if ((not source.startswith('http://')) and
             (not source.startswith('https://')) and

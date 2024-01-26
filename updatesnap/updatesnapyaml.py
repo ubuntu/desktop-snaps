@@ -4,10 +4,9 @@
 
 import sys
 import argparse
-from SnapModule.snapmodule import Snapcraft
+from SnapVersionModule.snap_version_module import ExtendedSnapcraft
+from SnapVersionModule.snap_version_module import ExtendedManageYAML, is_version_update
 from SnapModule.snapmodule import Github
-from SnapModule.snapmodule import ManageYAML
-
 UPDATE_BRANCH = 'update_versions'
 
 
@@ -66,6 +65,8 @@ def main():
                         help='User name for accesing Github projects.')
     parser.add_argument('--github-token', action='store', default=None,
                         help='Access token for accesing Github projects.')
+    parser.add_argument('--version-schema', action='store', default=None,
+                        help='Version schema of snapping repository')
     parser.add_argument('--verbose', action='store_true', default=False)
     parser.add_argument('project', default='.', help='The project URI')
     arguments = parser.parse_args(sys.argv[1:])
@@ -84,9 +85,9 @@ def main():
         sys.exit(-1)
     contents = data.decode('utf-8')
 
-    manager_yaml = ManageYAML(contents)
+    manager_yaml = ExtendedManageYAML(contents)
 
-    snap = Snapcraft(not arguments.verbose)
+    snap = ExtendedSnapcraft(not arguments.verbose)
     snap.load_external_data(contents)
     if arguments.github_user:
         snap.set_secret('github', 'user', arguments.github_user)
@@ -115,7 +116,7 @@ def main():
         version_data['data'] = f"source-tag: '{part['updates'][0]['name']}'"
         has_update = True
 
-    if has_update:
+    if (is_version_update(snap, manager_yaml, arguments) or has_update):
         with open('output_file', 'w', encoding="utf8") as output_file:
             output_file.write(manager_yaml.get_yaml())
     else:
