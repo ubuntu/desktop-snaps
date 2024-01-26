@@ -65,7 +65,7 @@ def main():
                         help='User name for accesing Github projects.')
     parser.add_argument('--github-token', action='store', default=None,
                         help='Access token for accesing Github projects.')
-    parser.add_argument('--version-schema', action='store', default=None,
+    parser.add_argument('--version-schema', action='store', default='None',
                         help='Version schema of snapping repository')
     parser.add_argument('--verbose', action='store_true', default=False)
     parser.add_argument('project', default='.', help='The project URI')
