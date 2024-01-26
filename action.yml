@@ -37,8 +37,8 @@ runs:
     - name: checkout desktop-snaps repo
       uses: actions/checkout@v3
       with:
-        repository: 'Rudra-IITM/desktop-snaps'
-        ref: test1
+        repository: 'ubuntu/desktop-snaps'
+        ref: stable
         path: desktop-snaps
 
 # Step to run the script that will generate a new output_file with an updated tag, if one is available. If there was a change, then we move this to the snapcraft.yaml and note that there was a change. 
@@ -62,7 +62,7 @@ runs:
       env:
         GITHUB_USER: ubuntu
         GITHUB_TOKEN: ${{ inputs.token }}
-        VERSION_SCHEMA: ${{ inputs.version-schema} }
+        VERSION_SCHEMA: ${{ inputs.version-schema }}
       shell: bash
 
 # Step to remove the desktop-snaps folder so that when we commit changes in another repo, the desktop-snaps folder is not committed there.
@@ -73,7 +73,7 @@ runs:
 
 # If there was a change detected, then let's commit the changes
     - name: Commit files
-      if: ${{ env.IS_CHANGE or env.IS_VERSION_CHANGE}}
+      if: ${{ env.IS_CHANGE || env.IS_VERSION_CHANGE}}
       run: |
         set -x
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -90,7 +90,7 @@ runs:
 
 # If there was a change detected, then let's push the changes
     - name: Push changes
-      if: ${{ env.IS_CHANGE or env.IS_VERSION_CHANGE }}
+      if: ${{ env.IS_CHANGE || env.IS_VERSION_CHANGE }}
       uses: ad-m/github-push-action@master
       env:
         GITHUB_USER: ubuntu
