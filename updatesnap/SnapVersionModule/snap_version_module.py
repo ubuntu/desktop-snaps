@@ -121,7 +121,7 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
     if not match:
         print("Version schema does not match with snapping repository version")
         return None
-    upstreamversion = match.group(1)
+    upstreamversion = match.group(1).replace('_', '.')
 
     # Determine package release number
     packagerelease = int(
