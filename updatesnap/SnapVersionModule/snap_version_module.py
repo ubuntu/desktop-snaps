@@ -8,6 +8,7 @@ import os
 import shutil
 import re
 from datetime import datetime
+import logging
 import requests
 import git
 
@@ -37,7 +38,7 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
         try:
             git.Repo.clone_from(git_repo_url, repo_dir)
         except git.exc.GitError:
-            print('Some error occur in cloning snapping repo')
+            logging.warning('Some error occur in cloning snapping repo')
             os.chdir('..')
             return None
 
@@ -63,7 +64,7 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
     shutil.rmtree(repo_dir)
     match = re.match(version_schema, upstreamversion)
     if not match:
-        print("Version schema does not match with snapping repository version")
+        logging.warning("Version schema does not match with snapping repository version")
         return None
     upstreamversion = match.group(1).replace('_', '.')
 
@@ -87,19 +88,19 @@ def is_version_update(snap, manager_yaml, arguments):
         if metadata['version'] != snap_version:
             snap_version_data = manager_yaml.get_part_metadata('version')
             if snap_version_data is not None:
-                print(f"Updating snap version from {metadata['version']} to {snap_version}")
+                logging.info("Updating snap grade from %s to %s", metadata['grade'], snap_grade)
                 snap_version_data['data'] = f"version: '{snap_version}'"
                 has_version_update = True
             else:
-                print("Version is not defined in metadata")
-        if metadata['grade'] != snap_grade:
+                logging.warning("Version is not defined in metadata")
+        if (metadata['grade'] and metadata['grade'] != snap_grade):
             snap_grade_data = manager_yaml.get_part_metadata('grade')
             if snap_grade_data is not None:
-                print(f"Updating snap grade from {metadata['grade']} to {snap_grade}")
+                logging.info("Updating snap grade from %s to %s", metadata['grade'], snap_grade)
                 snap_grade_data['data'] = f"grade: '{snap_grade}'"
                 has_version_update = True
             else:
-                print("Grade is not defined in metadata")
+                logging.warning("Grade is not defined in metadata")
     if has_version_update:
         with open('version_file', 'w', encoding="utf8") as version_file:
             version_file.write(f"{snap_version}")
