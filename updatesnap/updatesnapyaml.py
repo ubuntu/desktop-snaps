@@ -4,9 +4,9 @@
 
 import sys
 import argparse
-from SnapVersionModule.snap_version_module import ExtendedSnapcraft
-from SnapVersionModule.snap_version_module import ExtendedManageYAML, is_version_update
-from SnapModule.snapmodule import Github
+from SnapModule.snapmodule import Snapcraft, Github
+from SnapModule.manageYAML import ManageYAML
+from SnapVersionModule.snap_version_module import is_version_update
 UPDATE_BRANCH = 'update_versions'
 
 
@@ -85,9 +85,9 @@ def main():
         sys.exit(-1)
     contents = data.decode('utf-8')
 
-    manager_yaml = ExtendedManageYAML(contents)
+    manager_yaml = ManageYAML(contents)
 
-    snap = ExtendedSnapcraft(not arguments.verbose)
+    snap = Snapcraft(not arguments.verbose)
     snap.load_external_data(contents)
     if arguments.github_user:
         snap.set_secret('github', 'user', arguments.github_user)

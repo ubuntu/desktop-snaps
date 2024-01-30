@@ -1,71 +1,15 @@
-""" Extends ManageYAML and Snapcraft from snpamodule
-    and introduces two functions process_snap_version_data
-    and is_version_update to support auto snap versioning"""
+""" Processes the snap version and in the event of a new release of the primary
+    component, the version number is incremented accordingly, with the package
+    release number being reset to 1. Furthermore, any other modifications
+    to the package result in an increment of the package release number by 1 """
 
 import subprocess
 import os
 import shutil
 import re
 from datetime import datetime
-from typing import Optional
 import requests
 import git
-from SnapModule.snapmodule import ManageYAML, Snapcraft
-
-
-class ExtendedSnapcraft(Snapcraft):
-    """ Extends Snapcraft to introduces new function process_metadata """
-    def process_metadata(self) -> Optional[dict]:
-        """ Returns metadata from Snapcraft.yaml file """
-        metadata = {
-            "name": None,
-            "version": None,
-            "adopt-info": None,
-            "grade": None,
-            "upstream-version": None,
-            "upstream-url": None,
-        }
-
-        if self._config is None:
-            return None
-        data = self._config
-
-        if 'name' in data:
-            metadata['name'] = data['name']
-
-        if 'version' in data:
-            metadata['version'] = data['version']
-        if 'adopt-info' in data:
-            metadata['adopt-info'] = data['adopt-info']
-            upstream_data = self.process_part(data['adopt-info'])
-            metadata['upstream-url'] = upstream_data['source_url']
-            if len(upstream_data['updates']) != 0:
-                metadata['upstream-version'] = upstream_data['updates'][0]
-
-        if 'grade' in data:
-            metadata['grade'] = data['grade']
-        return metadata
-
-
-class ExtendedManageYAML(ManageYAML):
-    """ Extends ManageYAML to introduce functions which process metadata """
-    def get_metadata(self) -> Optional[dict]:
-        """ Returns metadata in form of list """
-        data = []
-        for entry in self._tree:
-            if entry['data'] == 'part':
-                continue
-            data.append(entry)
-        return data
-
-    def get_part_metadata(self, element: str) -> Optional[dict]:
-        """ Returns specific element of the metadata"""
-        metadata = self.get_metadata()
-        if metadata:
-            for entry in metadata:
-                if entry['data'].startswith(element):
-                    return entry
-        return None
 
 
 def process_snap_version_data(git_repo_url, snap_name, version_schema):

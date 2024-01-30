@@ -8,7 +8,7 @@ import datetime
 import sys
 import yaml
 from SnapModule.snapmodule import Snapcraft
-from SnapModule.snapmodule import ManageYAML
+from SnapModule.manageYAML import ManageYAML
 from SnapModule.snapmodule import ProcessVersion
 from SnapModule.snapmodule import Github
 from SnapModule.snapmodule import Gitlab
