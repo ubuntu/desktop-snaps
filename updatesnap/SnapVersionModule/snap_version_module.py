@@ -32,7 +32,6 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
         snapbuilddate = int(snapbuilddate.timestamp())
 
     # Time stamp of the last GIT commit of the snapping repository
-    os.chdir('..')
     git_log_output = subprocess.run(['git', 'log', '-1', '--date=unix'],
                                     stdout=subprocess.PIPE, text=True, check=True)
     date_string = next(line for line in git_log_output.stdout.split('\n')
@@ -41,7 +40,6 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
 
     # Convert the date string to a Unix timestamp
     gitcommitdate = int(date_string)
-    os.chdir('desktop-snaps/')
 
     prevversion = max(
         next((channel["version"] for channel in snap_info["channel-map"]
