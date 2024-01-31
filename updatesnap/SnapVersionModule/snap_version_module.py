@@ -31,22 +31,17 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
                                                .replace("Z", "+00:00"))
         snapbuilddate = int(snapbuilddate.timestamp())
 
-    # Clone the repository if it doesn't exist
-    repo_dir = os.path.basename(git_repo_url.rstrip('.git'))
-    if not os.path.exists(repo_dir):
-        try:
-            git.Repo.clone_from(git_repo_url, repo_dir)
-        except git.exc.GitError:
-            logging.warning('Some error occur in cloning snapping repo')
-            os.chdir('..')
-            return None
-
-    os.chdir(repo_dir)
-
     # Time stamp of the last GIT commit of the snapping repository
-    repo = git.Repo('.')
-    last_commit = repo.head.commit
-    gitcommitdate = int(last_commit.authored_date)
+    os.chdir('..')
+    git_log_output = subprocess.run(['git', 'log', '-1', '--date=unix'],
+                                    stdout=subprocess.PIPE, text=True, check=True)
+    date_string = next(line for line in git_log_output.stdout.split('\n')
+                       if line.startswith('Date:'))
+    date_string = date_string.split(':', 1)[1].strip()
+
+    # Convert the date string to a Unix timestamp
+    gitcommitdate = int(date_string)
+    os.chdir('desktop-snaps/')
 
     prevversion = max(
         next((channel["version"] for channel in snap_info["channel-map"]
@@ -54,6 +49,17 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
         next((channel["version"] for channel in snap_info["channel-map"]
               if channel["channel"]["name"] == "edge"))
     )
+    # Clone the leading upstream repository if it doesn't exist
+    repo_dir = os.path.basename(git_repo_url.rstrip('.git'))
+    if not os.path.exists(repo_dir):
+        try:
+            git.Repo.clone_from(git_repo_url, repo_dir)
+        except git.exc.GitError:
+            logging.warning('Some error occur in cloning leading upstream repo')
+            os.chdir('..')
+            return None
+
+    os.chdir(repo_dir)
 
     upstreamversion = subprocess.run(["git", "describe", "--tags", "--always"],
                                      stdout=subprocess.PIPE,
