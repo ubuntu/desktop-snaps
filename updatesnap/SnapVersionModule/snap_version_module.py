@@ -17,7 +17,6 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
     """ Returns processed snap version and grade """
 
     # Time stamp of Snap build in Snap Store
-    # snap_info_url = f"https://api.snapcraft.io/v2/snaps/info/{snap_name}"
     response = requests.get(f"https://api.snapcraft.io/v2/snaps/info/{snap_name}",
                             headers={"Snap-Device-Series": "16", }, timeout=20)
     snap_info = response.json()
@@ -49,13 +48,12 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
     last_commit = repo.head.commit
     gitcommitdate = int(last_commit.authored_date)
 
-    # # Previous stable and development version
-    # prevstable = snap_info["channel-map"][0][
-    #     "version"]  # Assuming "stable" is the first channel in the response
-    # prevdevel = snap_info["channel-map"][1][
-    #     "version"]  # Assuming "edge" is the second channel in the response
-    prevversion = max(snap_info["channel-map"][0]["version"],
-                      snap_info["channel-map"][1]["version"])
+    prevversion = max(
+        next((channel["version"] for channel in snap_info["channel-map"]
+              if channel["channel"]["name"] == "stable")),
+        next((channel["version"] for channel in snap_info["channel-map"]
+              if channel["channel"]["name"] == "edge"))
+    )
 
     upstreamversion = subprocess.run(["git", "describe", "--tags", "--always"],
                                      stdout=subprocess.PIPE,
@@ -68,11 +66,14 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
         return None
     upstreamversion = match.group(1).replace('_', '.')
 
+    if upstreamversion != prevversion:
+        return f"{upstreamversion}-1"
     # Determine package release number
     packagerelease = int(
-        prevversion.split('-')[-1]) + 1 if gitcommitdate > snapbuilddate else 1
+        prevversion.split('-')[-1]) + 1 if gitcommitdate > snapbuilddate \
+        else prevversion.split('-')[-1]
 
-    return f"{upstreamversion}-{packagerelease}", "stable"
+    return f"{upstreamversion}-{packagerelease}"
 
 
 def is_version_update(snap, manager_yaml, arguments):
@@ -83,24 +84,18 @@ def is_version_update(snap, manager_yaml, arguments):
     metadata = snap.process_metadata()
     if process_snap_version_data(metadata['upstream-url'],
                                  metadata['name'], arguments.version_schema) is not None:
-        snap_version, snap_grade = process_snap_version_data(
+        snap_version = process_snap_version_data(
             metadata['upstream-url'], metadata['name'], arguments.version_schema)
         if metadata['version'] != snap_version:
             snap_version_data = manager_yaml.get_part_metadata('version')
             if snap_version_data is not None:
-                logging.info("Updating snap grade from %s to %s", metadata['grade'], snap_grade)
+                logging.info("Updating snap version from %s to %s",
+                             metadata['version'], snap_version)
                 snap_version_data['data'] = f"version: '{snap_version}'"
                 has_version_update = True
             else:
                 logging.warning("Version is not defined in metadata")
-        if (metadata['grade'] and metadata['grade'] != snap_grade):
-            snap_grade_data = manager_yaml.get_part_metadata('grade')
-            if snap_grade_data is not None:
-                logging.info("Updating snap grade from %s to %s", metadata['grade'], snap_grade)
-                snap_grade_data['data'] = f"grade: '{snap_grade}'"
-                has_version_update = True
-            else:
-                logging.warning("Grade is not defined in metadata")
+
     if has_version_update:
         with open('version_file', 'w', encoding="utf8") as version_file:
             version_file.write(f"{snap_version}")
