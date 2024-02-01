@@ -917,7 +917,7 @@ class Snapcraft(ProcessVersion):
             upstream_data = self.process_part(data['adopt-info'])
             metadata['upstream-url'] = upstream_data['source_url']
             if len(upstream_data['updates']) != 0:
-                metadata['upstream-version'] = upstream_data['updates'][0]
+                metadata['upstream-version'] = upstream_data['updates'][0]['name']
             else:
                 metadata['upstream-version'] = upstream_data['source_tag']
 
