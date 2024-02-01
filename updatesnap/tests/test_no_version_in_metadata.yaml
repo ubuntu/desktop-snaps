@@ -1,0 +1,41 @@
+name: hplip-printer-app
+base: core22
+summary: HPLIP Printer Application
+description: |
+  The HPLIP Printer Application is a PAPPL (Printer Application
+  Framework) based Printer Application to support printers using the
+  printer driver of HPLIP. Loading the proprietary plugin from HP is
+  supported, support for scanning will be added later.
+
+confinement: strict
+adopt-info: hplip
+
+# Only build on the architectures supported
+architectures:
+  - build-on: amd64
+  - build-on: arm64
+  - build-on: armhf
+
+environment:
+  MIBDIRS: /snap/hplip-printer-app/current/usr/share/snmp/mibs:/snap/hplip-printer-app/current/usr/share/snmp/mibs/iana:/snap/hplip-printer-app/current/usr/share/snmp/mibs/ietf
+
+apps:
+  hplip-printer-app-server:
+    command: scripts/run-hplip-printer-app-server
+    daemon: simple
+    stop-timeout: 70s
+    plugs:
+      [avahi-control, home, network, network-bind, raw-usb, hardware-observe]
+  hplip-printer-app:
+    command: scripts/run-hplip-printer-app
+    plugs: [avahi-control, home, network, network-bind, raw-usb]
+
+parts:
+  hplip:
+    source: https://salsa.debian.org/printing-team/hplip.v2.git
+    source-type: git
+    source-tag: "debian/3.22.10+dfsg0-4"
+    source-depth: 1
+# ext:updatesnap
+#   version-format:
+#     format: 'debian/%V'

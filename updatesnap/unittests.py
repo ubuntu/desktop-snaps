@@ -6,12 +6,16 @@ import unittest
 import os
 import datetime
 import sys
+import logging
+from argparse import Namespace
 import yaml
 from SnapModule.snapmodule import Snapcraft
-from SnapModule.snapmodule import ManageYAML
+from SnapModule.manageYAML import ManageYAML
 from SnapModule.snapmodule import ProcessVersion
 from SnapModule.snapmodule import Github
 from SnapModule.snapmodule import Gitlab
+from SnapVersionModule import snap_version_module
+from SnapVersionModule.snap_version_module import is_version_update
 
 
 class TestYAMLfiles(unittest.TestCase):
@@ -422,6 +426,53 @@ class TestYAMLfiles(unittest.TestCase):
             version = obj._get_version(
                 part['part_name'], part['version'], part['entry_format'], False)
             assert version is None
+
+    def test_snap_version_automation(self):
+        """ tests if snap version automation working correctly"""
+        data = self._base_load_test_file("test_snap_version_automation.yaml")
+        yaml_obj = ManageYAML(data)
+        snap, _, _, _ = self._load_test_file("test_snap_version_automation.yaml",
+                                             None)
+        args = Namespace(
+            version_schema=r'^gutenprint-(\d+_\d+_\d+)',
+        )
+        logging.basicConfig(level=logging.ERROR)
+        test = is_version_update(snap, yaml_obj, args)
+        os.remove('version_file')
+        assert test is not None
+
+    def test_no_version_in_metadata(self):
+        """ tests if snap version automation fails
+             if version is not present in metadata"""
+        data = self._base_load_test_file("test_no_version_in_metadata.yaml")
+        yaml_obj = ManageYAML(data)
+        snap, _, _, _ = self._load_test_file("test_no_version_in_metadata.yaml",
+                                             None)
+        args = Namespace(
+            version_schema=r'^debian/(\d+\.\d+\.\d+)',
+        )
+        logging.basicConfig(level=logging.ERROR)
+        test = is_version_update(snap, yaml_obj, args)
+        assert not test
+
+    def test_correct_snap_version(self):
+        """ tests if snap version number is correct or not"""
+        contents = self._base_load_test_file("test_snap_version_automation.yaml")
+        manager_yaml = ManageYAML(contents)
+        snap, _, _, _ = self._load_test_file("test_snap_version_automation.yaml",
+                                             None)
+        args = Namespace(
+            version_schema=r'^gutenprint-(\d+_\d+_\d+)',
+        )
+
+        def mock_process_version_data(_git_repo_url, _snap_name, _version_schema):
+            return "5.3.4-1"
+
+        temp = snap_version_module.process_snap_version_data
+        snap_version_module.process_snap_version_data = mock_process_version_data
+        test = is_version_update(snap, manager_yaml, args)
+        snap_version_module.process_snap_version_data = temp
+        assert not test
 
 
 class GitPose:

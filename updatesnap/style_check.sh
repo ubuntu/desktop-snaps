@@ -14,3 +14,4 @@ test_style updatesnap.py
 test_style updatesnapyaml.py
 test_style SnapModule/snapmodule.py
 test_style unittests.py
+test_style SnapVersionModule/snap_version_module.py

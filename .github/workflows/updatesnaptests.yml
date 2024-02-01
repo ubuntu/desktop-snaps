@@ -26,6 +26,7 @@ jobs:
         python3 -m pip install pyyaml
         python3 -m pip install python-debian
         python3 -m pip install packaging
+        python3 -m pip install gitpython
     - name: Code tests
       env:
         GITHUB_USER: ubuntu
