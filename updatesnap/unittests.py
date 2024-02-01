@@ -7,6 +7,7 @@ import os
 import datetime
 import sys
 import logging
+import copy
 from argparse import Namespace
 import yaml
 from SnapModule.snapmodule import Snapcraft
@@ -14,6 +15,7 @@ from SnapModule.manageYAML import ManageYAML
 from SnapModule.snapmodule import ProcessVersion
 from SnapModule.snapmodule import Github
 from SnapModule.snapmodule import Gitlab
+from SnapVersionModule import snap_version_module
 from SnapVersionModule.snap_version_module import is_version_update
 
 
@@ -433,10 +435,11 @@ class TestYAMLfiles(unittest.TestCase):
         snap, _, _, _ = self._load_test_file("test_snap_version_automation.yaml",
                                              None)
         args = Namespace(
-            version_schema=r'^debian/(\d+\.\d+\.\d+)',
+            version_schema=r'^gutenprint-(\d+_\d+_\d+)',
         )
         logging.basicConfig(level=logging.ERROR)
         test = is_version_update(snap, yaml_obj, args)
+        os.remove('version_file')
         assert test is not None
 
     def test_no_version_in_metadata(self):
@@ -451,6 +454,25 @@ class TestYAMLfiles(unittest.TestCase):
         )
         logging.basicConfig(level=logging.ERROR)
         test = is_version_update(snap, yaml_obj, args)
+        assert not test
+
+    def test_correct_snap_version(self):
+        """ tests if snap version number is correct or not"""
+        contents = self._base_load_test_file("test_snap_version_automation.yaml")
+        manager_yaml = ManageYAML(contents)
+        snap, _, _, _ = self._load_test_file("test_snap_version_automation.yaml",
+                                             None)
+        args = Namespace(
+            version_schema=r'^gutenprint-(\d+_\d+_\d+)',
+        )
+
+        def mock_process_version_data(_git_repo_url, _snap_name, _version_schema):
+            return "5.3.4-1"
+
+        temp = copy.copy(snap_version_module.process_snap_version_data)
+        snap_version_module.process_snap_version_data = mock_process_version_data
+        test = is_version_update(snap, manager_yaml, args)
+        snap_version_module.process_snap_version_data = temp
         assert not test
 
 
