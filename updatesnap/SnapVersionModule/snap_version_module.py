@@ -70,7 +70,7 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
         return None
     upstreamversion = match.group(1).replace('_', '.')
 
-    if upstreamversion != prevversion:
+    if upstreamversion != prevversion.split('-')[0]:
         return f"{upstreamversion}-1"
     # Determine package release number
     packagerelease = int(
