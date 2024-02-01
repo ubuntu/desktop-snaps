@@ -7,7 +7,6 @@ import os
 import datetime
 import sys
 import logging
-import copy
 from argparse import Namespace
 import yaml
 from SnapModule.snapmodule import Snapcraft
@@ -469,7 +468,7 @@ class TestYAMLfiles(unittest.TestCase):
         def mock_process_version_data(_git_repo_url, _snap_name, _version_schema):
             return "5.3.4-1"
 
-        temp = copy.copy(snap_version_module.process_snap_version_data)
+        temp = snap_version_module.process_snap_version_data
         snap_version_module.process_snap_version_data = mock_process_version_data
         test = is_version_update(snap, manager_yaml, args)
         snap_version_module.process_snap_version_data = temp
