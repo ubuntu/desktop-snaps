@@ -44,7 +44,7 @@ def process_snap_version_data(upstreamversion, snap_name, version_schema):
         next((channel["version"] for channel in snap_info["channel-map"]
               if channel["channel"]["name"] == "edge"))
     )
-    
+
     match = re.match(version_schema, upstreamversion)
     if not match:
         logging.warning("Version schema does not match with snapping repository version")
