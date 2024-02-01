@@ -663,7 +663,7 @@ class Snapcraft(ProcessVersion):
             "missing_format": False,
             "updates": [],
             "version_format": {},
-            "source_url": None,
+            "source_tag": None,
         }
 
         if self._config is None:
@@ -684,6 +684,8 @@ class Snapcraft(ProcessVersion):
             current_tag = data['source-tag']
         else:
             current_tag = None
+
+        part_data['source_tag'] = current_tag
 
         version_format = data['version-format'] if ('version-format' in data) else {}
 
@@ -916,6 +918,8 @@ class Snapcraft(ProcessVersion):
             metadata['upstream-url'] = upstream_data['source_url']
             if len(upstream_data['updates']) != 0:
                 metadata['upstream-version'] = upstream_data['updates'][0]
+            else:
+                metadata['upstream-version'] = upstream_data['source_tag']
 
         if 'grade' in data:
             metadata['grade'] = data['grade']
