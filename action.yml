@@ -89,7 +89,7 @@ runs:
           commit_msg="Update snap version"
         fi        
         if [ $IS_VERSION_CHANGE = true ] && [ $IS_CHANGE = true ]; then
-          commit_msg="Update snap version & update tag"
+          commit_msg="Update snap version/tag"
         fi
         git commit -a -m "$commit_msg"
       shell: bash
