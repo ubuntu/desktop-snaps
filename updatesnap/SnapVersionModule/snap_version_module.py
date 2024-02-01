@@ -51,7 +51,7 @@ def process_snap_version_data(upstreamversion, snap_name, version_schema):
         return None
     upstreamversion = match.group(1).replace('_', '.')
 
-    if upstreamversion != prevversion.split('-')[0]:
+    if upstreamversion > prevversion.split('-')[0]:
         return f"{upstreamversion}-1"
     # Determine package release number
     packagerelease = int(
