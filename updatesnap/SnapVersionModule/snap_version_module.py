@@ -10,7 +10,7 @@ import logging
 import requests
 
 
-def process_snap_version_data(upstreamversion, snap_name, version_schema):
+def process_snap_version_data(upstreamversion, snap_name, version_schema, has_update):
     """ Returns processed snap version and grade """
 
     # Time stamp of Snap build in Snap Store
@@ -54,23 +54,24 @@ def process_snap_version_data(upstreamversion, snap_name, version_schema):
     if upstreamversion > prevversion.split('-')[0]:
         return f"{upstreamversion}-1"
     # Determine package release number
-    packagerelease = int(
-        prevversion.split('-')[-1]) + 1 if gitcommitdate > snapbuilddate \
-        else prevversion.split('-')[-1]
+    if (gitcommitdate > snapbuilddate or has_update):
+        packagerelease = int(prevversion.split('-')[-1]) + 1
+    else:
+        packagerelease = int(prevversion.split('-')[-1])
 
     return f"{upstreamversion}-{packagerelease}"
 
 
-def is_version_update(snap, manager_yaml, arguments):
+def is_version_update(snap, manager_yaml, arguments, has_update):
     """ Returns if snap version update available """
     has_version_update = False
     if arguments.version_schema == 'None':
         return False
     metadata = snap.process_metadata()
-    if process_snap_version_data(metadata['upstream-version'],
-                                 metadata['name'], arguments.version_schema) is not None:
+    if process_snap_version_data(metadata['upstream-version'], metadata['name'],
+                                 arguments.version_schema, has_update) is not None:
         snap_version = process_snap_version_data(
-            metadata['upstream-version'], metadata['name'], arguments.version_schema)
+            metadata['upstream-version'], metadata['name'], arguments.version_schema, has_update)
         if metadata['version'] != snap_version:
             snap_version_data = manager_yaml.get_part_metadata('version')
             if snap_version_data is not None:
