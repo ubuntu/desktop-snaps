@@ -118,7 +118,7 @@ def main():
         has_update = True
 
     logging.basicConfig(level=logging.INFO)
-    if (is_version_update(snap, manager_yaml, arguments) or has_update):
+    if (is_version_update(snap, manager_yaml, arguments, has_update) or has_update):
         with open('output_file', 'w', encoding="utf8") as output_file:
             output_file.write(manager_yaml.get_yaml())
     else:

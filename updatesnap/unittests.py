@@ -437,7 +437,7 @@ class TestYAMLfiles(unittest.TestCase):
             version_schema=r'^gutenprint-(\d+_\d+_\d+)',
         )
         logging.basicConfig(level=logging.ERROR)
-        test = is_version_update(snap, yaml_obj, args)
+        test = is_version_update(snap, yaml_obj, args, has_update=False)
         os.remove('version_file')
         assert test is not None
 
@@ -452,7 +452,7 @@ class TestYAMLfiles(unittest.TestCase):
             version_schema=r'^debian/(\d+\.\d+\.\d+)',
         )
         logging.basicConfig(level=logging.ERROR)
-        test = is_version_update(snap, yaml_obj, args)
+        test = is_version_update(snap, yaml_obj, args, has_update=False)
         assert not test
 
     def test_correct_snap_version(self):
@@ -465,12 +465,13 @@ class TestYAMLfiles(unittest.TestCase):
             version_schema=r'^gutenprint-(\d+_\d+_\d+)',
         )
 
-        def mock_process_version_data(_git_repo_url, _snap_name, _version_schema):
+        def mock_process_version_data(_git_repo_url, _snap_name,
+                                      _version_schema, _has_update=False):
             return "5.3.4-1"
 
         temp = snap_version_module.process_snap_version_data
         snap_version_module.process_snap_version_data = mock_process_version_data
-        test = is_version_update(snap, manager_yaml, args)
+        test = is_version_update(snap, manager_yaml, args, has_update=False)
         snap_version_module.process_snap_version_data = temp
         assert not test
 

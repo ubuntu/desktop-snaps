@@ -4,16 +4,13 @@
     to the package result in an increment of the package release number by 1 """
 
 import subprocess
-import os
-import shutil
 import re
 from datetime import datetime
 import logging
 import requests
-import git
 
 
-def process_snap_version_data(git_repo_url, snap_name, version_schema):
+def process_snap_version_data(upstreamversion, snap_name, version_schema, has_update):
     """ Returns processed snap version and grade """
 
     # Time stamp of Snap build in Snap Store
@@ -47,49 +44,34 @@ def process_snap_version_data(git_repo_url, snap_name, version_schema):
         next((channel["version"] for channel in snap_info["channel-map"]
               if channel["channel"]["name"] == "edge"))
     )
-    # Clone the leading upstream repository if it doesn't exist
-    repo_dir = os.path.basename(git_repo_url.rstrip('.git'))
-    if not os.path.exists(repo_dir):
-        try:
-            git.Repo.clone_from(git_repo_url, repo_dir)
-        except git.exc.GitError:
-            logging.warning('Some error occur in cloning leading upstream repo')
-            os.chdir('..')
-            return None
 
-    os.chdir(repo_dir)
-
-    upstreamversion = subprocess.run(["git", "describe", "--tags", "--always"],
-                                     stdout=subprocess.PIPE,
-                                     text=True, check=True).stdout.strip()
-    os.chdir('..')
-    shutil.rmtree(repo_dir)
     match = re.match(version_schema, upstreamversion)
     if not match:
         logging.warning("Version schema does not match with snapping repository version")
         return None
     upstreamversion = match.group(1).replace('_', '.')
 
-    if upstreamversion != prevversion.split('-')[0]:
+    if upstreamversion > prevversion.split('-')[0]:
         return f"{upstreamversion}-1"
     # Determine package release number
-    packagerelease = int(
-        prevversion.split('-')[-1]) + 1 if gitcommitdate > snapbuilddate \
-        else prevversion.split('-')[-1]
+    if (gitcommitdate > snapbuilddate or has_update):
+        packagerelease = int(prevversion.split('-')[-1]) + 1
+    else:
+        packagerelease = int(prevversion.split('-')[-1])
 
     return f"{upstreamversion}-{packagerelease}"
 
 
-def is_version_update(snap, manager_yaml, arguments):
+def is_version_update(snap, manager_yaml, arguments, has_update):
     """ Returns if snap version update available """
     has_version_update = False
     if arguments.version_schema == 'None':
         return False
     metadata = snap.process_metadata()
-    if process_snap_version_data(metadata['upstream-url'],
-                                 metadata['name'], arguments.version_schema) is not None:
+    if process_snap_version_data(metadata['upstream-version'], metadata['name'],
+                                 arguments.version_schema, has_update) is not None:
         snap_version = process_snap_version_data(
-            metadata['upstream-url'], metadata['name'], arguments.version_schema)
+            metadata['upstream-version'], metadata['name'], arguments.version_schema, has_update)
         if metadata['version'] != snap_version:
             snap_version_data = manager_yaml.get_part_metadata('version')
             if snap_version_data is not None:
