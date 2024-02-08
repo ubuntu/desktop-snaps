@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 2749
 eog: []
 epiphany:
 - 173
