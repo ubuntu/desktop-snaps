@@ -39,7 +39,8 @@ gnome-mines: []
 gnome-nibbles: []
 gnome-recipes: []
 gnome-robots: []
-gnome-sudoku: []
+gnome-sudoku:
+- 110
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
