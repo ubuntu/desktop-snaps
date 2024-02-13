@@ -6,7 +6,7 @@ epiphany:
 - 173
 evince: []
 firefox:
-- 3789
+- 3828
 five-or-more: []
 gedit: []
 glade: []
@@ -50,7 +50,8 @@ gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22: []
 kisak-turtle/gaming-graphics-core22: []
-libreoffice: []
+libreoffice:
+- 308
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
 quadrapassel: []
