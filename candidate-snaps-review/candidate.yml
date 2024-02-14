@@ -48,8 +48,10 @@ gnome-text-editor:
 - 40
 gtk-common-themes: []
 iagno: []
-kisak-fresh/gaming-graphics-core22: []
-kisak-turtle/gaming-graphics-core22: []
+kisak-fresh/gaming-graphics-core22:
+- 157
+kisak-turtle/gaming-graphics-core22:
+- 156
 libreoffice:
 - 308
 lightsoff: []
