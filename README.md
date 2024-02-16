@@ -42,6 +42,10 @@ When the `--version-schema` (optional) flag is provided as input, the tool will 
 
 To include this feature as a github worflow you need to pass an optional input in `with` command.
 
+```
+./updatesnap/updatesnapyaml.py --github-user GITHUB_USER --github-token GITHUB_TOKEN --version-schema VERSION_SCHEMA https://github.com/ubuntu/gnome-calculator.git
+```
+
 ### How Snap Version Automation Works
 
 The snap version automation feature functions by extracting version information from the designated section labeled as `adopt-info`. Subsequently, it automatically updates the version of the primary snap. This versioning scheme consists of two components:
