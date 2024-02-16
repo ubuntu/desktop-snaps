@@ -42,9 +42,33 @@ When the `--version-schema` (optional) flag is provided as input, the tool will 
 
 To include this feature as a github worflow you need to pass an optional input in `with` command.
 
-```
-./updatesnap/updatesnapyaml.py --github-user GITHUB_USER --github-token GITHUB_TOKEN --version-schema VERSION_SCHEMA https://github.com/ubuntu/gnome-calculator.git
-```
+### How Snap Version Automation Works
+
+The snap version automation feature functions by extracting version information from the designated section labeled as `adopt-info`. Subsequently, it automatically updates the version of the primary snap. This versioning scheme consists of two components:
+
+- **Primary Upstream Component Version**: This component comprises the version number of the primary upstream component, which is extracted from the `adopt-info` section.
+
+- **Package Release Number**: The package release number is represented by a small integer and indicates the number of releases of the snap, provided the primary upstream component remains unchanged. In case of a new release of the primary component, the version number is incremented accordingly, with the package release number being reset to 1. Additionally, any other modifications to the package result in an increment of the package release number by 1.
+
+**Example:**
+For `cups-snap`, the version is defined as `2.4.7-6`, where `2.4.7` represents the primary upstream component source tag derived from part of the `adopt info` section, and `6` signifies the package release.
+
+**Prerequisites to Apply Snap Version Automation:**
+Before applying snap version automation, ensure the following prerequisites are met:
+
+- The `version` must be explicitly defined in the snapcraft.yaml metadata, preferably in the headers section of the respective project.
+- The `adopt-info` section must be included in snapcraft.yaml metadata to ensure that the primary upstream component can be derived from it.
+- Correct definition of the `version-schema` in the GitHub workflow is essential for smooth operation.
+
+***Examples of Version-Schema:***
+
+| Source Tag of Primary Upstream Component | Version-Schema | Snap Version |
+|----------|----------|----------|
+| v2.4.7 | 'v(\d+\.\d+\.\d+)' | 2.4.7-2 |
+| debian/3.22.10+dfsg0-4 | '^debian/(\d+\.\d+\.\d+)' | 3.22.10-5 |
+| 20240108 | '^(\d{8})' | 20240108-1 |
+| ghostpdl-10.02.1 | '^ghostpdl-(\d+\.\d+\.\d+)' | 10.02.1-6 |
+
 ### GitHub action
 This action should be utilized by other repos' workflows. The action checks out this repository to use updatesnapyaml.py and replaces the old snapcraft.yaml with the new one.
 
