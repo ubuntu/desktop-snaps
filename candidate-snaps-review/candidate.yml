@@ -5,8 +5,7 @@ eog: []
 epiphany:
 - 173
 evince: []
-firefox:
-- 3836
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -50,9 +49,9 @@ gnome-text-editor:
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 157
+- 159
 kisak-turtle/gaming-graphics-core22:
-- 156
+- 158
 libreoffice:
 - 308
 lightsoff: []
