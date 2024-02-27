@@ -1,7 +1,6 @@
 cheese: []
 cherrytree: []
-chromium:
-- 2764
+chromium: []
 eog: []
 epiphany:
 - 173
@@ -29,7 +28,7 @@ gnome-characters: []
 gnome-chess: []
 gnome-clocks: []
 gnome-contacts:
-- 217
+- 221
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
