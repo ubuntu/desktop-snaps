@@ -3,7 +3,7 @@ cherrytree: []
 chromium: []
 eog: []
 epiphany:
-- 173
+- 175
 evince: []
 firefox: []
 five-or-more: []
@@ -49,9 +49,9 @@ gnome-text-editor:
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 159
+- 160
 kisak-turtle/gaming-graphics-core22:
-- 158
+- 161
 libreoffice:
 - 310
 lightsoff: []
