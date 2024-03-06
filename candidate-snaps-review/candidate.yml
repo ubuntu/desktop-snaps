@@ -5,8 +5,7 @@ eog: []
 epiphany:
 - 177
 evince: []
-firefox:
-- 3941
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -50,20 +49,19 @@ gnome-text-editor:
 gtk-common-themes: []
 iagno: []
 kisak-fresh/gaming-graphics-core22:
-- 160
+- 162
 kisak-turtle/gaming-graphics-core22:
-- 161
+- 163
 libreoffice:
 - 311
 lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
 quadrapassel: []
-snap-store:
-- 1058
+snap-store: []
 steam: []
 swell-foop: []
 tali: []
 thunderbird:
-- 445
+- 450
 ubuntu-desktop-installer:
 - 1284
