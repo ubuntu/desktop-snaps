@@ -5,8 +5,7 @@ eog: []
 epiphany:
 - 177
 evince: []
-firefox:
-- 3972
+firefox: []
 five-or-more: []
 gedit: []
 glade: []
@@ -57,7 +56,8 @@ lightsoff: []
 oibaf-latest/gaming-graphics-core22: []
 quadrapassel: []
 snap-store: []
-steam: []
+steam:
+- 189
 swell-foop: []
 tali: []
 thunderbird:
