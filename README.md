@@ -17,7 +17,7 @@ Then the snap in --candidate needs to be manually tested before promoting it to 
 
 ### candidate-snaps-review
 
-This tool is really a set of 3 useful tools:
+This tool is really a set of 4 useful tools:
 * _snapchanges.py_ is a utility to display changes in a snap between stable and candidate channels
 * _snaps.py_ defines the list of snaps the Ubuntu Desktop team is interested in
 * _candidate.yml_ is a cache of candidate revisions already processed
