@@ -47,7 +47,11 @@ class ProjectManager:
         try:
             data = self._github.get_file(project_url, yaml_path)
         except (ValueError, ConnectionError):
-            data = None
+            yaml_path = 'rockcraft.yaml'
+            try:
+                data = self._github.get_file(project_url, yaml_path)
+            except (ValueError, ConnectionError):
+                data = None
         if not data:
             yaml_path = 'snap/snapcraft.yaml'
             try:
