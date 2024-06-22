@@ -62,6 +62,32 @@ def process_snap_version_data(upstreamversion, snap_name, version_schema, has_up
     return f"{upstreamversion}-{packagerelease}"
 
 
+def process_rock_version_data(upstreamversion, prevversion, version_schema, has_update):
+    """ Returns processed rock version"""
+
+    match = re.match(version_schema, upstreamversion)
+    if not match:
+        logging.warning("Version schema does not match with rock repository version")
+        return None
+    upstreamversion = match.group(1).replace('_', '.')
+
+    def version_tuple(v):
+        return tuple(map(int, v.split('.')))
+
+    upstream_tuple = version_tuple(upstreamversion)
+    prev_tuple = version_tuple(prevversion.split('-')[0])
+
+    if upstream_tuple > prev_tuple:
+        return f"{upstreamversion}-1"
+    # Determine package release number
+    if has_update:
+        packagerelease = int(prevversion.split('-')[-1]) + 1
+    else:
+        packagerelease = int(prevversion.split('-')[-1])
+
+    return f"{upstreamversion}-{packagerelease}"
+
+
 def is_version_update(snap, manager_yaml, arguments, has_update):
     """ Returns if snap version update available """
     has_version_update = False
@@ -85,5 +111,32 @@ def is_version_update(snap, manager_yaml, arguments, has_update):
     if has_version_update:
         with open('version_file', 'w', encoding="utf8") as version_file:
             version_file.write(f"{snap_version}")
+
+    return has_version_update
+
+
+def is_rock_version_update(rock, manager_yaml, arguments, has_update):
+    """ Returns if rock version update available """
+    has_version_update = False
+    if arguments.rock_version_schema == 'None':
+        return False
+    metadata = rock.process_metadata()
+    rock_version = process_rock_version_data(metadata['upstream-version'], metadata['version'],
+                                             arguments.rock_version_schema, has_update)
+    if rock_version is None:
+        return False
+    if metadata['version'] != rock_version:
+        rock_version_data = manager_yaml.get_part_metadata('version')
+        if rock_version_data is not None:
+            logging.info("Updating rock version from %s to %s",
+                         metadata['version'], rock_version)
+            rock_version_data['data'] = f"version: '{rock_version}'"
+            has_version_update = True
+        else:
+            logging.warning("Version is not defined in metadata")
+
+    if has_version_update:
+        with open('version_file', 'w', encoding="utf8") as version_file:
+            version_file.write(f"{rock_version}")
 
     return has_version_update

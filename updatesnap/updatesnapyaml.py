@@ -7,7 +7,7 @@ import argparse
 import logging
 from SnapModule.snapmodule import Snapcraft, Github
 from SnapModule.manageYAML import ManageYAML
-from SnapVersionModule.snap_version_module import is_version_update
+from SnapVersionModule.snap_version_module import is_version_update, is_rock_version_update
 UPDATE_BRANCH = 'update_versions'
 
 
@@ -74,6 +74,8 @@ def main():
                         help='Access token for accesing Github projects.')
     parser.add_argument('--version-schema', action='store', default='None',
                         help='Version schema of snapping repository')
+    parser.add_argument('--rock-version-schema', action='store', default='None',
+                        help='Version schema of rock repository')
     parser.add_argument('--verbose', action='store_true', default=False)
     parser.add_argument('project', default='.', help='The project URI')
     arguments = parser.parse_args(sys.argv[1:])
@@ -124,7 +126,8 @@ def main():
         has_update = True
 
     logging.basicConfig(level=logging.INFO)
-    if (is_version_update(snap, manager_yaml, arguments, has_update) or has_update):
+    if (is_version_update(snap, manager_yaml, arguments, has_update) or
+            is_rock_version_update(snap, manager_yaml, arguments, has_update) or has_update):
         with open('output_file', 'w', encoding="utf8") as output_file:
             output_file.write(manager_yaml.get_yaml())
     else:
