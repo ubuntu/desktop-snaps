@@ -62,30 +62,31 @@ def process_snap_version_data(upstreamversion, snap_name, version_schema, has_up
     return f"{upstreamversion}-{packagerelease}"
 
 
-def process_rock_version_data(upstreamversion, prevversion, version_schema, has_update):
+def process_rock_version_data(upstream_version, previous_version, version_schema, has_update):
     """ Returns processed rock version"""
 
-    match = re.match(version_schema, upstreamversion)
+    match = re.match(version_schema, upstream_version)
     if not match:
         logging.warning("Version schema does not match with rock repository version")
         return None
-    upstreamversion = match.group(1).replace('_', '.')
+    upstream_version = match.group(1).replace('_', '.')
 
     def version_tuple(v):
         return tuple(map(int, v.split('.')))
 
-    upstream_tuple = version_tuple(upstreamversion)
-    prev_tuple = version_tuple(prevversion.split('-')[0])
+    upstream_tuple = version_tuple(upstream_version)
+    upstream_tuple = tuple(map(int, upstream_version.split('.')))
+    prev_tuple = tuple(map(int, previous_version.split('-')[0].split('.')))
 
     if upstream_tuple > prev_tuple:
-        return f"{upstreamversion}-1"
+        return f"{upstream_version}-1"
     # Determine package release number
     if has_update:
-        packagerelease = int(prevversion.split('-')[-1]) + 1
+        packagerelease = int(previous_version.split('-')[-1]) + 1
     else:
-        packagerelease = int(prevversion.split('-')[-1])
+        packagerelease = int(previous_version.split('-')[-1])
 
-    return f"{upstreamversion}-{packagerelease}"
+    return f"{upstream_version}-{packagerelease}"
 
 
 def is_version_update(snap, manager_yaml, arguments, has_update):
