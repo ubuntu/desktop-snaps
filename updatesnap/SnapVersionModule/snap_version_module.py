@@ -71,10 +71,6 @@ def process_rock_version_data(upstream_version, previous_version, version_schema
         return None
     upstream_version = match.group(1).replace('_', '.')
 
-    def version_tuple(v):
-        return tuple(map(int, v.split('.')))
-
-    upstream_tuple = version_tuple(upstream_version)
     upstream_tuple = tuple(map(int, upstream_version.split('.')))
     prev_tuple = tuple(map(int, previous_version.split('-')[0].split('.')))
 
