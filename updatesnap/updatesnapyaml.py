@@ -40,22 +40,15 @@ class ProjectManager:
                 break
         return working_branch
 
-    def get_yaml_file(self, project_url, file_path):
+    def get_yaml_file(self, project_url, yaml_path):
         """ Searches in a project for the 'snapcraft.yaml' file and
             returns its contents """
-        yaml_path = 'snapcraft.yaml'
         try:
             data = self._github.get_file(project_url, yaml_path)
         except (ValueError, ConnectionError):
             data = None
         if not data:
             yaml_path = 'snap/snapcraft.yaml'
-            try:
-                data = self._github.get_file(project_url, yaml_path)
-            except (ValueError, ConnectionError):
-                data = None
-        if not data:
-            yaml_path = f'{file_path}'
             try:
                 data = self._github.get_file(project_url, yaml_path)
             except (ValueError, ConnectionError):
@@ -76,7 +69,7 @@ def main():
                         help='Version schema of snapping repository')
     parser.add_argument('--rock-version-schema', action='store', default='None',
                         help='Version schema of rock repository')
-    parser.add_argument('--file-path', action='store', default='rockcraft.yaml',
+    parser.add_argument('--yaml-path', action='store', default='snapcraft.yaml',
                         help='Path to the yaml file')
     parser.add_argument('--verbose', action='store_true', default=False)
     parser.add_argument('project', default='.', help='The project URI')
@@ -90,7 +83,7 @@ def main():
 
     # get the most-updated SNAPCRAFT.YAML file
 
-    data = manager.get_yaml_file(arguments.project, arguments.file_path)
+    data = manager.get_yaml_file(arguments.project, arguments.yaml_path)
     if not data:
         print('Failed to get the snapcraft.yaml file.', file=sys.stderr)
         sys.exit(-1)
