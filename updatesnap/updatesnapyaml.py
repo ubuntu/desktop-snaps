@@ -43,12 +43,26 @@ class ProjectManager:
     def get_yaml_file(self, project_url, yaml_path):
         """ Searches in a project for the 'snapcraft.yaml' file and
             returns its contents """
+        if yaml_path != 'None':
+            try:
+                data = self._github.get_file(project_url, yaml_path)
+            except (ValueError, ConnectionError):
+                data = None
+            return data
+
+        yaml_path = 'snapcraft.yaml'
         try:
             data = self._github.get_file(project_url, yaml_path)
         except (ValueError, ConnectionError):
             data = None
         if not data:
             yaml_path = 'snap/snapcraft.yaml'
+            try:
+                data = self._github.get_file(project_url, yaml_path)
+            except (ValueError, ConnectionError):
+                data = None
+        if not data:
+            yaml_path = 'rockcraft.yaml'
             try:
                 data = self._github.get_file(project_url, yaml_path)
             except (ValueError, ConnectionError):
@@ -69,7 +83,7 @@ def main():
                         help='Version schema of snapping repository')
     parser.add_argument('--rock-version-schema', action='store', default='None',
                         help='Version schema of rock repository')
-    parser.add_argument('--yaml-path', action='store', default='snapcraft.yaml',
+    parser.add_argument('--yaml-path', action='store', default='None',
                         help='Path to the yaml file')
     parser.add_argument('--verbose', action='store_true', default=False)
     parser.add_argument('project', default='.', help='The project URI')
