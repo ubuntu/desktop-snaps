@@ -62,8 +62,6 @@ runs:
           echo "IS_CHANGE=true" >> $GITHUB_ENV
           if [ -n "$YAML_PATH" ]; then
             mv output_file $YAML_PATH
-          elif [ -f rockcraft.yaml ]; then
-            mv output_file rockcraft.yaml
           elif [ -d snap ]; then
             mv output_file snap/snapcraft.yaml
           else
