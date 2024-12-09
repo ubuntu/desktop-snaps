@@ -18,7 +18,6 @@ inputs:
   rock-version-schema:
     description: 'Version schema of rock repository'
     required: false
-    default: 'None'
   yaml-path:
     description: 'Path to the YAML file'
     required: false
