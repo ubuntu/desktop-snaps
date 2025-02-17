@@ -11,7 +11,8 @@ epiphany:
 evince:
 - 1056
 factory-reset-tools: []
-firefox: []
+firefox:
+- 5783
 firmware-updater:
 - 147
 five-or-more:
@@ -58,8 +59,7 @@ gnome-klotski:
 - 115
 gnome-logs:
 - 129
-gnome-mahjongg:
-- 180
+gnome-mahjongg: []
 gnome-mines:
 - 316
 gnome-nibbles:
