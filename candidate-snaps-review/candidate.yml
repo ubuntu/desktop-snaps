@@ -1,8 +1,7 @@
 cheese:
 - 61
 cherrytree: []
-chromium:
-- 3054
+chromium: []
 desktop-security-center: []
 eog:
 - 734
@@ -12,7 +11,7 @@ evince:
 - 1056
 factory-reset-tools: []
 firefox:
-- 5836
+- 5846
 firmware-updater:
 - 147
 five-or-more:
@@ -35,9 +34,8 @@ gnome-42-2204:
 gnome-42-2204-sdk:
 - 298
 gnome-46-2404:
-- 80
-gnome-46-2404-sdk:
-- 70
+- 81
+gnome-46-2404-sdk: []
 gnome-boxes: []
 gnome-calculator:
 - 965
@@ -105,7 +103,7 @@ swell-foop:
 tali:
 - 366
 thunderbird:
-- 678
+- 680
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
