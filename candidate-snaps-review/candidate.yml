@@ -1,8 +1,7 @@
 cheese:
 - 61
 cherrytree: []
-chromium:
-- 3060
+chromium: []
 desktop-security-center: []
 eog:
 - 734
@@ -103,8 +102,7 @@ swell-foop:
 - 120
 tali:
 - 366
-thunderbird:
-- 682
+thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
