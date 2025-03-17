@@ -56,7 +56,8 @@ gnome-klotski:
 - 115
 gnome-logs:
 - 129
-gnome-mahjongg: []
+gnome-mahjongg:
+- 186
 gnome-mines:
 - 316
 gnome-nibbles:
