@@ -101,7 +101,8 @@ swell-foop:
 - 120
 tali:
 - 366
-thunderbird: []
+thunderbird:
+- 684
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
