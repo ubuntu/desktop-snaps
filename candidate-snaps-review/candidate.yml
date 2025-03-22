@@ -1,27 +1,27 @@
 cheese:
-- 61
+- 64
 cherrytree: []
-chromium:
-- 3080
+chromium: []
 desktop-security-center: []
 eog:
 - 734
 epiphany:
-- 203
+- 204
 evince:
-- 1056
+- 1058
 factory-reset-tools: []
 firefox: []
 firmware-updater:
 - 147
 five-or-more:
-- 199
+- 201
 gedit:
 - 686
 glade:
 - 430
 glimpse-editor: []
-gnome-2048: []
+gnome-2048:
+- 60
 gnome-3-26-1604:
 - 113
 gnome-3-28-1804: []
@@ -31,18 +31,20 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 203
-gnome-42-2204-sdk: []
+gnome-42-2204-sdk:
+- 300
 gnome-46-2404:
 - 81
-gnome-46-2404-sdk: []
+gnome-46-2404-sdk:
+- 72
 gnome-boxes: []
 gnome-calculator:
-- 965
+- 966
 gnome-calendar: []
 gnome-characters:
-- 801
+- 803
 gnome-chess:
-- 93
+- 94
 gnome-clocks:
 - 477
 gnome-contacts:
@@ -53,21 +55,21 @@ gnome-font-viewer:
 gnome-hitori:
 - 330
 gnome-klotski:
-- 115
+- 118
 gnome-logs:
 - 129
 gnome-mahjongg:
 - 186
 gnome-mines:
-- 316
+- 318
 gnome-nibbles:
-- 143
+- 145
 gnome-recipes:
-- 47
+- 48
 gnome-robots:
 - 123
 gnome-sudoku:
-- 126
+- 128
 gnome-system-monitor:
 - 191
 gnome-taquin:
@@ -101,7 +103,7 @@ steam: []
 swell-foop:
 - 120
 tali:
-- 366
+- 369
 thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
