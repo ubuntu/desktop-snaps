@@ -12,7 +12,7 @@ evince:
 - 1058
 factory-reset-tools: []
 firefox:
-- 5963
+- 5974
 firmware-updater:
 - 147
 five-or-more:
@@ -63,8 +63,7 @@ gnome-mahjongg:
 - 186
 gnome-mines:
 - 318
-gnome-nibbles:
-- 145
+gnome-nibbles: []
 gnome-recipes:
 - 48
 gnome-robots:
@@ -106,7 +105,7 @@ swell-foop:
 tali:
 - 369
 thunderbird:
-- 692
+- 697
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
