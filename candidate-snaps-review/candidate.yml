@@ -32,8 +32,7 @@ gnome-3-38-2004: []
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 203
-gnome-42-2204-sdk:
-- 300
+gnome-42-2204-sdk: []
 gnome-46-2404:
 - 84
 gnome-46-2404-sdk: []
