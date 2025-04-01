@@ -11,7 +11,7 @@ evince:
 - 1058
 factory-reset-tools: []
 firefox:
-- 5974
+- 5987
 firmware-updater:
 - 147
 five-or-more:
@@ -21,8 +21,7 @@ gedit:
 glade:
 - 430
 glimpse-editor: []
-gnome-2048:
-- 60
+gnome-2048: []
 gnome-3-26-1604:
 - 113
 gnome-3-28-1804: []
@@ -85,8 +84,7 @@ kisak-fresh/gaming-graphics-core22:
 - 190
 kisak-turtle/gaming-graphics-core22:
 - 191
-libreoffice:
-- 342
+libreoffice: []
 lightsoff:
 - 162
 loupe:
