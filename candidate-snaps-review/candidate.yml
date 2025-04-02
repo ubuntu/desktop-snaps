@@ -10,8 +10,7 @@ epiphany:
 evince:
 - 1058
 factory-reset-tools: []
-firefox:
-- 5987
+firefox: []
 firmware-updater:
 - 147
 five-or-more:
@@ -102,7 +101,7 @@ swell-foop:
 tali:
 - 369
 thunderbird:
-- 697
+- 702
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
