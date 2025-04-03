@@ -1,20 +1,20 @@
 cheese:
-- 64
+- 69
 cherrytree: []
-chromium: []
+chromium:
+- 3093
 desktop-security-center: []
 eog:
 - 734
 epiphany:
-- 204
+- 207
 evince:
 - 1058
 factory-reset-tools: []
 firefox: []
 firmware-updater:
 - 147
-five-or-more:
-- 201
+five-or-more: []
 gedit:
 - 686
 glade:
@@ -49,14 +49,12 @@ gnome-contacts:
 gnome-dictionary: []
 gnome-font-viewer:
 - 53
-gnome-hitori:
-- 330
+gnome-hitori: []
 gnome-klotski:
 - 118
 gnome-logs:
 - 129
-gnome-mahjongg:
-- 186
+gnome-mahjongg: []
 gnome-mines:
 - 318
 gnome-nibbles: []
@@ -94,7 +92,7 @@ quadrapassel: []
 simple-scan: []
 snap-store: []
 snapd-desktop-integration:
-- 302
+- 307
 steam: []
 swell-foop:
 - 120
