@@ -1,11 +1,10 @@
 cheese:
 - 69
 cherrytree: []
-chromium:
-- 3093
+chromium: []
 desktop-security-center: []
 eog:
-- 734
+- 736
 epiphany:
 - 207
 evince:
@@ -33,7 +32,8 @@ gnome-42-2204:
 gnome-42-2204-sdk: []
 gnome-46-2404:
 - 84
-gnome-46-2404-sdk: []
+gnome-46-2404-sdk:
+- 73
 gnome-boxes: []
 gnome-calculator:
 - 966
@@ -99,7 +99,7 @@ swell-foop:
 tali:
 - 369
 thunderbird:
-- 702
+- 706
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
