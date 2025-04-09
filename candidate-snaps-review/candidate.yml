@@ -3,15 +3,12 @@ cheese:
 cherrytree: []
 chromium: []
 desktop-security-center: []
-eog:
-- 736
+eog: []
 epiphany:
 - 207
-evince:
-- 1058
+evince: []
 factory-reset-tools: []
-firefox:
-- 6019
+firefox: []
 firmware-updater:
 - 147
 five-or-more: []
@@ -31,45 +28,35 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 203
 gnome-42-2204-sdk: []
-gnome-46-2404:
-- 87
+gnome-46-2404: []
 gnome-46-2404-sdk: []
 gnome-boxes: []
-gnome-calculator:
-- 966
+gnome-calculator: []
 gnome-calendar: []
-gnome-characters:
-- 803
-gnome-chess:
-- 94
+gnome-characters: []
+gnome-chess: []
 gnome-clocks:
 - 477
 gnome-contacts:
 - 267
 gnome-dictionary: []
 gnome-font-viewer:
-- 53
+- 56
 gnome-hitori: []
-gnome-klotski:
-- 118
-gnome-logs:
-- 129
+gnome-klotski: []
+gnome-logs: []
 gnome-mahjongg: []
 gnome-mines:
 - 318
 gnome-nibbles: []
-gnome-recipes:
-- 48
+gnome-recipes: []
 gnome-robots:
 - 123
-gnome-sudoku:
-- 128
+gnome-sudoku: []
 gnome-system-monitor:
 - 191
-gnome-taquin:
-- 41
-gnome-tetravex:
-- 285
+gnome-taquin: []
+gnome-tetravex: []
 gnome-text-editor:
 - 44
 gnome-weather:
@@ -96,8 +83,7 @@ snapd-desktop-integration:
 steam: []
 swell-foop:
 - 120
-tali:
-- 369
+tali: []
 thunderbird:
 - 706
 ubuntu-desktop-bootstrap:
