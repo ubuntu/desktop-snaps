@@ -1,16 +1,14 @@
-cheese:
-- 69
+cheese: []
 cherrytree: []
 chromium: []
 desktop-security-center: []
 eog: []
 epiphany:
-- 207
+- 208
 evince: []
 factory-reset-tools: []
 firefox: []
-firmware-updater:
-- 147
+firmware-updater: []
 five-or-more: []
 gedit:
 - 686
@@ -29,7 +27,8 @@ gnome-42-2204:
 - 203
 gnome-42-2204-sdk: []
 gnome-46-2404: []
-gnome-46-2404-sdk: []
+gnome-46-2404-sdk:
+- 77
 gnome-boxes: []
 gnome-calculator: []
 gnome-calendar: []
@@ -40,8 +39,7 @@ gnome-clocks:
 gnome-contacts:
 - 267
 gnome-dictionary: []
-gnome-font-viewer:
-- 56
+gnome-font-viewer: []
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs: []
