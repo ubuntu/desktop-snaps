@@ -82,8 +82,7 @@ steam: []
 swell-foop:
 - 120
 tali: []
-thunderbird:
-- 706
+thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
