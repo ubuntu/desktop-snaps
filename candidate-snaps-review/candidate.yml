@@ -1,7 +1,6 @@
 cheese: []
 cherrytree: []
-chromium:
-- 3107
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany:
@@ -44,7 +43,8 @@ gnome-font-viewer: []
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs: []
-gnome-mahjongg: []
+gnome-mahjongg:
+- 188
 gnome-mines:
 - 318
 gnome-nibbles: []
