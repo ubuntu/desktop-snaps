@@ -10,14 +10,14 @@ evince: []
 factory-reset-tools: []
 firefox: []
 firmware-updater: []
-five-or-more:
-- 203
+five-or-more: []
 gedit:
-- 686
+- 690
 glade:
-- 430
+- 435
 glimpse-editor: []
-gnome-2048: []
+gnome-2048:
+- 64
 gnome-3-26-1604:
 - 113
 gnome-3-28-1804: []
@@ -27,7 +27,7 @@ gnome-3-38-2004:
 - 146
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
-- 203
+- 207
 gnome-42-2204-sdk:
 - 306
 gnome-46-2404:
@@ -35,12 +35,13 @@ gnome-46-2404:
 gnome-46-2404-sdk:
 - 79
 gnome-boxes: []
-gnome-calculator: []
+gnome-calculator:
+- 970
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
 gnome-clocks:
-- 477
+- 479
 gnome-contacts:
 - 267
 gnome-dictionary: []
@@ -51,21 +52,23 @@ gnome-logs: []
 gnome-mahjongg:
 - 188
 gnome-mines:
-- 318
-gnome-nibbles: []
+- 320
+gnome-nibbles:
+- 151
 gnome-recipes:
 - 50
 gnome-robots:
 - 123
-gnome-sudoku: []
+gnome-sudoku:
+- 136
 gnome-system-monitor:
-- 191
+- 193
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor:
 - 44
 gnome-weather:
-- 10
+- 12
 gtk-common-themes:
 - 1539
 iagno: []
