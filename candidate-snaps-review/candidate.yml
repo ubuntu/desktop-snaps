@@ -12,12 +12,11 @@ firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
-- 690
+- 692
 glade:
 - 435
 glimpse-editor: []
-gnome-2048:
-- 64
+gnome-2048: []
 gnome-3-26-1604:
 - 113
 gnome-3-28-1804: []
@@ -52,7 +51,7 @@ gnome-logs: []
 gnome-mahjongg:
 - 188
 gnome-mines:
-- 320
+- 322
 gnome-nibbles:
 - 151
 gnome-recipes:
@@ -66,7 +65,7 @@ gnome-system-monitor:
 gnome-taquin: []
 gnome-tetravex: []
 gnome-text-editor:
-- 44
+- 46
 gnome-weather:
 - 12
 gtk-common-themes:
@@ -78,7 +77,7 @@ kisak-turtle/gaming-graphics-core22:
 - 191
 libreoffice: []
 lightsoff:
-- 162
+- 165
 loupe:
 - 27
 oibaf-latest/gaming-graphics-core22: []
