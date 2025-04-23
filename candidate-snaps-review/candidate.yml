@@ -1,8 +1,7 @@
 cheese:
 - 70
 cherrytree: []
-chromium:
-- 3110
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany: []
@@ -57,7 +56,7 @@ gnome-nibbles:
 gnome-recipes:
 - 50
 gnome-robots:
-- 123
+- 125
 gnome-sudoku:
 - 136
 gnome-system-monitor:
