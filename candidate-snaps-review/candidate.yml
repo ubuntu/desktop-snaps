@@ -2,9 +2,9 @@ cheese: []
 cherrytree: []
 chromium: []
 desktop-security-center: []
-eog: []
-epiphany:
-- 226
+eog:
+- 738
+epiphany: []
 evince:
 - 1063
 factory-reset-tools: []
@@ -39,7 +39,8 @@ gnome-calculator:
 - 972
 gnome-calendar: []
 gnome-characters: []
-gnome-chess: []
+gnome-chess:
+- 98
 gnome-clocks:
 - 481
 gnome-contacts:
@@ -51,15 +52,18 @@ gnome-klotski: []
 gnome-logs: []
 gnome-mahjongg: []
 gnome-mines: []
-gnome-nibbles: []
+gnome-nibbles:
+- 153
 gnome-recipes:
-- 53
+- 54
 gnome-robots: []
-gnome-sudoku: []
+gnome-sudoku:
+- 138
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor: []
+gnome-text-editor:
+- 50
 gnome-weather: []
 gtk-common-themes:
 - 1539
@@ -69,9 +73,10 @@ kisak-fresh/gaming-graphics-core22:
 kisak-turtle/gaming-graphics-core22:
 - 191
 libreoffice: []
-lightsoff: []
+lightsoff:
+- 167
 loupe:
-- 32
+- 33
 oibaf-latest/gaming-graphics-core22: []
 prompting-client: []
 quadrapassel: []
