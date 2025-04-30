@@ -16,7 +16,6 @@ parser = argparse.ArgumentParser(description='Trigger a Snap build in Launchpad.
 parser.add_argument("--lpname", dest="lpname", default=os.getenv("USER"), help="Launchpad user or team to build from (default: %s)"%os.getenv("USER"))
 parser.add_argument("--arch", dest="arch", default=None, help="Build architecture to target")
 parser.add_argument("--series", dest="series", help="Ubuntu release to build against, required for an arch specific build")
-parser.add_argument("--core-channel", dest="core", default=None, help="Channel to find core (default: None)")
 parser.add_argument("--snapcraft-channel", dest="snapcraft", default=None, help="Channel to find snapcraft (default: None)")
 parser.add_argument("snap_name", help="Name of the Snap package being built")
 args = parser.parse_args()
@@ -31,7 +30,6 @@ if buildarch:
     if not series:
         print("Building on a specific arch requires to also specify the serie")
         exit(1)
-core = args.core
 snapcraft = args.snapcraft
 
 # we need to store credentials once for cronned builds
@@ -44,7 +42,6 @@ if DEBUG:
     if buildarch:
         print ("buildarch: %s" % buildarch)
         print ("series: %s" % series)
-    print ("core-channel: %s" % core)
     print ("snapcraft-channel: %s" % snapcraft)
     print ("cachedir: %s" % cachedir)
     print ("creds: %s" % creds)
@@ -73,19 +70,15 @@ if buildarch:
     arch = release.getDistroArchSeries(archtag=buildarch)
 
 # trigger build
-if core or snapcraft:
-    if not core:
-        core = 'stable'
-    if not snapcraft:
-        snapcraft = 'stable'
+if snapcraft:
     if buildarch:
         request = ubuntucore.requestBuild(archive=ubuntu.main_archive,
-                                          channels={'core': core, 'snapcraft': snapcraft},
+                                          channels={'snapcraft': snapcraft},
                                           distro_arch_series=arch,
                                           pocket='Updates')
     else:
         request = ubuntucore.requestBuilds(archive=ubuntu.main_archive,
-                                          channels={'core': core, 'snapcraft': snapcraft},
+                                          channels={'snapcraft': snapcraft},
                                           pocket='Updates')
 else:
     if buildarch:
