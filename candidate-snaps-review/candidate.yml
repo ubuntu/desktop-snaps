@@ -3,13 +3,12 @@ cherrytree: []
 chromium: []
 desktop-security-center: []
 eog:
-- 738
+- 740
 epiphany: []
 evince:
 - 1063
 factory-reset-tools: []
-firefox:
-- 6073
+firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -31,7 +30,7 @@ gnome-42-2204:
 gnome-42-2204-sdk:
 - 311
 gnome-46-2404:
-- 93
+- 96
 gnome-46-2404-sdk: []
 gnome-boxes: []
 gnome-calculator:
