@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 3125
 desktop-security-center: []
 eog:
 - 740
