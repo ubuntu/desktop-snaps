@@ -7,8 +7,7 @@ eog:
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 6159
+firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -82,7 +81,8 @@ steam: []
 swell-foop: []
 tali:
 - 372
-thunderbird: []
+thunderbird:
+- 727
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
