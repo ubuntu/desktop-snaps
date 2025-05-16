@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 3137
 desktop-security-center: []
 eog:
 - 740
@@ -68,8 +69,7 @@ kisak-turtle/gaming-graphics-core22:
 libreoffice: []
 lightsoff:
 - 167
-loupe:
-- 33
+loupe: []
 oibaf-latest/gaming-graphics-core22: []
 prompting-client: []
 quadrapassel: []
