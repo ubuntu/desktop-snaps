@@ -8,7 +8,8 @@ eog:
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox: []
+firefox:
+- 6198
 firmware-updater: []
 five-or-more: []
 gedit:
