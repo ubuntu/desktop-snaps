@@ -1,4 +1,5 @@
-cheese: []
+cheese:
+- 78
 cherrytree: []
 chromium:
 - 3137
@@ -8,8 +9,7 @@ eog:
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 6198
+firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -38,7 +38,8 @@ gnome-calculator: []
 gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
-gnome-clocks: []
+gnome-clocks:
+- 486
 gnome-contacts:
 - 267
 gnome-dictionary: []
@@ -50,7 +51,8 @@ gnome-mahjongg: []
 gnome-mines: []
 gnome-nibbles:
 - 153
-gnome-recipes: []
+gnome-recipes:
+- 59
 gnome-robots: []
 gnome-sudoku:
 - 138
@@ -82,8 +84,7 @@ steam: []
 swell-foop: []
 tali:
 - 372
-thunderbird:
-- 727
+thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
