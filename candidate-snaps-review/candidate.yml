@@ -8,8 +8,7 @@ eog:
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 6227
+firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -32,7 +31,7 @@ gnome-42-2204-sdk:
 gnome-46-2404:
 - 96
 gnome-46-2404-sdk:
-- 88
+- 94
 gnome-boxes: []
 gnome-calculator: []
 gnome-calendar: []
