@@ -1,19 +1,17 @@
-cheese:
-- 78
+cheese: []
 cherrytree: []
 chromium:
 - 3153
 desktop-security-center: []
-eog:
-- 740
+eog: []
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox: []
+firefox:
+- 6259
 firmware-updater: []
 five-or-more: []
-gedit:
-- 697
+gedit: []
 glade: []
 glimpse-editor: []
 gnome-2048: []
@@ -49,18 +47,14 @@ gnome-klotski: []
 gnome-logs: []
 gnome-mahjongg: []
 gnome-mines: []
-gnome-nibbles:
-- 153
-gnome-recipes:
-- 59
+gnome-nibbles: []
+gnome-recipes: []
 gnome-robots: []
-gnome-sudoku:
-- 138
+gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor:
-- 50
+gnome-text-editor: []
 gnome-weather: []
 gtk-common-themes:
 - 1539
@@ -70,8 +64,7 @@ kisak-fresh/gaming-graphics-core22:
 kisak-turtle/gaming-graphics-core22:
 - 191
 libreoffice: []
-lightsoff:
-- 167
+lightsoff: []
 loupe: []
 oibaf-latest/gaming-graphics-core22: []
 prompting-client: []
@@ -82,8 +75,7 @@ snapd-desktop-integration:
 - 311
 steam: []
 swell-foop: []
-tali:
-- 372
+tali: []
 thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
