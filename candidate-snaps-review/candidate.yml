@@ -1,5 +1,5 @@
 cheese:
-- 82
+- 86
 cherrytree: []
 chromium: []
 desktop-security-center: []
@@ -28,7 +28,8 @@ gnome-42-2204-sdk:
 - 319
 gnome-46-2404:
 - 96
-gnome-46-2404-sdk: []
+gnome-46-2404-sdk:
+- 101
 gnome-boxes: []
 gnome-calculator: []
 gnome-calendar: []
