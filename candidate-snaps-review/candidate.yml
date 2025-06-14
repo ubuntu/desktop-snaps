@@ -1,8 +1,7 @@
 cheese:
 - 86
 cherrytree: []
-chromium:
-- 3169
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany: []
@@ -31,7 +30,7 @@ gnome-42-2204-sdk:
 gnome-46-2404:
 - 109
 gnome-46-2404-sdk:
-- 109
+- 113
 gnome-boxes: []
 gnome-calculator:
 - 975
@@ -81,8 +80,7 @@ snapd-desktop-integration:
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 737
+thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
