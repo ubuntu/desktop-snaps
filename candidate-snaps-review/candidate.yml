@@ -39,7 +39,7 @@ gnome-calendar: []
 gnome-characters: []
 gnome-chess: []
 gnome-clocks:
-- 489
+- 492
 gnome-contacts:
 - 272
 gnome-dictionary: []
@@ -60,7 +60,7 @@ gnome-tetravex: []
 gnome-text-editor:
 - 53
 gnome-weather:
-- 15
+- 18
 gtk-common-themes:
 - 1539
 iagno: []
