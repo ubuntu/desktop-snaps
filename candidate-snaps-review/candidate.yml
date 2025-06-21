@@ -1,7 +1,8 @@
 cheese:
 - 86
 cherrytree: []
-chromium: []
+chromium:
+- 3179
 desktop-security-center: []
 eog: []
 epiphany: []
@@ -74,7 +75,8 @@ loupe: []
 oibaf-latest/gaming-graphics-core22: []
 prompting-client: []
 quadrapassel: []
-simple-scan: []
+simple-scan:
+- 801
 snap-store: []
 snapd-desktop-integration:
 - 315
