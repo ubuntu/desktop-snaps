@@ -2,13 +2,15 @@ cheese:
 - 86
 cherrytree: []
 chromium:
-- 3186
+- 3191
 desktop-security-center: []
 eog: []
-epiphany: []
+epiphany:
+- 240
 evince: []
 factory-reset-tools: []
-firefox: []
+firefox:
+- 6436
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -41,7 +43,7 @@ gnome-chess: []
 gnome-clocks:
 - 492
 gnome-contacts:
-- 272
+- 277
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
