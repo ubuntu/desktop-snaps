@@ -1,8 +1,7 @@
 cheese:
 - 86
 cherrytree: []
-chromium:
-- 3191
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany:
@@ -28,7 +27,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 222
 gnome-42-2204-sdk:
-- 326
+- 329
 gnome-46-2404:
 - 117
 gnome-46-2404-sdk:
@@ -78,8 +77,7 @@ quadrapassel: []
 simple-scan:
 - 801
 snap-store: []
-snapd-desktop-integration:
-- 315
+snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
