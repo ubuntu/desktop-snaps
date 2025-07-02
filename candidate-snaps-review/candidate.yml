@@ -1,7 +1,8 @@
 cheese:
 - 86
 cherrytree: []
-chromium: []
+chromium:
+- 3196
 desktop-security-center: []
 eog: []
 epiphany:
@@ -19,13 +20,14 @@ gnome-2048: []
 gnome-3-26-1604:
 - 113
 gnome-3-28-1804: []
-gnome-3-34-1804: []
+gnome-3-34-1804:
+- 96
 gnome-3-34-1804-sdk: []
 gnome-3-38-2004:
-- 158
+- 161
 gnome-3-38-2004-sdk: []
 gnome-42-2204:
-- 222
+- 226
 gnome-42-2204-sdk:
 - 329
 gnome-46-2404:
