@@ -55,8 +55,7 @@ gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
 gnome-tetravex: []
-gnome-text-editor:
-- 53
+gnome-text-editor: []
 gnome-weather:
 - 18
 gtk-common-themes:
