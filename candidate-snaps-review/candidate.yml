@@ -8,7 +8,8 @@ epiphany:
 - 240
 evince: []
 factory-reset-tools: []
-firefox: []
+firefox:
+- 6534
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -65,7 +66,8 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice: []
+libreoffice:
+- 355
 lightsoff: []
 loupe: []
 oibaf-latest/gaming-graphics-core22:
