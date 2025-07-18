@@ -10,7 +10,7 @@ epiphany:
 evince: []
 factory-reset-tools: []
 firefox:
-- 6548
+- 6560
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -32,7 +32,8 @@ gnome-42-2204:
 gnome-42-2204-sdk:
 - 329
 gnome-46-2404: []
-gnome-46-2404-sdk: []
+gnome-46-2404-sdk:
+- 121
 gnome-boxes: []
 gnome-calculator:
 - 975
@@ -66,8 +67,7 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice:
-- 355
+libreoffice: []
 lightsoff: []
 loupe: []
 oibaf-latest/gaming-graphics-core22:
