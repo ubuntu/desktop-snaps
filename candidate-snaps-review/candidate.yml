@@ -1,8 +1,7 @@
 cheese:
 - 86
 cherrytree: []
-chromium:
-- 3203
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany:
@@ -10,7 +9,7 @@ epiphany:
 evince: []
 factory-reset-tools: []
 firefox:
-- 6560
+- 6565
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -78,7 +77,8 @@ simple-scan:
 - 801
 snap-store: []
 snapd-desktop-integration: []
-steam: []
+steam:
+- 216
 swell-foop: []
 tali: []
 thunderbird: []
