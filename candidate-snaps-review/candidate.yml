@@ -4,8 +4,7 @@ cherrytree: []
 chromium: []
 desktop-security-center: []
 eog: []
-epiphany:
-- 240
+epiphany: []
 evince: []
 factory-reset-tools: []
 firefox:
@@ -81,7 +80,8 @@ steam:
 - 216
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 767
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
