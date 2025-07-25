@@ -8,8 +8,7 @@ eog: []
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 6565
+firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -29,7 +28,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 226
 gnome-42-2204-sdk:
-- 329
+- 335
 gnome-46-2404: []
 gnome-46-2404-sdk: []
 gnome-boxes: []
@@ -67,7 +66,8 @@ kisak-turtle/gaming-graphics-core22:
 - 196
 libreoffice: []
 lightsoff: []
-loupe: []
+loupe:
+- 36
 oibaf-latest/gaming-graphics-core22:
 - 195
 prompting-client: []
