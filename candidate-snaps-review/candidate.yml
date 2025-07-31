@@ -28,7 +28,7 @@ gnome-3-38-2004-sdk: []
 gnome-42-2204:
 - 226
 gnome-42-2204-sdk:
-- 335
+- 337
 gnome-46-2404:
 - 121
 gnome-46-2404-sdk: []
@@ -80,8 +80,7 @@ snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 769
+thunderbird: []
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
