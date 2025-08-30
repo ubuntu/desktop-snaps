@@ -8,8 +8,7 @@ eog: []
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 6738
+firefox: []
 firmware-updater: []
 five-or-more: []
 gedit:
@@ -42,7 +41,7 @@ gnome-chess: []
 gnome-clocks:
 - 492
 gnome-contacts:
-- 280
+- 282
 gnome-dictionary: []
 gnome-font-viewer: []
 gnome-hitori: []
