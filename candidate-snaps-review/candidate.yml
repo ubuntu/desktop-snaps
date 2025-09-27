@@ -7,7 +7,8 @@ desktop-security-center: []
 eog: []
 epiphany: []
 evince: []
-factory-reset-tools: []
+factory-reset-tools:
+- 58
 firefox:
 - 6867
 firmware-updater: []
@@ -66,8 +67,7 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice:
-- 358
+libreoffice: []
 lightsoff: []
 loupe:
 - 39
