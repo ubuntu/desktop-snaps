@@ -8,11 +8,12 @@ eog: []
 epiphany: []
 evince: []
 factory-reset-tools:
-- 58
+- 59
 firefox:
 - 6933
 firmware-updater: []
-five-or-more: []
+five-or-more:
+- 210
 gedit:
 - 701
 glade: []
@@ -29,11 +30,11 @@ gnome-3-38-2004:
 gnome-3-38-2004-sdk: []
 gnome-42-2204: []
 gnome-42-2204-sdk:
-- 337
+- 342
 gnome-46-2404:
 - 129
 gnome-46-2404-sdk:
-- 135
+- 138
 gnome-boxes: []
 gnome-calculator:
 - 975
@@ -79,11 +80,12 @@ simple-scan:
 - 801
 snap-store: []
 snapd-desktop-integration:
-- 323
+- 327
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 825
 ubuntu-desktop-bootstrap:
 - 242
 ubuntu-desktop-init: []
