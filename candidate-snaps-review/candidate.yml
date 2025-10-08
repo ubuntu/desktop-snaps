@@ -1,15 +1,15 @@
 cheese:
 - 86
 cherrytree: []
-chromium:
-- 3265
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany: []
 evince: []
 factory-reset-tools:
 - 59
-firefox: []
+firefox:
+- 6999
 firmware-updater: []
 five-or-more:
 - 210
