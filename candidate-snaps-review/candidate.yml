@@ -9,7 +9,7 @@ evince: []
 factory-reset-tools:
 - 59
 firefox:
-- 7204
+- 7242
 firmware-updater: []
 five-or-more:
 - 210
@@ -81,7 +81,8 @@ simple-scan:
 snap-store: []
 snapd-desktop-integration:
 - 327
-steam: []
+steam:
+- 231
 swell-foop: []
 tali: []
 thunderbird: []
