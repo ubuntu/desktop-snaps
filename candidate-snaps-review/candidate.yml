@@ -7,8 +7,7 @@ desktop-security-center: []
 eog: []
 epiphany: []
 evince: []
-factory-reset-tools:
-- 59
+factory-reset-tools: []
 firefox:
 - 7366
 firmware-updater: []
@@ -79,7 +78,7 @@ simple-scan:
 - 801
 snap-store: []
 snapd-desktop-integration:
-- 333
+- 337
 steam:
 - 231
 swell-foop: []
