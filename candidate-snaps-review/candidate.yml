@@ -1,15 +1,14 @@
 cheese:
 - 86
 cherrytree: []
-chromium:
-- 3313
+chromium: []
 desktop-security-center: []
 eog: []
 epiphany: []
 evince: []
 factory-reset-tools: []
 firefox:
-- 7366
+- 7395
 firmware-updater: []
 five-or-more:
 - 210
@@ -83,7 +82,8 @@ steam:
 - 231
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 895
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
