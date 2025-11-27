@@ -6,9 +6,9 @@ desktop-security-center: []
 eog: []
 epiphany: []
 evince: []
-factory-reset-tools: []
-firefox:
-- 7423
+factory-reset-tools:
+- 60
+firefox: []
 firmware-updater: []
 five-or-more:
 - 210
