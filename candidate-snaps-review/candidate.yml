@@ -8,7 +8,8 @@ epiphany: []
 evince: []
 factory-reset-tools:
 - 60
-firefox: []
+firefox:
+- 7455
 firmware-updater: []
 five-or-more:
 - 210
@@ -78,8 +79,7 @@ simple-scan:
 snap-store: []
 snapd-desktop-integration:
 - 337
-steam:
-- 231
+steam: []
 swell-foop: []
 tali: []
 thunderbird:
