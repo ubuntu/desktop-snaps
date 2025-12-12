@@ -8,8 +8,7 @@ epiphany: []
 evince: []
 factory-reset-tools:
 - 60
-firefox:
-- 7477
+firefox: []
 firmware-updater: []
 five-or-more:
 - 210
@@ -29,10 +28,11 @@ gnome-3-38-2004:
 gnome-3-38-2004-sdk: []
 gnome-42-2204: []
 gnome-42-2204-sdk:
-- 342
+- 345
 gnome-46-2404:
 - 149
-gnome-46-2404-sdk: []
+gnome-46-2404-sdk:
+- 152
 gnome-boxes: []
 gnome-calculator:
 - 975
