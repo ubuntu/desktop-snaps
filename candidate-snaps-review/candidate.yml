@@ -7,8 +7,7 @@ desktop-security-center: []
 eog: []
 epiphany: []
 evince: []
-factory-reset-tools:
-- 60
+factory-reset-tools: []
 firefox: []
 firmware-updater: []
 five-or-more:
