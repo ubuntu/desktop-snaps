@@ -7,7 +7,8 @@ eog: []
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox: []
+firefox:
+- 7633
 firmware-updater: []
 five-or-more:
 - 210
@@ -27,7 +28,7 @@ gnome-3-38-2004:
 gnome-3-38-2004-sdk: []
 gnome-42-2204: []
 gnome-42-2204-sdk:
-- 345
+- 352
 gnome-46-2404:
 - 149
 gnome-46-2404-sdk:
