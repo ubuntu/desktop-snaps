@@ -2,7 +2,7 @@ cheese:
 - 86
 cherrytree: []
 chromium:
-- 3350
+- 3352
 desktop-security-center: []
 eog: []
 epiphany: []
@@ -81,7 +81,8 @@ snapd-desktop-integration:
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 953
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
