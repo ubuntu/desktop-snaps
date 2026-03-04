@@ -77,7 +77,8 @@ quadrapassel: []
 simple-scan:
 - 801
 snap-store: []
-snapd-desktop-integration: []
+snapd-desktop-integration:
+- 364
 steam: []
 swell-foop: []
 tali: []
