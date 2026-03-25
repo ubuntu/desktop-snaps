@@ -11,7 +11,7 @@ evince:
 - 1065
 factory-reset-tools: []
 firefox:
-- 8030
+- 8054
 firmware-updater: []
 five-or-more:
 - 210
@@ -92,8 +92,7 @@ snapd-desktop-integration:
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 1040
+thunderbird: []
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
