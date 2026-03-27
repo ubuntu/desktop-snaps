@@ -10,8 +10,7 @@ epiphany: []
 evince:
 - 1065
 factory-reset-tools: []
-firefox:
-- 8054
+firefox: []
 firmware-updater: []
 five-or-more:
 - 210
@@ -36,7 +35,7 @@ gnome-42-2204-sdk:
 gnome-46-2404:
 - 162
 gnome-46-2404-sdk:
-- 168
+- 172
 gnome-boxes: []
 gnome-calculator:
 - 975
@@ -75,8 +74,7 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice:
-- 369
+libreoffice: []
 lightsoff: []
 loupe:
 - 39
@@ -88,7 +86,7 @@ simple-scan:
 - 814
 snap-store: []
 snapd-desktop-integration:
-- 373
+- 376
 steam: []
 swell-foop: []
 tali: []
