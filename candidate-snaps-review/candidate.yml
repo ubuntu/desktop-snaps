@@ -86,12 +86,11 @@ simple-scan:
 - 814
 snap-store: []
 snapd-desktop-integration:
-- 376
+- 361
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 1043
+thunderbird: []
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
