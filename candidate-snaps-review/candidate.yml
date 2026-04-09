@@ -90,8 +90,7 @@ snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 1057
+thunderbird: []
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
