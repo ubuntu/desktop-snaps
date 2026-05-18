@@ -11,7 +11,7 @@ evince:
 - 1065
 factory-reset-tools: []
 firefox:
-- 8323
+- 8339
 firmware-updater: []
 five-or-more:
 - 210
@@ -75,8 +75,7 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice:
-- 373
+libreoffice: []
 lightsoff: []
 loupe:
 - 39
