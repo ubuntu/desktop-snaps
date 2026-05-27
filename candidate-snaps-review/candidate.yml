@@ -10,7 +10,8 @@ epiphany: []
 evince:
 - 1065
 factory-reset-tools: []
-firefox: []
+firefox:
+- 8387
 firmware-updater: []
 five-or-more:
 - 210
@@ -85,7 +86,8 @@ quadrapassel: []
 simple-scan:
 - 818
 snap-store: []
-snapd-desktop-integration: []
+snapd-desktop-integration:
+- 387
 steam: []
 swell-foop: []
 tali: []
