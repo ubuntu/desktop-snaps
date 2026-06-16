@@ -2,7 +2,7 @@ cheese:
 - 94
 cherrytree: []
 chromium:
-- 3461
+- 3464
 desktop-security-center: []
 eog:
 - 746
@@ -11,7 +11,7 @@ evince:
 - 1065
 factory-reset-tools: []
 firefox:
-- 8498
+- 8504
 firmware-updater: []
 five-or-more:
 - 210
@@ -87,13 +87,11 @@ quadrapassel: []
 simple-scan:
 - 818
 snap-store: []
-snapd-desktop-integration:
-- 387
+snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 1144
+thunderbird: []
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
