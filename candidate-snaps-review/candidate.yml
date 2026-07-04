@@ -9,8 +9,7 @@ epiphany: []
 evince:
 - 1065
 factory-reset-tools: []
-firefox:
-- 8580
+firefox: []
 firmware-updater: []
 five-or-more:
 - 210
@@ -81,11 +80,13 @@ quadrapassel: []
 simple-scan:
 - 818
 snap-store: []
-snapd-desktop-integration: []
+snapd-desktop-integration:
+- 391
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 1177
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
