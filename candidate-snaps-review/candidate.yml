@@ -11,7 +11,7 @@ evince:
 - 1065
 factory-reset-tools: []
 firefox:
-- 8644
+- 8664
 firmware-updater: []
 five-or-more:
 - 210
@@ -88,7 +88,7 @@ steam: []
 swell-foop: []
 tali: []
 thunderbird:
-- 1177
+- 1199
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
