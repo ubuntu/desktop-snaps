@@ -9,7 +9,8 @@ epiphany: []
 evince:
 - 1065
 factory-reset-tools: []
-firefox: []
+firefox:
+- 8761
 firmware-updater: []
 five-or-more:
 - 210
