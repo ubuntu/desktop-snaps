@@ -2,7 +2,7 @@ cheese:
 - 94
 cherrytree: []
 chromium:
-- 3512
+- 3513
 desktop-security-center: []
 eog:
 - 746
@@ -85,7 +85,8 @@ simple-scan:
 - 818
 snap-store: []
 snapd-desktop-integration: []
-steam: []
+steam:
+- 267
 swell-foop: []
 tali: []
 thunderbird: []
