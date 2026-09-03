@@ -34,8 +34,7 @@ gnome-42-2204-sdk:
 gnome-46-2404: []
 gnome-46-2404-sdk:
 - 194
-gnome-boxes:
-- 16
+gnome-boxes: []
 gnome-calculator:
 - 975
 gnome-calendar: []
@@ -86,11 +85,10 @@ simple-scan:
 snap-store: []
 snapd-desktop-integration: []
 steam:
-- 267
+- 271
 swell-foop: []
 tali: []
-thunderbird:
-- 1240
+thunderbird: []
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
