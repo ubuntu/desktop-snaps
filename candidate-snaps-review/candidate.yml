@@ -1,13 +1,11 @@
-cheese:
-- 94
+cheese: []
 cherrytree: []
 chromium: []
 desktop-security-center: []
 eog:
 - 746
 epiphany: []
-evince:
-- 1065
+evince: []
 factory-reset-tools: []
 firefox: []
 firmware-updater: []
@@ -39,15 +37,13 @@ gnome-calculator:
 gnome-calendar: []
 gnome-characters:
 - 810
-gnome-chess:
-- 101
+gnome-chess: []
 gnome-clocks:
 - 492
 gnome-contacts:
 - 288
 gnome-dictionary: []
-gnome-font-viewer:
-- 59
+gnome-font-viewer: []
 gnome-hitori: []
 gnome-klotski: []
 gnome-logs:
@@ -60,8 +56,7 @@ gnome-robots: []
 gnome-sudoku: []
 gnome-system-monitor: []
 gnome-taquin: []
-gnome-tetravex:
-- 292
+gnome-tetravex: []
 gnome-text-editor: []
 gnome-weather: []
 gtk-common-themes:
