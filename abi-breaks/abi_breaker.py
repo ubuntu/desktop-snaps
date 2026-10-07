@@ -230,7 +230,8 @@ class SnapComparer(Colors):
             for root, _, files in os.walk(old_path):
                 for filename in files:
                     full_old_path = os.path.join(root, filename)
-                    full_new_path = full_old_path.replace(old_path, new_path)
+                    rel_path = os.path.relpath(full_old_path, old_path)
+                    full_new_path = os.path.join(new_path, rel_path)
                     if not self._should_check(full_old_path, full_new_path):
                         continue
                     self._do_comparison(full_old_path, full_new_path, show_new_symbols)
