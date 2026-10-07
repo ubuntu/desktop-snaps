@@ -1,15 +1,13 @@
 cheese: []
 cherrytree: []
-chromium:
-- 3551
+chromium: []
 desktop-security-center: []
 eog:
 - 746
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 9036
+firefox: []
 firmware-updater: []
 five-or-more:
 - 210
@@ -33,7 +31,7 @@ gnome-42-2204-sdk:
 gnome-46-2404:
 - 172
 gnome-46-2404-sdk:
-- 202
+- 206
 gnome-boxes: []
 gnome-calculator:
 - 975
