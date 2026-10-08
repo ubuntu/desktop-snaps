@@ -79,8 +79,7 @@ simple-scan:
 - 818
 snap-store: []
 snapd-desktop-integration: []
-steam:
-- 279
+steam: []
 swell-foop: []
 tali: []
 thunderbird: []
