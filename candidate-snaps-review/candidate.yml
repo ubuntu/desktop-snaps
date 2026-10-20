@@ -9,7 +9,7 @@ epiphany: []
 evince: []
 factory-reset-tools: []
 firefox:
-- 9106
+- 9113
 firmware-updater: []
 five-or-more:
 - 210
@@ -67,7 +67,8 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice: []
+libreoffice:
+- 379
 lightsoff: []
 loupe:
 - 39
@@ -82,7 +83,8 @@ snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 1299
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
