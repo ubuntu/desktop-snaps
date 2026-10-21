@@ -1,15 +1,13 @@
 cheese: []
 cherrytree: []
-chromium:
-- 3563
+chromium: []
 desktop-security-center: []
 eog:
 - 746
 epiphany: []
 evince: []
 factory-reset-tools: []
-firefox:
-- 9113
+firefox: []
 firmware-updater: []
 five-or-more:
 - 210
@@ -68,7 +66,7 @@ kisak-fresh/gaming-graphics-core22:
 kisak-turtle/gaming-graphics-core22:
 - 196
 libreoffice:
-- 379
+- 382
 lightsoff: []
 loupe:
 - 39
