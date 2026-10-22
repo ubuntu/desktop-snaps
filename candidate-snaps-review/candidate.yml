@@ -1,6 +1,7 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 3568
 desktop-security-center: []
 eog:
 - 746
@@ -66,7 +67,7 @@ kisak-fresh/gaming-graphics-core22:
 kisak-turtle/gaming-graphics-core22:
 - 196
 libreoffice:
-- 382
+- 384
 lightsoff: []
 loupe:
 - 39
@@ -81,8 +82,7 @@ snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird:
-- 1299
+thunderbird: []
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
