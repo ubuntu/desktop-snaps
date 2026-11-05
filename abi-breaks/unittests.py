@@ -2,7 +2,10 @@
 
 """ Unitary tests for abi_breaker """
 
+import os
+import tempfile
 import unittest
+from unittest import mock
 import abi_breaker
 
 
@@ -42,6 +45,25 @@ class TestBreakerfiles(unittest.TestCase):
         self.assertRaises(ValueError, comparer.set_direct_paths,
                           'tests/libtest_doesn_t_exist.so.1.1',
                           'tests/libtest_doesn_t_exist.so.1.4')
+
+    def test_compare_snaps_path_mapping(self):
+        """ tests that new paths are built relative to the search root, even
+            when the root path appears again inside the library path """
+        with tempfile.TemporaryDirectory() as tmpdir:
+            old_snap = os.path.join(tmpdir, 'snap')
+            new_snap = os.path.join(tmpdir, 'new')
+            nested_dir = os.path.join(old_snap, 'lib', tmpdir.lstrip(os.sep), 'snap', 'lib')
+            os.makedirs(nested_dir)
+            with open(os.path.join(nested_dir, 'libx.so'), 'w', encoding='utf-8'):
+                pass
+
+            comparer = abi_breaker.SnapComparer()
+            with mock.patch.object(comparer, '_should_check', return_value=False) as should_check:
+                comparer.compare_snaps(old_snap, new_snap, False)
+
+            rel_path = os.path.join(tmpdir.lstrip(os.sep), 'snap', 'lib', 'libx.so')
+            should_check.assert_called_once_with(os.path.join(old_snap, 'lib', rel_path),
+                                                 os.path.join(new_snap, 'lib', rel_path))
 
 
 unittest.main()
