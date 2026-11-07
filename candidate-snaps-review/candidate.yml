@@ -1,14 +1,16 @@
 cheese: []
 cherrytree: []
-chromium: []
+chromium:
+- 3590
 desktop-security-center: []
 eog:
 - 746
 epiphany: []
 evince: []
-factory-reset-tools: []
+factory-reset-tools:
+- 62
 firefox:
-- 9171
+- 9181
 firmware-updater: []
 five-or-more:
 - 210
@@ -68,8 +70,7 @@ kisak-fresh/gaming-graphics-core22:
 - 197
 kisak-turtle/gaming-graphics-core22:
 - 196
-libreoffice:
-- 386
+libreoffice: []
 lightsoff: []
 loupe:
 - 39
@@ -84,7 +85,8 @@ snapd-desktop-integration: []
 steam: []
 swell-foop: []
 tali: []
-thunderbird: []
+thunderbird:
+- 1325
 ubuntu-desktop-bootstrap: []
 ubuntu-desktop-init: []
 ubuntu-desktop-installer: []
